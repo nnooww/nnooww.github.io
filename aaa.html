@@ -109,7 +109,7 @@
 <body>
   <div class="left-panel">
     <div class="intro-container">
-      <!-- 여기는 JS로 동적 변경 -->
+      <!-- 이곳에 제목, 부제, 팀원 표시 -->
     </div>
   </div>
 
@@ -125,6 +125,7 @@
   </div>
 
   <script>
+    // 데이터 구조
     const data = {
       ko: {
         titles: {
@@ -165,14 +166,12 @@
     const listTitle = document.getElementById('list-title');
     const introContainer = document.querySelector('.intro-container');
 
-    // 현재 URL에 lang 파라미터 있으면 사용, 없으면 'ko' 기본값
+    // 현재 URL에 lang 쿼리 있으면 사용, 없으면 ko 기본
     let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
     langSelect.value = currentLang;
 
-    // 왼쪽 제목, 부제, 팀원 동적 생성 함수
     function renderTitles(lang) {
       const titles = data[lang].titles;
-
       introContainer.innerHTML = `
         <h1>${titles.mainTitle}</h1>
         <p>${titles.subtitle}</p>
@@ -182,37 +181,34 @@
       `;
     }
 
-    // 오른쪽 콘텐츠 목록 렌더링
     function renderList(lang) {
       const langData = data[lang].contents;
       listArea.innerHTML = "";
-
-      Object.keys(langData).forEach(id => {
-        const item = langData[id];
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `<a href="bbb.html?id=${id}&lang=${lang}">${item.title}</a>`;
-        listArea.appendChild(card);
-      });
-
-      listTitle.textContent = lang === "ko" ? "콘텐츠 목록" : "Contents List";
+      for (const id in langData) {
+        if (langData.hasOwnProperty(id)) {
+          const item = langData[id];
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `<a href="bbb.html?id=${id}&lang=${lang}">${item.title}</a>`;
+          listArea.appendChild(card);
+        }
+      }
+      listTitle.textContent = lang === 'ko' ? '콘텐츠 목록' : 'Contents List';
     }
 
-    // 언어 변경 시 처리
-    langSelect.addEventListener('change', (e) => {
-      const selectedLang = e.target.value;
-      currentLang = selectedLang;
+    langSelect.addEventListener('change', e => {
+      currentLang = e.target.value;
       const url = new URL(location.href);
-      url.searchParams.set("lang", selectedLang);
-      history.replaceState(null, "", url.toString());
+      url.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', url.toString());
 
-      renderList(selectedLang);
-      renderTitles(selectedLang);
+      renderTitles(currentLang);
+      renderList(currentLang);
     });
 
     // 초기 렌더링
-    renderList(currentLang);
     renderTitles(currentLang);
+    renderList(currentLang);
   </script>
 </body>
 </html>
