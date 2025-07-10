@@ -52,6 +52,25 @@
       background-color: #276fc2;
     }
 
+    /* 언어 선택 UI */
+    #lang-switcher {
+      margin-top: 15px;
+      font-size: 0.85rem;
+      color: #ddd;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #lang-select-ccc {
+      padding: 4px 8px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      background: #333;
+      color: white;
+    }
+
     /* 로딩 스타일 (aaa.html과 동일하게 맞춤) */
     .loading {
       position: fixed;
@@ -67,6 +86,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.5s ease;
+      flex-direction: row;
     }
 
     .loading > div {
@@ -88,7 +108,7 @@
 
   <!-- 로딩 화면 -->
   <div class="loading">
-    로딩중...
+    <span class="loading-text">로딩중...</span>
     <div></div>
   </div>
 
@@ -96,12 +116,40 @@
     <h1>자연이 바뀌면, 병도 바뀐다</h1>
     <p>조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
     <a href="aaa.html" id="go-aaa">탐색 시작</a>
+
+    <!-- 한영 언어 선택 UI -->
+    <div id="lang-switcher">
+      <label for="lang-select-ccc">언어 선택:</label>
+      <select id="lang-select-ccc">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+      </select>
+    </div>
   </section>
 
   <script>
     const btn = document.getElementById('go-aaa');
     const loading = document.querySelector('.loading');
+    const loadingText = document.querySelector('.loading-text');
+    const langSelectCCC = document.getElementById('lang-select-ccc');
 
+    // URL에서 lang 파라미터 읽어서 초기 언어 설정
+    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    langSelectCCC.value = currentLang;
+
+    // 언어별 로딩 텍스트 설정 함수
+    function updateLoadingText(lang) {
+      if (lang === 'en') {
+        loadingText.textContent = 'Loading...';
+      } else {
+        loadingText.textContent = '로딩중...';
+      }
+    }
+
+    // 초기 로딩 텍스트 설정
+    updateLoadingText(currentLang);
+
+    // 탐색 시작 클릭 시
     btn.addEventListener('click', (e) => {
       e.preventDefault(); // 기본 이동 차단
 
@@ -109,10 +157,23 @@
       loading.style.visibility = 'visible';
       loading.style.opacity = '1';
 
-      // 1초 후 페이지 이동
+      // 1초 후 페이지 이동 (언어 파라미터 포함)
+      const url = new URL(btn.href, location.origin);
+      url.searchParams.set('lang', currentLang);
       setTimeout(() => {
-        window.location.href = btn.href;
+        window.location.href = url.toString();
       }, 1000);
+    });
+
+    // 언어 선택 변경 이벤트
+    langSelectCCC.addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      updateLoadingText(currentLang);
+
+      // URL lang 파라미터 업데이트 (새로고침 없이)
+      const url = new URL(location.href);
+      url.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', url.toString());
     });
   </script>
 
