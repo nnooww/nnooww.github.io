@@ -120,11 +120,17 @@
     let id = getParam('id') || '1';
 
     // 상세 내용 데이터
+    
+
 const data = {
   ko: {
-    "projectTitle": "환경과 전염병의 연결고리를 탐구하다",
-    "teamMembers": "채우혁 채인혁 최진서 송형록",
-    "1": {
+    titles: {
+      mainTitle: "🌍 융합수업 프로젝트",
+      subtitle: "환경과 전염병의 연결고리를 탐구하다",
+      creators: ["채우혁", "채인혁", "최진서", "송형록"]
+    },
+    contents: {
+      "1": {
       title: "왜 생태 변화가 전염병과 관련이 있을까?",
       sections: [
         { heading: "1. 생태계는 바이러스의 집이다", text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다. 자연이 변하면 병원체의 서식지도 바뀌게 됩니다." },
@@ -204,10 +210,14 @@ const data = {
       ]
     }
   },
-  en: {
-    "projectTitle": "Exploring the Link Between Environment and Infectious Diseases",
-    "teamMembers": "Chae Woo Hyuk, Chae In Hyuk, Cho Jin Seo, Song Hyung Rok",
-    "1": {
+   en: {
+    titles: {
+      mainTitle: "🌍 Convergence Class Project",
+      subtitle: "Exploring the Link Between Environment and Infectious Diseases",
+      creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
+    },
+    contents: {
+      "1": {
       title: "Why Is Ecological Change Related to Infectious Diseases?",
       sections: [
         { heading: "1. Ecosystems Are Homes to Viruses", text: "Viruses and bacteria live in nature, such as animals, water, and plants. When nature changes, the habitats of pathogens also change." },
