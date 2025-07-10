@@ -1,20 +1,17 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>인트로</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body, html {
       height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
     }
-
     .intro-section {
       background: url('joseon-background.jpg') no-repeat center center/cover;
       height: 100vh;
@@ -24,27 +21,23 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0,0,0,0.5);
       background-blend-mode: darken;
     }
-
     .intro-section h1 {
       font-size: 3rem;
       margin-bottom: 20px;
     }
-
     .intro-section p {
       font-size: 1.3rem;
       margin-bottom: 40px;
       color: #e0e0e0;
     }
-
     .intro-section a {
       padding: 12px 28px;
       background-color: #4a90e2;
       color: white;
       font-size: 1rem;
-      border: none;
       border-radius: 8px;
       text-decoration: none;
       transition: 0.3s;
@@ -52,13 +45,61 @@
     .intro-section a:hover {
       background-color: #276fc2;
     }
+
+    /* 로딩 스타일 */
+    .loading {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+    .loading h1 {
+      font-size: 40px;
+      color: #333;
+    }
+    .spinner {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
   </style>
 </head>
 <body>
+
+  <div class="loading">
+    <h1>로딩중...</h1>
+    <div class="spinner"></div>
+  </div>
+
   <section class="intro-section">
     <h1>자연이 바뀌면, 병도 바뀐다</h1>
     <p>조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
     <a href="aaa.html">탐색 시작</a>
   </section>
+
+  <script>
+    window.onload = function() {
+      setTimeout(() => {
+        const loading = document.querySelector('.loading');
+        loading.style.opacity = 0;
+        setTimeout(() => loading.style.visibility = 'hidden', 500);
+      }, 2500);
+    };
+  </script>
+
 </body>
 </html>
