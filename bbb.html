@@ -300,83 +300,82 @@ const data = {
 };
 
 
+function renderContent(lang, id) {
+  const entry = data[lang].contents[id];  // 여기 꼭 수정!
 
-    function renderContent(lang, id) {
-      const entry = data[lang][id];
-      if (!entry) {
-        contentArea.innerHTML = "<p>정보가 없습니다.</p>";
-        headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
-        return;
-      }
+  if (!entry) {
+    contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+    headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
+    return;
+  }
 
-      headerTitle.textContent = entry.title;
+  headerTitle.textContent = entry.title;
 
-      if (id === "7" && entry.quiz) {
-        // 퀴즈 페이지 렌더링
-        let quizHtml = '<div class="quiz-container">';
-        entry.quiz.forEach((q, i) => {
-          quizHtml += `
-            <div class="quiz-item">
-              <p><strong>Q${i + 1}. ${q.question}</strong></p>
-              <ul>
-                ${q.choices.map(choice => `<li><label><input type="radio" name="q${i}" value="${choice}"> ${choice}</label></li>`).join('')}
-              </ul>
-              <p class="answer" style="display:none; color: green;">정답: ${q.answer}</p>
-            </div>
-          `;
-        });
-        quizHtml += `<button id="check-answers">${lang === 'ko' ? '정답 확인' : 'Check Answers'}</button></div>`;
+  if (id === "7" && entry.quiz) {
+    // 퀴즈 페이지 렌더링
+    let quizHtml = '<div class="quiz-container">';
+    entry.quiz.forEach((q, i) => {
+      quizHtml += `
+        <div class="quiz-item">
+          <p><strong>Q${i + 1}. ${q.question}</strong></p>
+          <ul>
+            ${q.choices.map(choice => `<li><label><input type="radio" name="q${i}" value="${choice}"> ${choice}</label></li>`).join('')}
+          </ul>
+          <p class="answer" style="display:none; color: green;">정답: ${q.answer}</p>
+        </div>
+      `;
+    });
+    quizHtml += `<button id="check-answers">${lang === 'ko' ? '정답 확인' : 'Check Answers'}</button></div>`;
 
-        contentArea.innerHTML = quizHtml;
+    contentArea.innerHTML = quizHtml;
 
-        // 정답 확인 버튼 이벤트
-        document.getElementById('check-answers').addEventListener('click', () => {
-          entry.quiz.forEach((q, i) => {
-            const selected = document.querySelector(`input[name="q${i}"]:checked`);
-            const answerEl = document.querySelectorAll('.quiz-item')[i].querySelector('.answer');
-            if (!selected) {
-              answerEl.style.color = 'red';
-              answerEl.textContent = lang === 'ko' ? '답을 선택해주세요!' : 'Please select an answer!';
-              answerEl.style.display = 'block';
-            } else if (selected.value === q.answer) {
-              answerEl.style.color = 'green';
-              answerEl.textContent = lang === 'ko' ? '정답입니다!' : 'Correct!';
-              answerEl.style.display = 'block';
-            } else {
-              answerEl.style.color = 'red';
-              answerEl.textContent = (lang === 'ko' ? '오답입니다. 정답은: ' : 'Incorrect. The correct answer is: ') + q.answer;
-              answerEl.style.display = 'block';
-            }
-          });
-        });
+    // 정답 확인 버튼 이벤트
+    document.getElementById('check-answers').addEventListener('click', () => {
+      entry.quiz.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const answerEl = document.querySelectorAll('.quiz-item')[i].querySelector('.answer');
+        if (!selected) {
+          answerEl.style.color = 'red';
+          answerEl.textContent = lang === 'ko' ? '답을 선택해주세요!' : 'Please select an answer!';
+          answerEl.style.display = 'block';
+        } else if (selected.value === q.answer) {
+          answerEl.style.color = 'green';
+          answerEl.textContent = lang === 'ko' ? '정답입니다!' : 'Correct!';
+          answerEl.style.display = 'block';
+        } else {
+          answerEl.style.color = 'red';
+          answerEl.textContent = (lang === 'ko' ? '오답입니다. 정답은: ' : 'Incorrect. The correct answer is: ') + q.answer;
+          answerEl.style.display = 'block';
+        }
+      });
+    });
 
-      } else if (entry.sections) {
-        // 기존 설명 페이지 렌더링
-        let html = "";
-        entry.sections.forEach(section => {
-          html += `
-            <div class="info-box">
-              <h3>${section.heading}</h3>
-              <p>${section.text}</p>
-            </div>
-          `;
-        });
-        html += `<div class="source">${entry.source || ''}</div>`;
+  } else if (entry.sections) {
+    // 기존 설명 페이지 렌더링
+    let html = "";
+    entry.sections.forEach(section => {
+      html += `
+        <div class="info-box">
+          <h3>${section.heading}</h3>
+          <p>${section.text}</p>
+        </div>
+      `;
+    });
+    html += `<div class="source">${entry.source || ''}</div>`;
 
-        contentArea.innerHTML = html;
+    contentArea.innerHTML = html;
 
-        // 클릭해서 내용 토글 기능 추가
-        document.querySelectorAll('.info-box h3').forEach(h3 => {
-          h3.addEventListener('click', () => {
-            const box = h3.parentElement;
-            box.classList.toggle('active');
-          });
-        });
-      } else {
-        contentArea.innerHTML = "<p>정보가 없습니다.</p>";
-      }
-    }
-
+    // 클릭해서 내용 토글 기능 추가
+    document.querySelectorAll('.info-box h3').forEach(h3 => {
+      h3.addEventListener('click', () => {
+        const box = h3.parentElement;
+        box.classList.toggle('active');
+      });
+    });
+  } else {
+    contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+  }
+}
     // 초기 렌더링
     renderContent(currentLang, id);
 
