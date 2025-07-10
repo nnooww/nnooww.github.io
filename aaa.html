@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>왼쪽에 서브 리스트 나오기</title>
+<title>병 이름 상세 설명</title>
 <style>
   body {
     margin: 0;
@@ -23,6 +23,7 @@
     padding: 1em;
     background: #ddd;
     box-sizing: border-box;
+    position: relative;
   }
   main {
     flex: 1;
@@ -30,32 +31,48 @@
     background: #eee;
     box-sizing: border-box;
   }
-  ol {
+  /* 병 이름 목록 */
+  ol.bacteria-list {
     padding-left: 1em;
   }
-  /* 리스트 아이템 위치 기준 */
-  li.expandable {
-    position: relative;
+  /* 병 이름 글씨 좀 더 크고 굵게 */
+  ol.bacteria-list > li {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1em;
     cursor: pointer;
     user-select: none;
-    margin-bottom: 0.5em;
   }
-  /* 서브 리스트는 절대 위치, 기본 숨김 */
-  li.expandable > ol {
+  /* 상세 설명 박스 - aside 오른쪽 끝에 위치 */
+  #detail-box {
     position: absolute;
-    top: 0;
-    right: 100%;  /* 오른쪽 대신 왼쪽에 붙이기 */
-    margin-right: 10px;  /* 왼쪽과 간격 */
-    padding: 1em;
-    background: #ccc;
+    top: 1em;
+    right: 1em;
+    width: 350px;
+    background: rgba(255,255,255,0.95);
     border: 1px solid #999;
-    width: 250px; /* 크기 크게 */
-    display: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 100;
+    padding: 1em;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.15);
+    overflow-y: auto;
+    max-height: 90vh;
+    display: none; /* 기본은 숨김 */
+    font-size: 0.9em;
+    line-height: 1.4em;
   }
-  li.expandable > ol > li {
-    margin: 0.3em 0;
+  #detail-box h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+  }
+  #detail-box p {
+    margin: 0.5em 0;
+  }
+  #detail-box .section-title {
+    font-weight: bold;
+    margin-top: 1em;
+  }
+  #detail-box .source {
+    font-size: 0.8em;
+    color: #555;
   }
 </style>
 </head>
@@ -67,43 +84,19 @@
 <div class="container">
   <aside>
     <h2>사이드바 영역</h2>
+
+    <!-- 상세 설명 박스 -->
+    <div id="detail-box"></div>
   </aside>
 
   <main>
     <h2>오른쪽 영역 리스트</h2>
-    <ol>
-      <li class="expandable">병 이름 1
-        <ol>
-          <li>내용 1</li>
-          <li>내용 2</li>
-          <li>내용 3</li>
-          <li>내용 4</li>
-        </ol>
-      </li>
-      <li class="expandable">병 이름 2
-        <ol>
-          <li>내용 1</li>
-          <li>내용 2</li>
-          <li>내용 3</li>
-          <li>내용 4</li>
-        </ol>
-      </li>
-      <li class="expandable">병 이름 3
-        <ol>
-          <li>내용 1</li>
-          <li>내용 2</li>
-          <li>내용 3</li>
-          <li>내용 4</li>
-        </ol>
-      </li>
-      <li class="expandable">병 이름 4
-        <ol>
-          <li>내용 1</li>
-          <li>내용 2</li>
-          <li>내용 3</li>
-          <li>내용 4</li>
-        </ol>
-      </li>
+    <ol class="bacteria-list">
+      <li data-id="1">1. 두창(천연두)</li>
+      <li data-id="2">2. 콜레라(호열자)</li>
+      <li data-id="3">3. 홍역(마마)</li>
+      <li data-id="4">4. 장티푸스 및 이질(장질부사)</li>
+      <li data-id="5">5. 인플루엔자 (현대 중심)</li>
     </ol>
   </main>
 </div>
@@ -113,25 +106,80 @@
 </footer>
 
 <script>
-  const expandableItems = document.querySelectorAll('li.expandable');
-  expandableItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const sublist = item.querySelector('ol');
-      if (!sublist) return;
+  // 상세 내용 데이터 (JSON 형태로 분리)
+  const details = {
+    "1": `
+      <h3>두창(천연두)</h3>
+      <div class="section-title">조선시대:</div>
+      <p>두창은 조선시대 대표적인 전염병으로 자연 치유 의존, 민간신앙과 함께 후기에는 종두법 도입 시도됨.</p>
+      <div class="source">출처: 「한국민족문화대백과사전」, 링크</div>
 
-      // 모든 서브 리스트 숨기기
-      document.querySelectorAll('li.expandable > ol').forEach(ol => {
-        ol.style.display = 'none';
-      });
+      <div class="section-title">현대:</div>
+      <p>WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨.</p>
+      <div class="source">출처: WHO 공식 페이지, 링크</div>
+    `,
+    "2": `
+      <h3>콜레라(호열자)</h3>
+      <div class="section-title">조선시대:</div>
+      <p>19세기 개항 이후 유입, 시체 조기 매장과 이동 제한으로 대응함. 위생상태 매우 열악했음.</p>
+      <div class="source">출처: 「한국역사연구」 논문, 국립중앙도서관 자료</div>
 
-      // 클릭한 아이템의 서브 리스트 보이기 (토글)
-      if (sublist.style.display === 'block') {
-        sublist.style.display = 'none';
-      } else {
-        sublist.style.display = 'block';
-      }
+      <div class="section-title">현대:</div>
+      <p>수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영</p>
+      <div class="source">출처: WHO 콜레라 개요, 링크</div>
+    `,
+    "3": `
+      <h3>홍역(마마)</h3>
+      <div class="section-title">조선시대:</div>
+      <p>자연 면역 기대, 민간요법 주로 활용, 사망률 높았음.</p>
+      <div class="source">출처: 「조선시대 질병사 연구」 학술논문 (RISS)</div>
+
+      <div class="section-title">현대:</div>
+      <p>MMR 백신 보급으로 예방, 집단 면역 중요.</p>
+      <div class="source">출처: 질병관리청, 링크</div>
+    `,
+    "4": `
+      <h3>장티푸스 및 이질(장질부사)</h3>
+      <div class="section-title">조선시대:</div>
+      <p>오염된 물과 음식으로 전파, 위생 문제 심각, 환자 격리 및 민간 치료법 사용.</p>
+      <div class="source">출처: 「한국 전염병사」 국립중앙도서관 자료</div>
+
+      <div class="section-title">현대:</div>
+      <p>항생제 치료 및 경구 예방접종, 상하수도 시설 개선으로 예방</p>
+      <div class="source">출처: WHO, 링크</div>
+    `,
+    "5": `
+      <h3>인플루엔자 (현대 중심)</h3>
+      <div class="section-title">조선시대:</div>
+      <p>기록은 적지만, 현대에는 계절성 독감 및 팬데믹 발생, 백신과 항바이러스제 개발</p>
+      <div class="source">출처: 질병관리청, WHO</div>
+    `
+  };
+
+  const detailBox = document.getElementById('detail-box');
+
+  document.querySelectorAll('ol.bacteria-list > li').forEach(li => {
+    li.addEventListener('click', () => {
+      const id = li.getAttribute('data-id');
+
+      // 상세내용 불러오기
+      const content = details[id];
+      if (!content) return;
+
+      // 박스에 내용 넣기 및 보여주기
+      detailBox.innerHTML = content;
+      detailBox.style.display = 'block';
     });
   });
+
+  // aside 외 다른 곳 클릭 시 상세 박스 닫기
+  document.body.addEventListener('click', (e) => {
+    const container = document.querySelector('.container');
+    if (!container.contains(e.target)) {
+      detailBox.style.display = 'none';
+    }
+  });
+
 </script>
 </body>
 </html>
