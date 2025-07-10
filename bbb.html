@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>병 이름 상세 설명 (bbb.html)</title>
 <style>
   /* 화면 꽉 채우기 */
@@ -33,9 +34,9 @@
     margin: 0 auto;
     box-sizing: border-box;
     overflow-y: auto;
-    border-radius: 0; /* 여백 없애기 */
-    box-shadow: none; /* 그림자 없애서 꽉찬 느낌 */
-    position: relative; /* 언어선택 위치 절대 기준 */
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
   }
   h1, h3 {
     margin-top: 0;
@@ -69,9 +70,46 @@
     font-size: 0.9em;
     cursor: pointer;
   }
+
+  /* 로딩 스타일 - 동일 */
+  .loading {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(225,225,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  .loading h1 {
+    font-size: 40px;
+    color: #333;
+  }
+  .spinner {
+    width: 50px; height: 50px;
+    border: 6px solid #ccc;
+    border-top: 6px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 20px;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
 </style>
 </head>
 <body>
+
+  <div class="loading">
+    <h1>로딩중...</h1>
+    <div class="spinner"></div>
+  </div>
+
 <header>
   <h1 id="header-title">병 이름 상세 설명</h1>
 </header>
@@ -95,28 +133,24 @@
         <div class="source">출처: 한국민족문화대백과사전</div>
         <div class="section-title">현대:</div>
         <p>WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨.</p>`,
-
     "2": `<h3>콜레라(호열자)</h3>
         <div class="section-title">조선시대:</div>
         <p>19세기 개항 이후 유입, 조기 매장 및 격리 시도, 위생상태 열악.</p>
         <div class="source">출처: 한국역사연구</div>
         <div class="section-title">현대:</div>
         <p>수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영.</p>`,
-
     "3": `<h3>홍역(마마)</h3>
         <div class="section-title">조선시대:</div>
         <p>자연 면역 의존, 민간요법 활용, 사망률 높았음.</p>
         <div class="source">출처: 조선시대 질병사 연구</div>
         <div class="section-title">현대:</div>
         <p>MMR 백신 보급으로 예방, 집단 면역 중요.</p>`,
-
     "4": `<h3>장티푸스 및 이질</h3>
         <div class="section-title">조선시대:</div>
         <p>오염된 물·음식 전파, 환자 격리, 민간 치료.</p>
         <div class="source">출처: 한국 전염병사</div>
         <div class="section-title">현대:</div>
         <p>항생제, 예방접종, 상하수도 개선으로 예방.</p>`,
-
     "5": `<h3>인플루엔자</h3>
         <div class="section-title">현대:</div>
         <p>계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨.</p>
@@ -130,28 +164,24 @@
         <div class="source">Source: Encyclopedia of Korean Culture</div>
         <div class="section-title">Modern:</div>
         <p>Eradicated globally in 1980 through WHO vaccination campaigns.</p>`,
-
     "2": `<h3>Cholera</h3>
         <div class="section-title">Joseon Dynasty:</div>
         <p>Entered after the 19th century. Early burial and quarantine. Poor hygiene.</p>
         <div class="source">Source: Korean History Journal</div>
         <div class="section-title">Modern:</div>
         <p>Rehydration, antibiotics, isolation, global surveillance.</p>`,
-
     "3": `<h3>Measles</h3>
         <div class="section-title">Joseon Dynasty:</div>
         <p>Natural immunity. High mortality. Folk remedies.</p>
         <div class="source">Source: Study on Disease in Joseon</div>
         <div class="section-title">Modern:</div>
         <p>Prevention via MMR vaccine, herd immunity important.</p>`,
-
     "4": `<h3>Typhoid & Dysentery</h3>
         <div class="section-title">Joseon Dynasty:</div>
         <p>Spread via contaminated food and water. Patient isolation and folk cures.</p>
         <div class="source">Source: Korean Epidemic History</div>
         <div class="section-title">Modern:</div>
         <p>Antibiotics, vaccination, water sanitation improvements.</p>`,
-
     "5": `<h3>Influenza</h3>
         <div class="section-title">Modern:</div>
         <p>Seasonal flu and pandemics. Vaccines and antivirals developed.</p>
@@ -179,23 +209,35 @@
 
     let detailHtml;
     if(lang === "ko") {
-      detailHtml = details_ko[id] || "<p>상세 정보가 없습니다.</p>";
+      detailHtml = details_ko[id] || "<p>정보가 없습니다.</p>";
     } else {
-      detailHtml = details_en[id] || "<p>No details available.</p>";
+      detailHtml = details_en[id] || "<p>No information available.</p>";
     }
-
-    // 상세 내용 + 뒤로가기 링크 출력
-    detailText.innerHTML = detailHtml + `<a class="back-link" href="aaa.html?lang=${lang}">${lang === "ko" ? "목록으로 돌아가기" : "Back to List"}</a>`;
+    detailText.innerHTML = detailHtml;
   }
 
-  // 처음 렌더링
+  // 최초 렌더링
   renderContent(currentLang, id);
 
-  // 언어 변경시 다시 렌더링 (id 유지)
-  langSelect.addEventListener("change", (e) => {
-    currentLang = e.target.value;
-    renderContent(currentLang, id);
+  // 언어 선택 변경 이벤트
+  langSelect.addEventListener("change", () => {
+    const newLang = langSelect.value;
+    renderContent(newLang, id);
+    // URL에 lang 파라미터도 바꾸기 (새로고침 없이)
+    const newUrl = new URL(location.href);
+    newUrl.searchParams.set("lang", newLang);
+    history.replaceState(null, "", newUrl.toString());
   });
+
+  // 로딩 화면 제어
+  window.onload = function() {
+    setTimeout(() => {
+      const loading = document.querySelector('.loading');
+      loading.style.opacity = 0;
+      setTimeout(() => loading.style.visibility = 'hidden', 500);
+    }, 2500);
+  };
 </script>
+
 </body>
 </html>
