@@ -165,6 +165,10 @@
     </main>
   </div>
 
+  <footer>
+    <p id="footer-text">푸터 영역</p>
+  </footer>
+
   <script>
     const bacteriaList = document.querySelector(".bacteria-list");
     const hoverBox = document.getElementById("hover-box");
@@ -300,11 +304,11 @@
           clearTimeout(hoverTimeout);
           const data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
           if (data) {
-            hoverBox.innerHTML = `
+            hoverBox.innerHTML = 
               <h3>${data.title}</h3>
               <p>${data.preview}</p>
               <button onclick="location.href='bbb.html?id=${id}&lang=${currentLang}'">${currentLang === "ko" ? "자세히 보기" : "Details"}</button>
-            `;
+            ;
             hoverBox.style.display = "block";
           }
         });
@@ -327,7 +331,7 @@
     }
 
     function renderList(lang) {
-      bacteriaList.innerHTML = items[lang].map((text, i) => `<li data-id="${i+1}">${text}</li>`).join("");
+      bacteriaList.innerHTML = items[lang].map((text, i) => <li data-id="${i+1}">${text}</li>).join("");
       attachHoverListeners();
     }
 
