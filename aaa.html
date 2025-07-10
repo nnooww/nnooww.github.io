@@ -23,7 +23,7 @@
 
     .container {
       display: flex;
-      min-height: calc(100vh - 160px); /* 헤더+푸터 제외 */
+      min-height: calc(100vh - 160px);
     }
     aside {
       flex: 3;
@@ -32,7 +32,6 @@
       position: relative;
     }
 
-    /* aside 안에서 오른쪽 위에 언어 선택 위치 */
     #lang-select {
       position: absolute;
       top: 10px;
@@ -55,10 +54,9 @@
       cursor: pointer;
     }
 
-    /* 설명 박스 */
     #hover-box {
       position: absolute;
-      top: 50px;  /* 선택박스 아래쪽에 위치하도록 */
+      top: 50px;
       right: 10px;
       width: 350px;
       background: rgba(255,255,255,0.95);
@@ -86,7 +84,6 @@
       cursor: pointer;
     }
 
-    /* 생태변화 섹션 추가 스타일 */
     #ecology-impact {
       margin-top: 20px;
       background: #f2f8ff;
@@ -149,41 +146,16 @@
 
   <div class="container">
     <aside>
-      <h2 id="sidebar-title">사이드바 영역</h2>
       <select id="lang-select" aria-label="언어 선택">
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
       <div id="hover-box"></div>
 
-      <!-- 생태 변화 섹션 추가 -->
       <section id="ecology-impact">
-        <h3>왜 생태 변화가 전염병과 관련이 있을까?</h3>
-
-        <div class="info-box">
-          <h4>1. 생태계는 바이러스의 집이다</h4>
-          <p>바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.<br />자연이 변하면 병원체의 서식지도 바뀌게 됩니다.</p>
-        </div>
-
-        <div class="info-box">
-          <h4>2. 인간이 경계를 넘으면 바이러스도 따라온다</h4>
-          <p>산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.<br />이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다.</p>
-        </div>
-
-        <div class="info-box">
-          <h4>3. 기후 변화는 병의 활동 범위를 넓힌다</h4>
-          <p>기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.<br />그 결과 열대병이 다른 나라로 확산되기도 합니다.</p>
-        </div>
-
-        <div class="info-box">
-          <h4>4. 생태 변화는 사람을 더 약하게 만든다</h4>
-          <p>기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.<br />면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다.</p>
-        </div>
-
-        <blockquote>
-          생태계는 바이러스와 인간 사이의 ‘경계선’입니다.<br />
-          그 경계가 무너질 때, 전염병은 인간에게 다가옵니다.
-        </blockquote>
+        <h3 id="ecology-title">왜 생태 변화가 전염병과 관련이 있을까?</h3>
+        <div id="ecology-content"></div>
+        <blockquote id="ecology-quote"></blockquote>
       </section>
     </aside>
 
@@ -204,8 +176,11 @@
 
     const headerTitle = document.getElementById("header-title");
     const footerText = document.getElementById("footer-text");
-    const sidebarTitle = document.getElementById("sidebar-title");
     const listTitle = document.getElementById("list-title");
+
+    const ecologyTitle = document.getElementById("ecology-title");
+    const ecologyContent = document.getElementById("ecology-content");
+    const ecologyQuote = document.getElementById("ecology-quote");
 
     const items = {
       ko: [
@@ -270,6 +245,53 @@
       }
     };
 
+    const ecologyData = {
+      ko: {
+        title: "왜 생태 변화가 전염병과 관련이 있을까?",
+        items: [
+          {
+            heading: "1. 생태계는 바이러스의 집이다",
+            text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
+          },
+          {
+            heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
+            text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
+          },
+          {
+            heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
+            text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다."
+          },
+          {
+            heading: "4. 생태 변화는 사람을 더 약하게 만든다",
+            text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
+          }
+        ],
+        quote: "생태계는 바이러스와 인간 사이의 ‘경계선’입니다.\n그 경계가 무너질 때, 전염병은 인간에게 다가옵니다."
+      },
+      en: {
+        title: "Why are ecological changes related to infectious diseases?",
+        items: [
+          {
+            heading: "1. Ecosystems are homes for viruses",
+            text: "Viruses and bacteria live within animals, water, and plants in nature.\nWhen nature changes, habitats for pathogens change as well."
+          },
+          {
+            heading: "2. When humans cross boundaries, viruses follow",
+            text: "Building cities by clearing mountains brings humans closer to wildlife.\nViruses that lived in animals can then jump to humans."
+          },
+          {
+            heading: "3. Climate change expands disease ranges",
+            text: "Rising temperatures let disease carriers like mosquitoes and ticks spread wider.\nAs a result, tropical diseases can spread to other countries."
+          },
+          {
+            heading: "4. Ecological changes weaken people",
+            text: "Famine, floods, and droughts contaminate water and cause hunger.\nPeople with weakened immunity get sick more easily."
+          }
+        ],
+        quote: "The ecosystem is the ‘borderline’ between viruses and humans.\nWhen that border collapses, infectious diseases approach humans."
+      }
+    };
+
     let currentLang = "ko";
 
     function attachHoverListeners() {
@@ -304,37 +326,60 @@
       });
 
       hoverBox.addEventListener("mouseleave", () => {
-        hoverTimeout = setTimeout(() => {
-          hoverBox.style.display = "none";
-        }, 200);
+        hoverBox.style.display = "none";
       });
     }
 
-    function renderList() {
-      bacteriaList.innerHTML = "";
-      const arr = items[currentLang];
-      arr.forEach((text, index) => {
-        const li = document.createElement("li");
-        li.textContent = text;
-        li.setAttribute("data-id", index + 1);
-        bacteriaList.appendChild(li);
-      });
+    function renderList(lang) {
+      bacteriaList.innerHTML = items[lang].map((text, i) => `<li data-id="${i+1}">${text}</li>`).join("");
       attachHoverListeners();
+    }
+
+    // ecology-impact 내용 렌더링 및 클릭 토글 적용
+    function renderEcology(lang) {
+      ecologyTitle.textContent = ecologyData[lang].title;
+      ecologyContent.innerHTML = "";
+
+      ecologyData[lang].items.forEach(section => {
+        const box = document.createElement("div");
+        box.classList.add("info-box");
+
+        const h4 = document.createElement("h4");
+        h4.textContent = section.heading;
+
+        const p = document.createElement("p");
+        p.textContent = section.text.replace(/\n/g, "\n");
+
+        box.appendChild(h4);
+        box.appendChild(p);
+        ecologyContent.appendChild(box);
+
+        // 클릭 시 토글 기능
+        h4.addEventListener("click", () => {
+          if (p.style.display === "block") {
+            p.style.display = "none";
+          } else {
+            p.style.display = "block";
+          }
+        });
+      });
+
+      ecologyQuote.textContent = ecologyData[lang].quote;
     }
 
     function updateTextLang() {
       if(currentLang === "ko") {
-        headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
+        headerTitle.textContent = ecologyData.ko.title;
         footerText.textContent = "푸터 영역";
-        sidebarTitle.textContent = "사이드바 영역";
         listTitle.textContent = "오른쪽 영역 리스트";
       } else {
-        headerTitle.textContent = "Why are ecological changes related to infectious diseases?";
+        headerTitle.textContent = ecologyData.en.title;
         footerText.textContent = "Footer area";
-        sidebarTitle.textContent = "Sidebar area";
         listTitle.textContent = "Right area list";
       }
-      renderList();
+      renderList(currentLang);
+      renderEcology(currentLang);
+      hoverBox.style.display = "none";
     }
 
     langSelect.addEventListener("change", (e) => {
@@ -345,17 +390,6 @@
     // 초기 렌더링
     updateTextLang();
 
-    // 토글 기능 - 생태 변화 내용 접기/펼치기
-    document.querySelectorAll('#ecology-impact .info-box h4').forEach(h4 => {
-      h4.addEventListener('click', () => {
-        const p = h4.nextElementSibling;
-        if (p.style.display === 'block') {
-          p.style.display = 'none';
-        } else {
-          p.style.display = 'block';
-        }
-      });
-    });
   </script>
 </body>
 </html>
