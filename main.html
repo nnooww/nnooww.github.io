@@ -71,5 +71,18 @@
       <span>송형록</span>
     </div>
   </div>
+
+  <script>
+    // 페이지 로드 후 1초 뒤 aaa.html로 이동
+    setTimeout(() => {
+      // 현재 주소에 lang 쿼리가 있다면 유지해서 넘겨주고 싶으면 아래처럼 수정 가능
+      // const url = new URL('aaa.html', location.origin);
+      // const lang = new URL(location.href).searchParams.get('lang');
+      // if(lang) url.searchParams.set('lang', lang);
+      // window.location.href = url.toString();
+
+      window.location.href = 'aaa.html';
+    }, 1000);
+  </script>
 </body>
 </html>
