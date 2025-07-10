@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <title>왜 생태 변화가 전염병과 관련이 있을까? (aaa.html)</title>
   <style>
-    /* 기존 스타일 유지 */
-
     * {
       box-sizing: border-box;
     }
@@ -60,8 +58,9 @@
     .bacteria-list > li:hover {
       color: #007acc;
     }
+    /* hover-box를 오른쪽 위 고정 */
     #hover-box {
-      position: absolute;
+      position: fixed;
       top: 50px;
       right: 10px;
       width: 350px;
@@ -115,14 +114,13 @@
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       overflow: hidden;
-      cursor: pointer; /* 클릭 가능 표시 */
+      cursor: pointer;
     }
     #ecology-impact .info-box h4 {
       font-size: 1rem;
       color: #114a77;
       margin: 0;
       padding: 10px 12px;
-      cursor: pointer;
       background-color: #e6f1ff;
       transition: background 0.3s;
       user-select: none;
@@ -130,7 +128,6 @@
     #ecology-impact .info-box h4:hover {
       background-color: #d0e6ff;
     }
-    /* p는 기본 숨김 */
     #ecology-impact .info-box p {
       font-size: 0.9rem;
       color: #333;
@@ -140,7 +137,6 @@
       margin: 0;
       white-space: pre-wrap;
     }
-    /* active 클래스가 붙으면 보여줌 */
     #ecology-impact .info-box.active p {
       display: block;
     }
@@ -269,51 +265,80 @@
           title: "왜 생태 변화가 전염병과 관련이 있을까?",
           items: [
             {
-              title: "생태계 파괴",
-              description: "서식지 파괴 및 야생동물 밀렵으로 병원체가 인간과 더 가까워짐."
+              heading: "1. 생태계는 바이러스의 집이다",
+              text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
             },
             {
-              title: "기후 변화",
-              description: "온도 상승과 강수 패턴 변화가 병원체 확산에 영향."
+              heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
+              text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
             },
             {
-              title: "도시화 및 인구 밀집",
-              description: "도시화로 인해 인구 밀집이 증가, 전염병 확산 위험 높아짐."
+              heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
+              text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다."
+            },
+            {
+              heading: "4. 생태 변화는 사람을 더 약하게 만든다",
+              text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
             }
           ],
-          quote: "“생태계 파괴는 전염병 확산의 주요 원인 중 하나입니다.”"
+          quote: "“생태계의 건강은 인간의 건강과 직결됩니다.”"
         },
         en: {
-          title: "Why is ecological change related to infectious diseases?",
+          title: "Why does ecological change relate to infectious diseases?",
           items: [
             {
-              title: "Ecosystem Destruction",
-              description: "Habitat destruction and wildlife poaching bring pathogens closer to humans."
+              heading: "1. Ecosystems are homes to viruses",
+              text: "Viruses and bacteria live in animals, water, and plants in nature.\nChanges in nature alter the habitats of pathogens."
             },
             {
-              title: "Climate Change",
-              description: "Rising temperatures and altered precipitation patterns affect pathogen spread."
+              heading: "2. When humans cross boundaries, viruses follow",
+              text: "Building cities over mountains brings humans closer to wildlife.\nViruses from animals can then transfer to humans."
             },
             {
-              title: "Urbanization & Population Density",
-              description: "Increased urban population density raises risks of disease outbreaks."
+              heading: "3. Climate change expands disease ranges",
+              text: "Rising temperatures allow vectors like mosquitoes and ticks to spread wider.\nThis results in tropical diseases spreading to new countries."
+            },
+            {
+              heading: "4. Ecological changes weaken people",
+              text: "Famine, floods, and droughts contaminate water and cause hunger.\nWeakened immune systems make people more susceptible to infections."
             }
           ],
-          quote: "“Ecosystem destruction is a major driver of disease spread.”"
+          quote: "\"The health of ecosystems is directly linked to human health.\""
         }
       };
 
+      // 현재 선택된 언어
       let currentLang = "ko";
 
+      // hoverBox 보이기 함수
+      function showHoverBox() {
+        hoverBox.style.display = "block";
+        hoverBox.setAttribute("aria-hidden", "false");
+      }
+      // hoverBox 숨기기 함수
+      function hideHoverBox() {
+        hoverBox.style.display = "none";
+        hoverBox.setAttribute("aria-hidden", "true");
+      }
+      // hoverBox 내용 설정 함수
+      function setHoverBoxContent(desc) {
+        hoverBox.innerHTML = `
+          <h3>${desc.title}</h3>
+          <p>${desc.preview}</p>
+          <button type="button" aria-label="${desc.title} 자세히 보기">자세히 보기</button>
+        `;
+      }
+
+      // 리스트 렌더링
       function renderList() {
         bacteriaList.innerHTML = "";
-        items[currentLang].forEach((item, index) => {
+        items[currentLang].forEach((text, index) => {
           const li = document.createElement("li");
-          li.textContent = item;
+          li.textContent = text;
           li.setAttribute("data-id", index + 1);
           li.setAttribute("tabindex", "0");
-          li.setAttribute("role", "button");
-          li.setAttribute("aria-describedby", "hover-box");
+          li.setAttribute("role", "listitem");
+          // 마우스 / 키보드 접근 이벤트
           li.addEventListener("mouseenter", () => {
             const id = li.getAttribute("data-id");
             setHoverBoxContent(descriptions[currentLang][id]);
@@ -325,67 +350,84 @@
             showHoverBox();
           });
           li.addEventListener("mouseleave", () => {
-            hideHoverBox();
+            // 100ms 뒤 마우스가 hoverBox 위에 없으면 숨김
+            setTimeout(() => {
+              if (!hoverBox.matches(":hover")) {
+                hideHoverBox();
+              }
+            }, 100);
           });
           li.addEventListener("blur", () => {
-            hideHoverBox();
+            setTimeout(() => {
+              if (!hoverBox.matches(":hover")) {
+                hideHoverBox();
+              }
+            }, 100);
           });
+
           bacteriaList.appendChild(li);
         });
       }
 
-      function setHoverBoxContent(desc) {
-        hoverBox.innerHTML = `<h3>${desc.title}</h3><p>${desc.preview}</p><button aria-label="자세히 보기">자세히 보기</button>`;
-      }
-
-      function showHoverBox() {
-        hoverBox.style.display = "block";
-        hoverBox.setAttribute("aria-hidden", "false");
-      }
-
-      function hideHoverBox() {
-        hoverBox.style.display = "none";
-        hoverBox.setAttribute("aria-hidden", "true");
-      }
-
+      // Ecology section 렌더링
       function renderEcology() {
         ecologyTitle.textContent = ecologyData[currentLang].title;
         ecologyContent.innerHTML = "";
         ecologyData[currentLang].items.forEach((item, idx) => {
           const div = document.createElement("div");
-          div.className = "info-box";
-          div.innerHTML = `<h4 tabindex="0">${item.title}</h4><p>${item.description}</p>`;
-          div.querySelector("h4").addEventListener("click", () => {
-            div.classList.toggle("active");
-          });
-          div.querySelector("h4").addEventListener("keypress", e => {
+          div.classList.add("info-box");
+          div.setAttribute("tabindex", "0");
+          div.setAttribute("role", "region");
+          div.setAttribute("aria-expanded", "false");
+
+          const heading = document.createElement("h4");
+          heading.textContent = item.heading;
+          div.appendChild(heading);
+
+          const paragraph = document.createElement("p");
+          paragraph.textContent = item.text;
+          div.appendChild(paragraph);
+
+          // 클릭 또는 키보드 접근으로 상세 토글
+          function toggleDetail() {
+            const isActive = div.classList.toggle("active");
+            div.setAttribute("aria-expanded", isActive);
+          }
+          heading.addEventListener("click", toggleDetail);
+          div.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              div.classList.toggle("active");
+              toggleDetail();
             }
           });
+
           ecologyContent.appendChild(div);
         });
         ecologyQuote.textContent = ecologyData[currentLang].quote;
       }
 
-      function updateTexts() {
-        headerTitle.textContent = currentLang === "ko" ? "왜 생태 변화가 전염병과 관련이 있을까?" : "Why is ecological change related to infectious diseases?";
-        listTitle.textContent = currentLang === "ko" ? "오른쪽 영역 리스트" : "List on Right Area";
-      }
-
+      // 언어 변경 처리
       langSelect.addEventListener("change", () => {
         currentLang = langSelect.value;
+        headerTitle.textContent = currentLang === "ko" ? "왜 생태 변화가 전염병과 관련이 있을까?" : "Why does ecological change relate to infectious diseases?";
+        listTitle.textContent = currentLang === "ko" ? "오른쪽 영역 리스트" : "Right side list";
         renderList();
         renderEcology();
-        updateTexts();
+        hideHoverBox();
+      });
+
+      // hoverBox 마우스 이벤트 (숨기기 방지)
+      hoverBox.addEventListener("mouseenter", () => {
+        showHoverBox();
+      });
+      hoverBox.addEventListener("mouseleave", () => {
         hideHoverBox();
       });
 
       // 초기 렌더링
       renderList();
       renderEcology();
-      updateTexts();
+      hideHoverBox();
     })();
   </script>
 </body>
