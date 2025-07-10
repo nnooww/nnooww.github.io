@@ -74,7 +74,6 @@
 <body>
 <header>
   <h1 id="header-title">병 이름 상세 설명</h1>
-  <!-- 언어 선택 박스는 main으로 옮겼으므로 여기는 비움 -->
 </header>
 
 <main id="detail-content">
@@ -82,7 +81,8 @@
     <option value="ko">한국어</option>
     <option value="en">English</option>
   </select>
-  <!-- 상세 내용이 여기 들어갑니다 -->
+
+  <div id="detail-text"></div>
 </main>
 
 <footer></footer>
@@ -159,9 +159,8 @@
   };
 
   const headerTitle = document.getElementById("header-title");
-  const footerText = document.getElementById("footer-text");
   const langSelect = document.getElementById("lang-select");
-  const detailContent = document.getElementById("detail-content");
+  const detailText = document.getElementById("detail-text");
 
   // URL 파라미터 가져오기
   function getParam(param) {
@@ -177,7 +176,6 @@
 
   function renderContent(lang, id) {
     headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
-    footerText.textContent = lang === "ko" ? "푸터 영역" : "Footer Area";
 
     let detailHtml;
     if(lang === "ko") {
@@ -185,14 +183,9 @@
     } else {
       detailHtml = details_en[id] || "<p>No details available.</p>";
     }
-    detailContent.innerHTML = detailHtml;
 
-    // 뒤로가기 링크 추가 (언어 유지하면서 aaa.html로)
-    const backLinkText = lang === "ko" ? "목록으로 돌아가기" : "Back to List";
-    detailContent.insertAdjacentHTML("beforeend", `<a class="back-link" href="aaa.html?lang=${lang}">${backLinkText}</a>`);
-
-    // 다시 언어 선택 박스를 넣어줌 (위에서 innerHTML 덮었으니까)
-    detailContent.appendChild(langSelect);
+    // 상세 내용 + 뒤로가기 링크 출력
+    detailText.innerHTML = detailHtml + `<a class="back-link" href="aaa.html?lang=${lang}">${lang === "ko" ? "목록으로 돌아가기" : "Back to List"}</a>`;
   }
 
   // 처음 렌더링
