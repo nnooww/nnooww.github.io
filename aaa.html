@@ -14,12 +14,13 @@
       font-family: Arial, sans-serif;
     }
     header, footer {
-      background: #444;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-      position: relative;
-    }
+    background: #444;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    flex-shrink: 0;
+    position: relative;
+  }
 
     .container {
       display: flex;
@@ -137,6 +138,35 @@
       text-align: center;
       line-height: 1.5;
     }
+
+    /* 로딩 스타일 */
+    .loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #333;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+    }
+    .loading > div {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
   </style>
 </head>
 <body>
@@ -165,9 +195,13 @@
     </main>
   </div>
 
-  <footer>
-    <p id="footer-text">푸터 영역</p>
-  </footer>
+  <footer></footer>
+
+  <!-- 로딩 화면 -->
+  <div class="loading">
+    로딩중...
+    <div></div>
+  </div>
 
   <script>
     const bacteriaList = document.querySelector(".bacteria-list");
@@ -181,6 +215,8 @@
     const ecologyTitle = document.getElementById("ecology-title");
     const ecologyContent = document.getElementById("ecology-content");
     const ecologyQuote = document.getElementById("ecology-quote");
+
+    const loadingDiv = document.querySelector('.loading');
 
     const items = {
       ko: [
@@ -266,95 +302,60 @@
             text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
           }
         ],
-        quote: "생태계는 바이러스와 인간 사이의 ‘경계선’입니다.\n그 경계가 무너질 때, 전염병은 인간에게 다가옵니다."
+        quote: "생태계 변화가 인류 건강에 미치는 영향은 과학적 연구로 점점 더 명확해지고 있습니다."
       },
       en: {
-        title: "Why are ecological changes related to infectious diseases?",
+        title: "Why Is Ecological Change Related to Infectious Diseases?",
         items: [
           {
-            heading: "1. Ecosystems are homes for viruses",
-            text: "Viruses and bacteria live within animals, water, and plants in nature.\nWhen nature changes, habitats for pathogens change as well."
+            heading: "1. Ecosystems Are Homes for Viruses",
+            text: "Viruses and bacteria live in animals, water, and plants.\nWhen nature changes, habitats for pathogens also shift."
           },
           {
-            heading: "2. When humans cross boundaries, viruses follow",
-            text: "Building cities by clearing mountains brings humans closer to wildlife.\nViruses that lived in animals can then jump to humans."
+            heading: "2. Crossing Boundaries Brings Viruses Along",
+            text: "Building cities by clearing forests increases contact with wildlife.\nViruses in animals can transfer to humans."
           },
           {
-            heading: "3. Climate change expands disease ranges",
-            text: "Rising temperatures let disease carriers like mosquitoes and ticks spread wider.\nAs a result, tropical diseases can spread to other countries."
+            heading: "3. Climate Change Expands Disease Range",
+            text: "Higher temperatures let disease vectors like mosquitoes spread wider.\nTropical diseases can then spread to new areas."
           },
           {
-            heading: "4. Ecological changes weaken people",
-            text: "Famine, floods, and droughts contaminate water and cause hunger.\nPeople with weakened immunity get sick more easily."
+            heading: "4. Ecological Change Weakens Humans",
+            text: "Famine, floods, and drought pollute water and weaken people.\nThose with weak immunity get sick more easily."
           }
         ],
-        quote: "The ecosystem is the ‘borderline’ between viruses and humans.\nWhen that border collapses, infectious diseases approach humans."
+        quote: "The impact of ecological changes on human health is becoming clearer through scientific research."
       }
     };
 
     let currentLang = "ko";
 
-    function attachHoverListeners() {
-      let hoverTimeout;
-
-      document.querySelectorAll(".bacteria-list > li").forEach(item => {
-        const id = item.getAttribute("data-id");
-
-        item.addEventListener("mouseenter", () => {
-          clearTimeout(hoverTimeout);
-          const data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
-          if (data) {
-            hoverBox.innerHTML = `
-              <h3>${data.title}</h3>
-              <p>${data.preview}</p>
-              <button onclick="location.href='bbb.html?id=${id}&lang=${currentLang}'">${currentLang === "ko" ? "자세히 보기" : "Details"}</button>
-            `;
-            hoverBox.style.display = "block";
-          }
-        });
-
-        item.addEventListener("mouseleave", () => {
-          hoverTimeout = setTimeout(() => {
-            hoverBox.style.display = "none";
-          }, 200);
-        });
-      });
-
-      hoverBox.addEventListener("mouseenter", () => {
-        clearTimeout(hoverTimeout);
-        hoverBox.style.display = "block";
-      });
-
-      hoverBox.addEventListener("mouseleave", () => {
-        hoverBox.style.display = "none";
+    function populateList() {
+      bacteriaList.innerHTML = "";
+      items[currentLang].forEach((name, idx) => {
+        const li = document.createElement("li");
+        li.textContent = name;
+        li.dataset.id = idx + 1;
+        bacteriaList.appendChild(li);
       });
     }
 
-    function renderList(lang) {
-      bacteriaList.innerHTML = items[lang].map((text, i) => `<li data-id="${i+1}">${text}</li>`).join("");
-      attachHoverListeners();
-    }
-
-    // ecology-impact 내용 렌더링 및 클릭 토글 적용
-    function renderEcology(lang) {
-      ecologyTitle.textContent = ecologyData[lang].title;
+    function updateEcology() {
+      const data = ecologyData[currentLang];
+      ecologyTitle.textContent = data.title;
       ecologyContent.innerHTML = "";
-
-      ecologyData[lang].items.forEach(section => {
+      data.items.forEach(item => {
         const box = document.createElement("div");
-        box.classList.add("info-box");
+        box.className = "info-box";
 
         const h4 = document.createElement("h4");
-        h4.textContent = section.heading;
+        h4.textContent = item.heading;
+        box.appendChild(h4);
 
         const p = document.createElement("p");
-        p.textContent = section.text.replace(/\n/g, "\n");
-
-        box.appendChild(h4);
+        p.textContent = item.text;
         box.appendChild(p);
-        ecologyContent.appendChild(box);
 
-        // 클릭 시 토글 기능
         h4.addEventListener("click", () => {
           if (p.style.display === "block") {
             p.style.display = "none";
@@ -362,34 +363,85 @@
             p.style.display = "block";
           }
         });
-      });
 
-      ecologyQuote.textContent = ecologyData[lang].quote;
+        ecologyContent.appendChild(box);
+      });
+      ecologyQuote.textContent = data.quote;
     }
 
-    function updateTextLang() {
-      if(currentLang === "ko") {
-        headerTitle.textContent = ecologyData.ko.title;
+    function updateTexts() {
+      if(currentLang === "ko"){
+        headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
         footerText.textContent = "푸터 영역";
         listTitle.textContent = "오른쪽 영역 리스트";
       } else {
-        headerTitle.textContent = ecologyData.en.title;
+        headerTitle.textContent = "Why Is Ecological Change Related to Infectious Diseases?";
         footerText.textContent = "Footer area";
-        listTitle.textContent = "Right area list";
+        listTitle.textContent = "List on right side";
       }
-      renderList(currentLang);
-      renderEcology(currentLang);
-      hoverBox.style.display = "none";
     }
 
-    langSelect.addEventListener("change", (e) => {
-      currentLang = e.target.value;
-      updateTextLang();
+    function showHoverBox(id) {
+      let data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
+      if(!data) return;
+      hoverBox.style.display = "block";
+      hoverBox.style.top = "50px";
+      hoverBox.style.right = "10px";
+
+      hoverBox.innerHTML = `
+        <h3>${data.title}</h3>
+        <p>${data.preview}</p>
+        <button class="go-bbb" data-url="bbb.html?id=${id}&lang=${currentLang}">
+          ${currentLang === "ko" ? "자세히 보기" : "Details"}
+        </button>
+      `;
+    }
+
+    function hideHoverBox() {
+      hoverBox.style.display = "none";
+      hoverBox.innerHTML = "";
+    }
+
+    bacteriaList.addEventListener("mouseover", e => {
+      if(e.target.tagName === "LI"){
+        const id = e.target.dataset.id;
+        showHoverBox(id);
+      }
+    });
+    bacteriaList.addEventListener("mouseout", e => {
+      if(e.target.tagName === "LI"){
+        hideHoverBox();
+      }
     });
 
-    // 초기 렌더링
-    updateTextLang();
+    langSelect.addEventListener("change", e => {
+      currentLang = e.target.value;
+      populateList();
+      updateTexts();
+      updateEcology();
+      hideHoverBox();
+    });
 
+    // 클릭 시 로딩 보여주고 1초 후 이동
+    document.body.addEventListener('click', e => {
+      if(e.target.classList.contains('go-bbb')){
+        e.preventDefault();
+        const url = e.target.getAttribute('data-url');
+        if(!url) return;
+
+        loadingDiv.style.visibility = 'visible';
+        loadingDiv.style.opacity = '1';
+
+        setTimeout(() => {
+          window.location.href = url;
+        }, 1000);
+      }
+    });
+
+    // 초기 화면 세팅
+    populateList();
+    updateTexts();
+    updateEcology();
   </script>
 </body>
 </html>
