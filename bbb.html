@@ -1,178 +1,204 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>병 이름 상세 설명 (bbb.html)</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header, footer {
-      background: #444;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-      flex-shrink: 0;
-    }
-    main {
-      flex-grow: 1;
-      padding: 1.5em 2em;
-      background: white;
-      max-width: 900px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      overflow-y: auto;
-    }
-    h1, h3 {
-      margin-top: 0;
-    }
-    .section-title {
-      font-weight: bold;
-      margin-top: 1em;
-    }
-    .source {
-      font-size: 0.8em;
-      color: #555;
-      margin-bottom: 1em;
-    }
-    a.back-link {
-      display: inline-block;
-      margin-top: 2em;
-      color: #333;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.back-link:hover {
-      text-decoration: underline;
-    }
-    #lang-toggle {
-      margin-top: 0.5em;
-      padding: 0.4em 0.8em;
-      font-size: 0.9em;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>병 이름 상세 설명 (bbb.html)</title>
+<style>
+  /* 화면 꽉 채우기 */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header, footer {
+    background: #444;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    flex-shrink: 0;
+    position: relative;
+  }
+  main {
+    flex-grow: 1;
+    padding: 1.5em 2em;
+    background: white;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-radius: 0; /* 여백 없애기 */
+    box-shadow: none; /* 그림자 없애서 꽉찬 느낌 */
+  }
+  h1, h3 {
+    margin-top: 0;
+  }
+  .section-title {
+    font-weight: bold;
+    margin-top: 1em;
+  }
+  .source {
+    font-size: 0.8em;
+    color: #555;
+    margin-bottom: 1em;
+  }
+  a.back-link {
+    display: inline-block;
+    margin-top: 2em;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  a.back-link:hover {
+    text-decoration: underline;
+  }
+
+  #lang-select {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.3em;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1 id="page-title" data-lang="detail-header">병 이름 상세 설명</h1>
-    <button id="lang-toggle">🇰🇷 → 🇺🇸</button>
-  </header>
+<header>
+  <h1 id="header-title">병 이름 상세 설명</h1>
+  <select id="lang-select" aria-label="언어 선택">
+    <option value="ko">한국어</option>
+    <option value="en">English</option>
+  </select>
+</header>
 
-  <main id="detail-content"></main>
+<main id="detail-content">
+  <!-- 상세 내용이 여기 들어감 -->
+</main>
 
-  <footer>
-    <p data-lang="footer">푸터 영역</p>
-  </footer>
+<footer>
+  <p id="footer-text">푸터 영역</p>
+</footer>
 
-  <script>
-    const translations = {
-      "detail-header": "Disease Detail Page",
-      "footer": "Footer Area",
-      "not-found": "Invalid access. Please go back to the list."
-    };
-
-    const details_ko = {
-      "1": `<h3>두창(천연두)</h3>
+<script>
+  const details_ko = {
+    "1": `<h3>두창(천연두)</h3>
         <div class="section-title">조선시대:</div>
         <p>두창은 조선시대 대표적인 전염병으로 자연 치유 의존, 민간신앙과 함께 후기에는 종두법 도입 시도됨.</p>
         <div class="source">출처: 한국민족문화대백과사전</div>
         <div class="section-title">현대:</div>
         <p>WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨.</p>`,
 
-      "2": `<h3>콜레라(호열자)</h3>
+    "2": `<h3>콜레라(호열자)</h3>
         <div class="section-title">조선시대:</div>
         <p>19세기 개항 이후 유입, 조기 매장 및 격리 시도, 위생상태 열악.</p>
         <div class="source">출처: 한국역사연구</div>
         <div class="section-title">현대:</div>
         <p>수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영.</p>`,
 
-      "3": `<h3>홍역(마마)</h3>
+    "3": `<h3>홍역(마마)</h3>
         <div class="section-title">조선시대:</div>
         <p>자연 면역 의존, 민간요법 활용, 사망률 높았음.</p>
         <div class="source">출처: 조선시대 질병사 연구</div>
         <div class="section-title">현대:</div>
         <p>MMR 백신 보급으로 예방, 집단 면역 중요.</p>`,
 
-      "4": `<h3>장티푸스 및 이질</h3>
+    "4": `<h3>장티푸스 및 이질</h3>
         <div class="section-title">조선시대:</div>
         <p>오염된 물·음식 전파, 환자 격리, 민간 치료.</p>
         <div class="source">출처: 한국 전염병사</div>
         <div class="section-title">현대:</div>
         <p>항생제, 예방접종, 상하수도 개선으로 예방.</p>`,
 
-      "5": `<h3>인플루엔자</h3>
+    "5": `<h3>인플루엔자</h3>
         <div class="section-title">현대:</div>
         <p>계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨.</p>
         <div class="source">출처: 질병관리청, WHO</div>`
-    };
+  };
 
-    const details_en = {
-      "1": `<h3>Smallpox</h3>
+  const details_en = {
+    "1": `<h3>Smallpox</h3>
         <div class="section-title">Joseon Dynasty:</div>
-        <p>A major epidemic during the Joseon era. Natural healing, later inoculation attempts.</p>
+        <p>A major epidemic in the Joseon era. Vaccination efforts eradicated it globally.</p>
         <div class="source">Source: Encyclopedia of Korean Culture</div>
         <div class="section-title">Modern:</div>
         <p>Eradicated globally in 1980 through WHO vaccination campaigns.</p>`,
 
-      "2": `<h3>Cholera</h3>
+    "2": `<h3>Cholera</h3>
         <div class="section-title">Joseon Dynasty:</div>
         <p>Entered after the 19th century. Early burial and quarantine. Poor hygiene.</p>
         <div class="source">Source: Korean History Journal</div>
         <div class="section-title">Modern:</div>
         <p>Rehydration, antibiotics, isolation, global surveillance.</p>`,
 
-      "3": `<h3>Measles</h3>
+    "3": `<h3>Measles</h3>
         <div class="section-title">Joseon Dynasty:</div>
-        <p>Natural immunity, folk remedies, high mortality.</p>
-        <div class="source">Source: Disease History Study</div>
+        <p>Natural immunity. High mortality. Folk remedies.</p>
+        <div class="source">Source: Study on Disease in Joseon</div>
         <div class="section-title">Modern:</div>
-        <p>MMR vaccine and herd immunity are key.</p>`,
+        <p>Prevention via MMR vaccine, herd immunity important.</p>`,
 
-      "4": `<h3>Typhoid & Dysentery</h3>
+    "4": `<h3>Typhoid & Dysentery</h3>
         <div class="section-title">Joseon Dynasty:</div>
-        <p>Contaminated food/water, traditional isolation and remedies.</p>
-        <div class="source">Source: Infectious Disease History</div>
+        <p>Spread via contaminated food and water. Patient isolation and folk cures.</p>
+        <div class="source">Source: Korean Epidemic History</div>
         <div class="section-title">Modern:</div>
-        <p>Antibiotics, vaccines, and sanitation improvements.</p>`,
+        <p>Antibiotics, vaccination, water sanitation improvements.</p>`,
 
-      "5": `<h3>Influenza</h3>
+    "5": `<h3>Influenza</h3>
         <div class="section-title">Modern:</div>
         <p>Seasonal flu and pandemics. Vaccines and antivirals developed.</p>
-        <div class="source">Source: KCDC, WHO</div>`
-    };
+        <div class="source">Source: CDC, WHO</div>`
+  };
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const detailContent = document.getElementById('detail-content');
+  const headerTitle = document.getElementById("header-title");
+  const footerText = document.getElementById("footer-text");
+  const langSelect = document.getElementById("lang-select");
+  const detailContent = document.getElementById("detail-content");
 
-    if (id && details_ko[id]) {
-      detailContent.innerHTML = details_ko[id];
+  // URL 파라미터 가져오기
+  function getParam(param) {
+    const url = new URL(location.href);
+    return url.searchParams.get(param);
+  }
+
+  let currentLang = getParam("lang") || "ko";
+  let id = getParam("id") || "1";
+
+  // 언어 선택 드롭다운 초기값 설정
+  langSelect.value = currentLang;
+
+  function renderContent(lang, id) {
+    headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
+    footerText.textContent = lang === "ko" ? "푸터 영역" : "Footer Area";
+
+    let detailHtml;
+    if(lang === "ko") {
+      detailHtml = details_ko[id] || "<p>상세 정보가 없습니다.</p>";
     } else {
-      detailContent.innerHTML = `<p data-lang="not-found">잘못된 접근입니다. 목록에서 다시 선택해주세요.</p>`;
+      detailHtml = details_en[id] || "<p>No details available.</p>";
     }
+    detailContent.innerHTML = detailHtml;
 
-    document.getElementById("lang-toggle").addEventListener("click", () => {
-      document.querySelectorAll("[data-lang]").forEach(el => {
-        const key = el.getAttribute("data-lang");
-        if (translations[key]) {
-          el.textContent = translations[key];
-        }
-      });
+    // 뒤로가기 링크 추가 (언어 유지하면서 aaa.html로)
+    const backLinkText = lang === "ko" ? "목록으로 돌아가기" : "Back to List";
+    detailContent.insertAdjacentHTML("beforeend", `<a class="back-link" href="aaa.html?lang=${lang}">${backLinkText}</a>`);
+  }
 
-      if (id && details_en[id]) {
-        detailContent.innerHTML = details_en[id];
-      }
-    });
-  </script>
+  // 처음 렌더링
+  renderContent(currentLang, id);
+
+  // 언어 변경시 다시 렌더링 (id 유지)
+  langSelect.addEventListener("change", (e) => {
+    currentLang = e.target.value;
+    renderContent(currentLang, id);
+  });
+</script>
 </body>
 </html>
