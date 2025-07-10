@@ -18,10 +18,21 @@
       color: white;
       text-align: center;
       padding: 1em 0;
+      position: relative;
     }
+    /* 언어 선택 드롭다운 위치 */
+    #lang-select {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 0.3em;
+      font-size: 0.9em;
+      cursor: pointer;
+    }
+
     .container {
       display: flex;
-      min-height: calc(100vh - 160px);
+      min-height: calc(100vh - 160px); /* 헤더+푸터 제외 */
     }
     aside {
       flex: 3;
@@ -40,6 +51,8 @@
       margin-bottom: 1em;
       cursor: pointer;
     }
+
+    /* 설명 박스 */
     #hover-box {
       position: absolute;
       top: 1em;
@@ -52,23 +65,20 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       z-index: 10;
     }
+
     #hover-box h3 {
       margin-top: 0;
       font-size: 1.1em;
     }
+
     #hover-box p {
       margin: 0.5em 0;
       font-size: 0.9em;
     }
+
     #hover-box button {
       margin-top: 1em;
       padding: 0.5em 1em;
-      font-size: 0.9em;
-      cursor: pointer;
-    }
-    #lang-toggle {
-      margin-top: 0.5em;
-      padding: 0.4em 0.8em;
       font-size: 0.9em;
       cursor: pointer;
     }
@@ -76,96 +86,127 @@
 </head>
 <body>
   <header>
-    <h1 id="header-title" data-lang="header-title">헤더 영역</h1>
-    <button id="lang-toggle">🇰🇷 → 🇺🇸</button>
+    <h1 id="header-title">헤더 영역</h1>
+    <select id="lang-select" aria-label="언어 선택">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+    </select>
   </header>
 
   <div class="container">
     <aside>
-      <h2 data-lang="sidebar-title">사이드바 영역</h2>
+      <h2 id="sidebar-title">사이드바 영역</h2>
       <div id="hover-box"></div>
     </aside>
 
     <main>
-      <h2 data-lang="main-title">오른쪽 영역 리스트</h2>
-      <ol class="bacteria-list">
-        <li data-id="1" data-lang="item-1">1. 두창(천연두)</li>
-        <li data-id="2" data-lang="item-2">2. 콜레라(호열자)</li>
-        <li data-id="3" data-lang="item-3">3. 홍역(마마)</li>
-        <li data-id="4" data-lang="item-4">4. 장티푸스 및 이질</li>
-        <li data-id="5" data-lang="item-5">5. 인플루엔자</li>
+      <h2 id="main-title">오른쪽 영역 리스트</h2>
+      <ol class="bacteria-list" id="bacteria-list">
+        <!-- 리스트는 JS에서 언어별로 채움 -->
       </ol>
     </main>
   </div>
 
   <footer>
-    <p data-lang="footer">푸터 영역</p>
+    <p id="footer-text">푸터 영역</p>
   </footer>
 
-  <script>
-    const descriptions = {
-      "1": { title: "두창(천연두)", preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨." },
-      "2": { title: "콜레라(호열자)", preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영." },
-      "3": { title: "홍역(마마)", preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐." },
-      "4": { title: "장티푸스 및 이질", preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능." },
-      "5": { title: "인플루엔자", preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발." }
-    };
+ <script>
+  // 한국어 데이터
+  const data_ko = {
+    header: "헤더 영역",
+    sidebar: "사이드바 영역",
+    mainTitle: "오른쪽 영역 리스트",
+    footer: "푸터 영역",
+    bacteriaList: [
+      { id: "1", text: "1. 두창(천연두)", title: "두창(천연두)", preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨." },
+      { id: "2", text: "2. 콜레라(호열자)", title: "콜레라(호열자)", preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영." },
+      { id: "3", text: "3. 홍역(마마)", title: "홍역(마마)", preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐." },
+      { id: "4", text: "4. 장티푸스 및 이질", title: "장티푸스 및 이질", preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능." },
+      { id: "5", text: "5. 인플루엔자", title: "인플루엔자", preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발." }
+    ]
+  };
 
-    const hoverBox = document.getElementById("hover-box");
-    let hoverTimeout;
+  // 영어 데이터
+  const data_en = {
+    header: "Header Area",
+    sidebar: "Sidebar Area",
+    mainTitle: "Right Area List",
+    footer: "Footer Area",
+    bacteriaList: [
+      { id: "1", text: "1. Smallpox", title: "Smallpox", preview: "A major epidemic in the Joseon era. Vaccination efforts eradicated it globally." },
+      { id: "2", text: "2. Cholera", title: "Cholera", preview: "Introduced after the 19th century. Treated with rehydration and antibiotics." },
+      { id: "3", text: "3. Measles", title: "Measles", preview: "Natural immunity. Preventable by vaccine." },
+      { id: "4", text: "4. Typhoid & Dysentery", title: "Typhoid & Dysentery", preview: "Spread by contaminated food/water. Prevented with antibiotics and sanitation." },
+      { id: "5", text: "5. Influenza", title: "Influenza", preview: "Seasonal flu and pandemics. Vaccines and antivirals developed." }
+    ]
+  };
 
-    document.querySelectorAll(".bacteria-list > li").forEach(item => {
-      const id = item.getAttribute("data-id");
-      item.addEventListener("mouseenter", () => {
-        clearTimeout(hoverTimeout);
-        const data = descriptions[id];
-        if (data) {
-          hoverBox.innerHTML = `
-            <h3>${data.title}</h3>
-            <p>${data.preview}</p>
-            <button data-lang="button-detail" onclick="location.href='bbb.html?id=${id}'">자세히 보기</button>
-          `;
-          hoverBox.style.display = "block";
-        }
+  const headerTitle = document.getElementById("header-title");
+  const sidebarTitle = document.getElementById("sidebar-title");
+  const mainTitle = document.getElementById("main-title");
+  const footerText = document.getElementById("footer-text");
+  const bacteriaListEl = document.getElementById("bacteria-list");
+  const hoverBox = document.getElementById("hover-box");
+  const langSelect = document.getElementById("lang-select");
+
+  // 현재 언어 상태
+  let currentLang = "ko";
+
+  function renderList(lang) {
+    let data = lang === "ko" ? data_ko : data_en;
+
+    headerTitle.textContent = data.header;
+    sidebarTitle.textContent = data.sidebar;
+    mainTitle.textContent = data.mainTitle;
+    footerText.textContent = data.footer;
+
+    bacteriaListEl.innerHTML = ""; // 초기화
+
+    data.bacteriaList.forEach(item => {
+      const li = document.createElement("li");
+      li.textContent = item.text;
+      li.setAttribute("data-id", item.id);
+      li.style.cursor = "pointer";
+      bacteriaListEl.appendChild(li);
+
+      li.addEventListener("mouseenter", () => {
+        hoverBox.innerHTML = `
+          <h3>${item.title}</h3>
+          <p>${item.preview}</p>
+          <button onclick="location.href='bbb.html?id=${item.id}&lang=${lang}'">${lang === "ko" ? "자세히 보기" : "See Details"}</button>
+        `;
+        hoverBox.style.display = "block";
       });
 
-      item.addEventListener("mouseleave", () => {
-        hoverTimeout = setTimeout(() => {
+      li.addEventListener("mouseleave", () => {
+        setTimeout(() => {
           hoverBox.style.display = "none";
         }, 200);
       });
     });
+  }
 
-    hoverBox.addEventListener("mouseenter", () => {
-      clearTimeout(hoverTimeout);
-      hoverBox.style.display = "block";
-    });
+  // 처음 렌더링
+  renderList(currentLang);
 
-    hoverBox.addEventListener("mouseleave", () => {
+  // 언어 선택 변경 이벤트
+  langSelect.addEventListener("change", (e) => {
+    currentLang = e.target.value;
+    renderList(currentLang);
+  });
+
+  // hoverBox mouseenter, mouseleave 제어 (hover박스에서 마우스 나가면 숨김)
+  let hoverTimeout;
+  hoverBox.addEventListener("mouseenter", () => {
+    clearTimeout(hoverTimeout);
+    hoverBox.style.display = "block";
+  });
+  hoverBox.addEventListener("mouseleave", () => {
+    hoverTimeout = setTimeout(() => {
       hoverBox.style.display = "none";
-    });
-
-    const translations = {
-      "header-title": "Header Area",
-      "sidebar-title": "Sidebar Area",
-      "main-title": "Right Panel List",
-      "footer": "Footer Area",
-      "item-1": "1. Smallpox",
-      "item-2": "2. Cholera",
-      "item-3": "3. Measles",
-      "item-4": "4. Typhoid & Dysentery",
-      "item-5": "5. Influenza",
-      "button-detail": "View Details"
-    };
-
-    document.getElementById("lang-toggle").addEventListener("click", () => {
-      document.querySelectorAll("[data-lang]").forEach(el => {
-        const key = el.getAttribute("data-lang");
-        if (translations[key]) {
-          el.textContent = translations[key];
-        }
-      });
-    });
-  </script>
+    }, 200);
+  });
+</script>
 </body>
 </html>
