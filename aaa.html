@@ -20,15 +20,6 @@
       padding: 1em 0;
       position: relative;
     }
-    /* 헤더 오른쪽 위에 언어 선택 박스 위치 */
-    #lang-select {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 4px 8px;
-      font-size: 0.9em;
-      cursor: pointer;
-    }
 
     .container {
       display: flex;
@@ -40,6 +31,18 @@
       background: #ddd;
       position: relative;
     }
+
+    /* aside 안에서 오른쪽 위에 언어 선택 위치 */
+    #lang-select {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 8px;
+      font-size: 0.9em;
+      cursor: pointer;
+      z-index: 20;
+    }
+
     main {
       flex: 1;
       padding: 1em;
@@ -55,8 +58,8 @@
     /* 설명 박스 */
     #hover-box {
       position: absolute;
-      top: 1em;
-      right: 1em;
+      top: 50px;  /* 선택박스 아래쪽에 위치하도록 */
+      right: 10px;
       width: 350px;
       background: rgba(255,255,255,0.95);
       border: 1px solid #aaa;
@@ -87,15 +90,15 @@
 <body>
   <header>
     <h1 id="header-title">질병 리스트</h1>
-    <select id="lang-select" aria-label="언어 선택">
-      <option value="ko">한국어</option>
-      <option value="en">English</option>
-    </select>
   </header>
 
   <div class="container">
     <aside>
       <h2 id="sidebar-title">사이드바 영역</h2>
+      <select id="lang-select" aria-label="언어 선택">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+      </select>
       <div id="hover-box"></div>
     </aside>
 
@@ -119,7 +122,6 @@
     const sidebarTitle = document.getElementById("sidebar-title");
     const listTitle = document.getElementById("list-title");
 
-    // 각 언어별 리스트 텍스트
     const items = {
       ko: [
         "두창(천연두)",
@@ -137,7 +139,6 @@
       ]
     };
 
-    // hover 박스 내용 (한국어)
     const descriptions_ko = {
       "1": {
         title: "두창(천연두)",
@@ -161,7 +162,6 @@
       }
     };
 
-    // hover 박스 내용 (영어)
     const descriptions_en = {
       "1": {
         title: "Smallpox",
@@ -227,7 +227,6 @@
       bacteriaList.innerHTML = items[lang].map((text, i) => `<li data-id="${i+1}">${text}</li>`).join("");
       attachHoverListeners();
 
-      // 헤더, 사이드바, 리스트 제목, 푸터 텍스트 변경
       if (lang === "ko") {
         headerTitle.textContent = "질병 리스트";
         sidebarTitle.textContent = "사이드바 영역";
@@ -241,14 +240,12 @@
       }
     }
 
-    // 초기 렌더링
     renderList(currentLang);
 
-    // 언어 선택시 변경
     langSelect.addEventListener("change", e => {
       currentLang = e.target.value;
       renderList(currentLang);
-      hoverBox.style.display = "none"; // 언어 바뀔 때 설명 박스 숨기기
+      hoverBox.style.display = "none";
     });
   </script>
 </body>
