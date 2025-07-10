@@ -15,21 +15,21 @@
       padding: 1em 0;
     }
     .container {
-      display: flex;
-      min-height: 400px;
-    }
-    aside {
-      background: #ddd;
-      width: 200px;
-      padding: 1em;
-      box-sizing: border-box;
-    }
-    main {
-      background: #eee;
-      flex-grow: 1;
-      padding: 1em;
-      box-sizing: border-box;
-    }
+  display: flex;
+  min-height: 400px;
+}
+aside {
+  flex: 3; /* 왼쪽 영역 3 */
+  padding: 1em;
+  background: #ddd;
+  box-sizing: border-box;
+}
+main {
+  flex: 1; /* 오른쪽 영역 1 */
+  padding: 1em;
+  background: #eee;
+  box-sizing: border-box;
+}
     ol ol {
       margin-left: 1.5em;
       display: none; /* 기본 숨김 */
