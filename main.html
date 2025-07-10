@@ -6,8 +6,7 @@
   <title>융합수업 프로젝트</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       font-family: 'Noto Sans KR', sans-serif;
       background: linear-gradient(135deg, #e0f7fa, #ffffff);
       height: 100vh;
@@ -56,9 +55,9 @@
 </head>
 <body>
   <div class="intro-container">
-    <h1 id="main-title">🌍 융합수업 프로젝트</h1>
-    <p id="subtitle">환경과 전염병의 연결고리를 탐구하다</p>
-    <div class="creator-list" id="creator-list">
+    <h1 id="title">🌍 융합수업 프로젝트</h1>
+    <p id="desc">환경과 전염병의 연결고리를 탐구하다</p>
+    <div class="creator-list" id="creators">
       <span>채우혁</span>
       <span>채인혁</span>
       <span>최진서</span>
@@ -67,30 +66,32 @@
   </div>
 
   <script>
-    const lang = new URL(location.href).searchParams.get('lang') || 'ko';
+    const params = new URL(location.href).searchParams;
+    const lang = params.get('lang') || 'ko';
 
-    const textData = {
+    const text = {
       ko: {
         title: "🌍 융합수업 프로젝트",
-        subtitle: "환경과 전염병의 연결고리를 탐구하다",
-        creators: ["채우혁", "채인혁", "최진서", "송형록"]
+        desc: "환경과 전염병의 연결고리를 탐구하다",
+        names: ["채우혁", "채인혁", "최진서", "송형록"]
       },
       en: {
-        title: "🌍 Convergence Class Project",
-        subtitle: "Exploring the Link Between Environment and Infectious Diseases",
-        creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
+        title: "🌍 Interdisciplinary Project",
+        desc: "Exploring the Link Between Environment and Epidemics",
+        names: ["WooHyuk Chae", "InHyuk Chae", "JinSeo Choi", "HyungRok Song"]
       }
     };
 
-    const content = textData[lang];
-    document.getElementById('main-title').textContent = content.title;
-    document.getElementById('subtitle').textContent = content.subtitle;
-    document.getElementById('creator-list').innerHTML = content.creators.map(name => `<span>${name}</span>`).join('');
+    // 텍스트 반영
+    document.getElementById('title').textContent = text[lang].title;
+    document.getElementById('desc').textContent = text[lang].desc;
 
+    const creators = document.getElementById('creators');
+    creators.innerHTML = text[lang].names.map(name => `<span>${name}</span>`).join('');
+
+    // 4초 후 aaa.html 이동
     setTimeout(() => {
-      const url = new URL('aaa.html', location.origin);
-      url.searchParams.set('lang', lang);
-      window.location.href = url.toString();
+      window.location.href = `aaa.html?lang=${lang}`;
     }, 4000);
   </script>
 </body>
