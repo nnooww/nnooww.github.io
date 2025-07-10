@@ -32,7 +32,10 @@
       background: #ddd;
       position: relative;
     }
-
+    footer {
+  background-color: #000;
+  padding: 20px;
+}
     #lang-select {
       position: absolute;
       top: 10px;
@@ -209,7 +212,6 @@
     const langSelect = document.getElementById("lang-select");
 
     const headerTitle = document.getElementById("header-title");
-    const footerText = document.getElementById("footer-text");
     const listTitle = document.getElementById("list-title");
 
     const ecologyTitle = document.getElementById("ecology-title");
@@ -372,11 +374,9 @@
     function updateTexts() {
       if(currentLang === "ko"){
         headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
-        footerText.textContent = "푸터 영역";
         listTitle.textContent = "오른쪽 영역 리스트";
       } else {
         headerTitle.textContent = "Why Is Ecological Change Related to Infectious Diseases?";
-        footerText.textContent = "Footer area";
         listTitle.textContent = "List on right side";
       }
     }
