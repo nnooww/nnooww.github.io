@@ -5,174 +5,287 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>병 이름 상세 설명 (bbb.html)</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-    }
     body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header, footer {
-      background: #444;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-      flex-shrink: 0;
-      position: relative;
-    }
-    main {
-      flex-grow: 1;
-      padding: 1.5em 2em;
-      background: white;
-      max-width: 900px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      overflow-y: auto;
-    }
-    h1, h3 {
-      margin-top: 0;
-    }
-    .section-title {
-      font-weight: bold;
-      margin-top: 1em;
-    }
-    .source {
-      font-size: 0.8em;
-      color: #555;
-      margin-bottom: 1em;
-    }
-    a.back-link {
-      display: inline-block;
-      margin-top: 2em;
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0; padding: 20px;
+      background: #f2f8ff;
       color: #333;
-      text-decoration: none;
-      font-weight: bold;
     }
-    a.back-link:hover {
-      text-decoration: underline;
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1a3c57;
+      margin-bottom: 40px;
+    }
+
+    .info-box {
+      background: #ffffff;
+      border-left: 6px solid #4a90e2;
+      padding: 0;
+      margin-bottom: 25px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .info-box h3 {
+      font-size: 1.3rem;
+      color: #114a77;
+      margin: 0;
+      padding: 20px 25px;
+      cursor: pointer;
+      background-color: #e6f1ff;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    .info-box h3:hover {
+      background-color: #d0e6ff;
+    }
+
+    .info-box p {
+      font-size: 1.1rem;
+      color: #333;
+      line-height: 1.6;
+      padding: 0 25px 20px;
+      display: none;
+      margin: 0;
+    }
+
+    .info-box.active p {
+      display: block;
+    }
+
+    .source {
+      font-size: 0.9rem;
+      color: #555;
+      padding: 0 25px 20px;
     }
 
     #lang-select {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 0.3em;
-      font-size: 0.9em;
-      cursor: pointer;
+      float: right;
+      margin-bottom: 20px;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
-  <header>
+  <div class="container">
     <h1 id="header-title">병 이름 상세 설명</h1>
-  </header>
 
-  <main id="detail-content">
     <select id="lang-select" aria-label="언어 선택">
       <option value="ko">한국어</option>
       <option value="en">English</option>
     </select>
-    <div id="detail-text"></div>
-  </main>
 
-  <footer></footer>
+    <div id="content-area"></div>
+  </div>
 
   <script>
-    const details_ko = {
-      "1": `<h3>두창(천연두)</h3>
-        <div class="section-title">조선시대:</div>
-        <p>두창은 조선시대 대표적인 전염병으로 자연 치유 의존, 민간신앙과 함께 후기에는 종두법 도입 시도됨.</p>
-        <div class="source">출처: 한국민족문화대백과사전</div>
-        <div class="section-title">현대:</div>
-        <p>WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨.</p>`,
-      "2": `<h3>콜레라(호열자)</h3>
-        <div class="section-title">조선시대:</div>
-        <p>19세기 개항 이후 유입, 조기 매장 및 격리 시도, 위생상태 열악.</p>
-        <div class="source">출처: 한국역사연구</div>
-        <div class="section-title">현대:</div>
-        <p>수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영.</p>`,
-      "3": `<h3>홍역(마마)</h3>
-        <div class="section-title">조선시대:</div>
-        <p>자연 면역 의존, 민간요법 활용, 사망률 높았음.</p>
-        <div class="source">출처: 조선시대 질병사 연구</div>
-        <div class="section-title">현대:</div>
-        <p>MMR 백신 보급으로 예방, 집단 면역 중요.</p>`,
-      "4": `<h3>장티푸스 및 이질</h3>
-        <div class="section-title">조선시대:</div>
-        <p>오염된 물·음식 전파, 환자 격리, 민간 치료.</p>
-        <div class="source">출처: 한국 전염병사</div>
-        <div class="section-title">현대:</div>
-        <p>항생제, 예방접종, 상하수도 개선으로 예방.</p>`,
-      "5": `<h3>인플루엔자</h3>
-        <div class="section-title">현대:</div>
-        <p>계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨.</p>
-        <div class="source">출처: 질병관리청, WHO</div>`
-    };
-
-    const details_en = {
-      "1": `<h3>Smallpox</h3>
-        <div class="section-title">Joseon Dynasty:</div>
-        <p>A major epidemic in the Joseon era. Vaccination efforts eradicated it globally.</p>
-        <div class="source">Source: Encyclopedia of Korean Culture</div>
-        <div class="section-title">Modern:</div>
-        <p>Eradicated globally in 1980 through WHO vaccination campaigns.</p>`,
-      "2": `<h3>Cholera</h3>
-        <div class="section-title">Joseon Dynasty:</div>
-        <p>Entered after the 19th century. Early burial and quarantine. Poor hygiene.</p>
-        <div class="source">Source: Korean History Journal</div>
-        <div class="section-title">Modern:</div>
-        <p>Rehydration, antibiotics, isolation, global surveillance.</p>`,
-      "3": `<h3>Measles</h3>
-        <div class="section-title">Joseon Dynasty:</div>
-        <p>Natural immunity. High mortality. Folk remedies.</p>
-        <div class="source">Source: Study on Disease in Joseon</div>
-        <div class="section-title">Modern:</div>
-        <p>Prevention via MMR vaccine, herd immunity important.</p>`,
-      "4": `<h3>Typhoid & Dysentery</h3>
-        <div class="section-title">Joseon Dynasty:</div>
-        <p>Spread via contaminated food and water. Patient isolation and folk cures.</p>
-        <div class="source">Source: Korean Epidemic History</div>
-        <div class="section-title">Modern:</div>
-        <p>Antibiotics, vaccination, water sanitation improvements.</p>`,
-      "5": `<h3>Influenza</h3>
-        <div class="section-title">Modern:</div>
-        <p>Seasonal flu and pandemics. Vaccines and antivirals developed.</p>
-        <div class="source">Source: CDC, WHO</div>`
-    };
-
-    const headerTitle = document.getElementById("header-title");
-    const langSelect = document.getElementById("lang-select");
-    const detailText = document.getElementById("detail-text");
-
+    // URL 파라미터 함수
     function getParam(param) {
-      const url = new URL(location.href);
+      const url = new URL(window.location.href);
       return url.searchParams.get(param);
     }
 
-    let currentLang = getParam("lang") || "ko";
-    let id = getParam("id") || "1";
+    const langSelect = document.getElementById('lang-select');
+    const contentArea = document.getElementById('content-area');
+    const headerTitle = document.getElementById('header-title');
 
-    langSelect.value = currentLang;
+    let currentLang = getParam('lang') || 'ko';
+    let id = getParam('id') || '1';
+
+    // 상세 내용 데이터
+    const data = {
+      ko: {
+        "1": {
+          title: "두창(천연두)",
+          sections: [
+            {
+              heading: "조선시대",
+              text: "두창은 조선시대 대표적인 전염병으로 자연 치유 의존, 민간신앙과 함께 후기에는 종두법 도입 시도됨."
+            },
+            {
+              heading: "현대",
+              text: "WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨."
+            }
+          ],
+          source: "출처: 한국민족문화대백과사전"
+        },
+        "2": {
+          title: "콜레라(호열자)",
+          sections: [
+            {
+              heading: "조선시대",
+              text: "19세기 개항 이후 유입, 조기 매장 및 격리 시도, 위생상태 열악."
+            },
+            {
+              heading: "현대",
+              text: "수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영."
+            }
+          ],
+          source: "출처: 한국역사연구"
+        },
+        // 3,4,5 도 동일 형식으로 넣어주세요
+        "3": {
+          title: "홍역(마마)",
+          sections: [
+            {
+              heading: "조선시대",
+              text: "자연 면역 의존, 민간요법 활용, 사망률 높았음."
+            },
+            {
+              heading: "현대",
+              text: "MMR 백신 보급으로 예방, 집단 면역 중요."
+            }
+          ],
+          source: "출처: 조선시대 질병사 연구"
+        },
+        "4": {
+          title: "장티푸스 및 이질",
+          sections: [
+            {
+              heading: "조선시대",
+              text: "오염된 물·음식 전파, 환자 격리, 민간 치료."
+            },
+            {
+              heading: "현대",
+              text: "항생제, 예방접종, 상하수도 개선으로 예방."
+            }
+          ],
+          source: "출처: 한국 전염병사"
+        },
+        "5": {
+          title: "인플루엔자",
+          sections: [
+            {
+              heading: "현대",
+              text: "계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨."
+            }
+          ],
+          source: "출처: 질병관리청, WHO"
+        }
+      },
+      en: {
+        "1": {
+          title: "Smallpox",
+          sections: [
+            {
+              heading: "Joseon Dynasty",
+              text: "A major epidemic in the Joseon era. Vaccination efforts eradicated it globally."
+            },
+            {
+              heading: "Modern",
+              text: "Eradicated globally in 1980 through WHO vaccination campaigns."
+            }
+          ],
+          source: "Source: Encyclopedia of Korean Culture"
+        },
+        "2": {
+          title: "Cholera",
+          sections: [
+            {
+              heading: "Joseon Dynasty",
+              text: "Entered after the 19th century. Early burial and quarantine. Poor hygiene."
+            },
+            {
+              heading: "Modern",
+              text: "Rehydration, antibiotics, isolation, global surveillance."
+            }
+          ],
+          source: "Source: Korean History Journal"
+        },
+        "3": {
+          title: "Measles",
+          sections: [
+            {
+              heading: "Joseon Dynasty",
+              text: "Natural immunity. High mortality. Folk remedies."
+            },
+            {
+              heading: "Modern",
+              text: "Prevention via MMR vaccine, herd immunity important."
+            }
+          ],
+          source: "Source: Study on Disease in Joseon"
+        },
+        "4": {
+          title: "Typhoid & Dysentery",
+          sections: [
+            {
+              heading: "Joseon Dynasty",
+              text: "Spread via contaminated food and water. Patient isolation and folk cures."
+            },
+            {
+              heading: "Modern",
+              text: "Antibiotics, vaccination, water sanitation improvements."
+            }
+          ],
+          source: "Source: Korean Epidemic History"
+        },
+        "5": {
+          title: "Influenza",
+          sections: [
+            {
+              heading: "Modern",
+              text: "Seasonal flu and pandemics. Vaccines and antivirals developed."
+            }
+          ],
+          source: "Source: CDC, WHO"
+        }
+      }
+    };
 
     function renderContent(lang, id) {
-      headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
-      let detailHtml = lang === "ko" ? details_ko[id] : details_en[id];
-      detailText.innerHTML = detailHtml || "<p>정보가 없습니다.</p>";
+      const entry = data[lang][id];
+      if (!entry) {
+        contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+        headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
+        return;
+      }
+
+      headerTitle.textContent = entry.title;
+
+      let html = "";
+      entry.sections.forEach(section => {
+        html += `
+          <div class="info-box">
+            <h3>${section.heading}</h3>
+            <p>${section.text}</p>
+          </div>
+        `;
+      });
+      html += `<div class="source">${entry.source}</div>`;
+
+      contentArea.innerHTML = html;
+
+      // 클릭해서 내용 토글 기능 추가
+      document.querySelectorAll('.info-box h3').forEach(h3 => {
+        h3.addEventListener('click', () => {
+          const box = h3.parentElement;
+          box.classList.toggle('active');
+        });
+      });
     }
 
+    // 초기 렌더링
     renderContent(currentLang, id);
 
-    langSelect.addEventListener("change", () => {
+    // 언어 변경 시 다시 렌더링 및 URL 반영
+    langSelect.value = currentLang;
+    langSelect.addEventListener('change', () => {
       currentLang = langSelect.value;
       renderContent(currentLang, id);
-      const newUrl = new URL(location.href);
-      newUrl.searchParams.set("lang", currentLang);
-      history.replaceState(null, "", newUrl.toString());
+
+      // URL에 lang 파라미터 교체 (새로고침 없이)
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', url.toString());
     });
   </script>
 </body>
