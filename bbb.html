@@ -65,45 +65,9 @@
       font-size: 0.9em;
       cursor: pointer;
     }
-
-    .loading {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(225,225,255,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 60px;
-      z-index: 9999;
-      opacity: 1;
-      transition: opacity 0.5s ease;
-    }
-    .loading h1 {
-      font-size: 40px;
-      color: #333;
-    }
-    .spinner {
-      width: 50px; height: 50px;
-      border: 6px solid #ccc;
-      border-top: 6px solid #333;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-left: 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
-
-  <div class="loading">
-    <h1>로딩중...</h1>
-    <div class="spinner"></div>
-  </div>
-
   <header>
     <h1 id="header-title">병 이름 상세 설명</h1>
   </header>
@@ -210,21 +174,6 @@
       newUrl.searchParams.set("lang", currentLang);
       history.replaceState(null, "", newUrl.toString());
     });
-
-    window.onload = function () {
-      const loaded = getParam("loaded");
-      const loading = document.querySelector(".loading");
-
-      if (loaded === "true") {
-        loading.style.opacity = 0;
-        loading.style.visibility = "hidden";
-      } else {
-        setTimeout(() => {
-          loading.style.opacity = 0;
-          setTimeout(() => loading.style.visibility = "hidden", 500);
-        }, 2500);
-      }
-    };
   </script>
 </body>
 </html>
