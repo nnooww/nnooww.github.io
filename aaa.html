@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>영역 구분 + 레이아웃</title>
+  <title>아코디언 리스트</title>
   <style>
     body {
       margin: 0;
@@ -14,10 +14,9 @@
       text-align: center;
       padding: 1em 0;
     }
-    /* 사이드바 + 메인 컨테이너 */
     .container {
-      display: flex; /* 좌우 배치 */
-      min-height: 400px; /* 임의 높이 */
+      display: flex;
+      min-height: 400px;
     }
     aside {
       background: #ddd;
@@ -27,13 +26,17 @@
     }
     main {
       background: #eee;
-      flex-grow: 1; /* 남은 공간 모두 차지 */
+      flex-grow: 1;
       padding: 1em;
       box-sizing: border-box;
     }
-    /* 리스트 하위 계층 들여쓰기 */
     ol ol {
       margin-left: 1.5em;
+      display: none; /* 기본 숨김 */
+    }
+    li.expandable {
+      cursor: pointer;
+      user-select: none;
     }
   </style>
 </head>
@@ -50,7 +53,7 @@
     <main>
       <h2>오른쪽 영역 리스트</h2>
       <ol>
-        <li>1
+        <li class="expandable">1
           <ol>
             <li>1.1</li>
             <li>1.2</li>
@@ -58,19 +61,19 @@
             <li>1.4</li>
           </ol>
         </li>
-        <li>2
+        <li class="expandable">2
           <ol>
             <li>2.1</li>
             <li>2.2</li>
           </ol>
         </li>
-        <li>3
+        <li class="expandable">3
           <ol>
             <li>3.1</li>
             <li>3.2</li>
           </ol>
         </li>
-        <li>4
+        <li class="expandable">4
           <ol>
             <li>4.1</li>
             <li>4.2</li>
@@ -83,5 +86,24 @@
   <footer>
     <p>푸터 영역</p>
   </footer>
+
+  <script>
+    // 모든 expandable 클래스 li 선택
+    const expandableItems = document.querySelectorAll('li.expandable');
+
+    expandableItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sublist = item.querySelector('ol');
+        if (sublist) {
+          // 토글 display
+          if (sublist.style.display === 'none' || sublist.style.display === '') {
+            sublist.style.display = 'block';
+          } else {
+            sublist.style.display = 'none';
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
