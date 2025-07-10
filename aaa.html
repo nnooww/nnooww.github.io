@@ -52,6 +52,11 @@
       font-weight: bold;
       margin-bottom: 1em;
       cursor: pointer;
+      user-select: none;
+      transition: color 0.3s;
+    }
+    .bacteria-list > li:hover {
+      color: #007acc;
     }
 
     #hover-box {
@@ -64,7 +69,8 @@
       padding: 1em;
       display: none;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 10;
+      z-index: 30;
+      border-radius: 6px;
     }
 
     #hover-box h3 {
@@ -75,6 +81,7 @@
     #hover-box p {
       margin: 0.5em 0;
       font-size: 0.9em;
+      white-space: pre-wrap;
     }
 
     #hover-box button {
@@ -82,6 +89,14 @@
       padding: 0.5em 1em;
       font-size: 0.9em;
       cursor: pointer;
+      border: none;
+      background-color: #007acc;
+      color: white;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    #hover-box button:hover {
+      background-color: #005a99;
     }
 
     #ecology-impact {
@@ -124,6 +139,7 @@
       padding: 0 12px 10px;
       display: none;
       margin: 0;
+      white-space: pre-wrap;
     }
     #ecology-impact blockquote {
       font-size: 0.95rem;
@@ -136,6 +152,7 @@
       margin-top: 15px;
       text-align: center;
       line-height: 1.5;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -150,7 +167,7 @@
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
-      <div id="hover-box"></div>
+      <div id="hover-box" role="tooltip" aria-hidden="true"></div>
 
       <section id="ecology-impact">
         <h3 id="ecology-title">왜 생태 변화가 전염병과 관련이 있을까?</h3>
@@ -161,7 +178,7 @@
 
     <main>
       <h2 id="list-title">오른쪽 영역 리스트</h2>
-      <ol class="bacteria-list"></ol>
+      <ol class="bacteria-list" role="list"></ol>
     </main>
   </div>
 
@@ -170,226 +187,256 @@
   </footer>
 
   <script>
-    const bacteriaList = document.querySelector(".bacteria-list");
-    const hoverBox = document.getElementById("hover-box");
-    const langSelect = document.getElementById("lang-select");
+    (() => {
+      const bacteriaList = document.querySelector(".bacteria-list");
+      const hoverBox = document.getElementById("hover-box");
+      const langSelect = document.getElementById("lang-select");
 
-    const headerTitle = document.getElementById("header-title");
-    const footerText = document.getElementById("footer-text");
-    const listTitle = document.getElementById("list-title");
+      const headerTitle = document.getElementById("header-title");
+      const footerText = document.getElementById("footer-text");
+      const listTitle = document.getElementById("list-title");
 
-    const ecologyTitle = document.getElementById("ecology-title");
-    const ecologyContent = document.getElementById("ecology-content");
-    const ecologyQuote = document.getElementById("ecology-quote");
+      const ecologyTitle = document.getElementById("ecology-title");
+      const ecologyContent = document.getElementById("ecology-content");
+      const ecologyQuote = document.getElementById("ecology-quote");
 
-    const items = {
-      ko: [
-        "두창(천연두)",
-        "콜레라(호열자)",
-        "홍역(마마)",
-        "장티푸스 및 이질",
-        "인플루엔자"
-      ],
-      en: [
-        "Smallpox",
-        "Cholera",
-        "Measles",
-        "Typhoid & Dysentery",
-        "Influenza"
-      ]
-    };
-
-    const descriptions_ko = {
-      "1": {
-        title: "두창(천연두)",
-        preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
-      },
-      "2": {
-        title: "콜레라(호열자)",
-        preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
-      },
-      "3": {
-        title: "홍역(마마)",
-        preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
-      },
-      "4": {
-        title: "장티푸스 및 이질",
-        preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
-      },
-      "5": {
-        title: "인플루엔자",
-        preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
-      }
-    };
-
-    const descriptions_en = {
-      "1": {
-        title: "Smallpox",
-        preview: "A representative infectious disease in the Joseon Dynasty. Eradicated by WHO vaccination."
-      },
-      "2": {
-        title: "Cholera",
-        preview: "Introduced after 19th century. Treated with hydration and antibiotics; international surveillance."
-      },
-      "3": {
-        title: "Measles",
-        preview: "Relies on natural immunity. Preventable with vaccine distribution."
-      },
-      "4": {
-        title: "Typhoid & Dysentery",
-        preview: "Spread via contaminated food and water. Preventable by antibiotics and improved sanitation."
-      },
-      "5": {
-        title: "Influenza",
-        preview: "Seasonal flu and pandemics. Development of vaccines and antivirals."
-      }
-    };
-
-    const ecologyData = {
-      ko: {
-        title: "왜 생태 변화가 전염병과 관련이 있을까?",
-        items: [
-          {
-            heading: "1. 생태계는 바이러스의 집이다",
-            text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
-          },
-          {
-            heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
-            text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
-          },
-          {
-            heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
-            text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다."
-          },
-          {
-            heading: "4. 생태 변화는 사람을 더 약하게 만든다",
-            text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
-          }
+      const items = {
+        ko: [
+          "두창(천연두)",
+          "콜레라(호열자)",
+          "홍역(마마)",
+          "장티푸스 및 이질",
+          "인플루엔자"
         ],
-        quote: "생태계는 바이러스와 인간 사이의 ‘경계선’입니다.\n그 경계가 무너질 때, 전염병은 인간에게 다가옵니다."
-      },
-      en: {
-        title: "Why are ecological changes related to infectious diseases?",
-        items: [
-          {
-            heading: "1. Ecosystems are homes for viruses",
-            text: "Viruses and bacteria live within animals, water, and plants in nature.\nWhen nature changes, habitats for pathogens change as well."
+        en: [
+          "Smallpox",
+          "Cholera",
+          "Measles",
+          "Typhoid & Dysentery",
+          "Influenza"
+        ]
+      };
+
+      const descriptions = {
+        ko: {
+          "1": {
+            title: "두창(천연두)",
+            preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
           },
-          {
-            heading: "2. When humans cross boundaries, viruses follow",
-            text: "Building cities by clearing mountains brings humans closer to wildlife.\nViruses that lived in animals can then jump to humans."
+          "2": {
+            title: "콜레라(호열자)",
+            preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
           },
-          {
-            heading: "3. Climate change expands disease ranges",
-            text: "Rising temperatures let disease carriers like mosquitoes and ticks spread wider.\nAs a result, tropical diseases can spread to other countries."
+          "3": {
+            title: "홍역(마마)",
+            preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
           },
-          {
-            heading: "4. Ecological changes weaken people",
-            text: "Famine, floods, and droughts contaminate water and cause hunger.\nPeople with weakened immunity get sick more easily."
+          "4": {
+            title: "장티푸스 및 이질",
+            preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
+          },
+          "5": {
+            title: "인플루엔자",
+            preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
           }
-        ],
-        quote: "The ecosystem is the ‘borderline’ between viruses and humans.\nWhen that border collapses, infectious diseases approach humans."
-      }
-    };
-
-    let currentLang = "ko";
-
-    function attachHoverListeners() {
-      let hoverTimeout;
-
-      document.querySelectorAll(".bacteria-list > li").forEach(item => {
-        const id = item.getAttribute("data-id");
-
-        item.addEventListener("mouseenter", () => {
-          clearTimeout(hoverTimeout);
-          const data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
-          if (data) {
-            hoverBox.innerHTML = 
-              <h3>${data.title}</h3>
-              <p>${data.preview}</p>
-              <button onclick="location.href='bbb.html?id=${id}&lang=${currentLang}'">${currentLang === "ko" ? "자세히 보기" : "Details"}</button>
-            ;
-            hoverBox.style.display = "block";
+        },
+        en: {
+          "1": {
+            title: "Smallpox",
+            preview: "A representative infectious disease in the Joseon Dynasty. Eradicated by WHO vaccination."
+          },
+          "2": {
+            title: "Cholera",
+            preview: "Introduced after 19th century. Treated with hydration and antibiotics; international surveillance."
+          },
+          "3": {
+            title: "Measles",
+            preview: "Relies on natural immunity. Preventable with vaccine distribution."
+          },
+          "4": {
+            title: "Typhoid & Dysentery",
+            preview: "Spread via contaminated food and water. Preventable by antibiotics and improved sanitation."
+          },
+          "5": {
+            title: "Influenza",
+            preview: "Seasonal flu and pandemics. Development of vaccines and antivirals."
           }
-        });
+        }
+      };
 
-        item.addEventListener("mouseleave", () => {
-          hoverTimeout = setTimeout(() => {
-            hoverBox.style.display = "none";
-          }, 200);
-        });
-      });
+      const ecologyData = {
+        ko: {
+          title: "왜 생태 변화가 전염병과 관련이 있을까?",
+          items: [
+            {
+              heading: "1. 생태계는 바이러스의 집이다",
+              text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
+            },
+            {
+              heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
+              text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
+            },
+            {
+              heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
+              text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다."
+            },
+            {
+              heading: "4. 생태 변화는 사람을 더 약하게 만든다",
+              text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
+            }
+          ],
+          quote: "생태계는 바이러스와 인간 사이의 ‘경계선’입니다.\n그 경계가 무너질 때, 전염병은 인간에게 다가옵니다."
+        },
+        en: {
+          title: "Why are ecological changes related to infectious diseases?",
+          items: [
+            {
+              heading: "1. Ecosystems are homes for viruses",
+              text: "Viruses and bacteria live within animals, water, and plants in nature.\nWhen nature changes, habitats for pathogens change as well."
+            },
+            {
+              heading: "2. When humans cross boundaries, viruses follow",
+              text: "Building cities by clearing mountains brings humans closer to wildlife.\nViruses that lived in animals can then jump to humans."
+            },
+            {
+              heading: "3. Climate change expands disease ranges",
+              text: "Rising temperatures let disease carriers like mosquitoes and ticks spread wider.\nAs a result, tropical diseases can spread to other countries."
+            },
+            {
+              heading: "4. Ecological changes weaken people",
+              text: "Famine, floods, and droughts contaminate water and cause hunger.\nPeople with weakened immunity get sick more easily."
+            }
+          ],
+          quote: "The ecosystem is the ‘borderline’ between viruses and humans.\nWhen that border collapses, infectious diseases approach humans."
+        }
+      };
 
-      hoverBox.addEventListener("mouseenter", () => {
-        clearTimeout(hoverTimeout);
+      let currentLang = "ko";
+      let hoverTimeout = null;
+
+      function showHoverBox(id) {
+        const data = descriptions[currentLang][id];
+        if (!data) return;
+
+        hoverBox.innerHTML = `
+          <h3>${data.title}</h3>
+          <p>${data.preview}</p>
+          <button onclick="location.href='bbb.html?id=${id}&lang=${currentLang}'">${currentLang === "ko" ? "자세히 보기" : "Details"}</button>
+        `;
         hoverBox.style.display = "block";
-      });
-
-      hoverBox.addEventListener("mouseleave", () => {
-        hoverBox.style.display = "none";
-      });
-    }
-
-    function renderList(lang) {
-      bacteriaList.innerHTML = items[lang].map((text, i) => <li data-id="${i+1}">${text}</li>).join("");
-      attachHoverListeners();
-    }
-
-    // ecology-impact 내용 렌더링 및 클릭 토글 적용
-    function renderEcology(lang) {
-      ecologyTitle.textContent = ecologyData[lang].title;
-      ecologyContent.innerHTML = "";
-
-      ecologyData[lang].items.forEach(section => {
-        const box = document.createElement("div");
-        box.classList.add("info-box");
-
-        const h4 = document.createElement("h4");
-        h4.textContent = section.heading;
-
-        const p = document.createElement("p");
-        p.textContent = section.text.replace(/\n/g, "\n");
-
-        box.appendChild(h4);
-        box.appendChild(p);
-        ecologyContent.appendChild(box);
-
-        // 클릭 시 토글 기능
-        h4.addEventListener("click", () => {
-          if (p.style.display === "block") {
-            p.style.display = "none";
-          } else {
-            p.style.display = "block";
-          }
-        });
-      });
-
-      ecologyQuote.textContent = ecologyData[lang].quote;
-    }
-
-    function updateTextLang() {
-      if(currentLang === "ko") {
-        headerTitle.textContent = ecologyData.ko.title;
-        footerText.textContent = "푸터 영역";
-        listTitle.textContent = "오른쪽 영역 리스트";
-      } else {
-        headerTitle.textContent = ecologyData.en.title;
-        footerText.textContent = "Footer area";
-        listTitle.textContent = "Right area list";
+        hoverBox.setAttribute("aria-hidden", "false");
       }
-      renderList(currentLang);
-      renderEcology(currentLang);
-      hoverBox.style.display = "none";
-    }
 
-    langSelect.addEventListener("change", (e) => {
-      currentLang = e.target.value;
+      function hideHoverBoxDelayed() {
+        hoverTimeout = setTimeout(() => {
+          hoverBox.style.display = "none";
+          hoverBox.setAttribute("aria-hidden", "true");
+        }, 200);
+      }
+
+      function clearHoverTimeout() {
+        if (hoverTimeout) {
+          clearTimeout(hoverTimeout);
+          hoverTimeout = null;
+        }
+      }
+
+      function attachHoverListeners() {
+        // 우선 기존 리스너 모두 제거 (안전하게 다시 부착)
+        const lis = bacteriaList.querySelectorAll("li");
+        lis.forEach(li => {
+          li.onmouseenter = null;
+          li.onmouseleave = null;
+        });
+
+        lis.forEach(li => {
+          const id = li.getAttribute("data-id");
+
+          li.addEventListener("mouseenter", () => {
+            clearHoverTimeout();
+            showHoverBox(id);
+          });
+
+          li.addEventListener("mouseleave", () => {
+            hideHoverBoxDelayed();
+          });
+        });
+
+        hoverBox.addEventListener("mouseenter", () => {
+          clearHoverTimeout();
+          hoverBox.style.display = "block";
+          hoverBox.setAttribute("aria-hidden", "false");
+        });
+
+        hoverBox.addEventListener("mouseleave", () => {
+          hideHoverBoxDelayed();
+        });
+      }
+
+      function renderList(lang) {
+        bacteriaList.innerHTML = items[lang]
+          .map((text, i) => `<li data-id="${i + 1}" tabindex="0">${text}</li>`)
+          .join("");
+        attachHoverListeners();
+      }
+
+      function renderEcology(lang) {
+        ecologyTitle.textContent = ecologyData[lang].title;
+        ecologyContent.innerHTML = "";
+
+        ecologyData[lang].items.forEach(({ heading, text }) => {
+          const box = document.createElement("div");
+          box.className = "info-box";
+
+          const h4 = document.createElement("h4");
+          h4.textContent = heading;
+          h4.setAttribute("tabindex", "0");
+          const p = document.createElement("p");
+          p.textContent = text;
+
+          box.appendChild(h4);
+          box.appendChild(p);
+          ecologyContent.appendChild(box);
+
+          h4.addEventListener("click", () => {
+            p.style.display = p.style.display === "block" ? "none" : "block";
+          });
+          // 키보드 접근성: Enter나 Space 누르면 토글
+          h4.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              p.style.display = p.style.display === "block" ? "none" : "block";
+            }
+          });
+        });
+
+        ecologyQuote.textContent = ecologyData[lang].quote;
+      }
+
+      function updateTextLang() {
+        if (currentLang === "ko") {
+          headerTitle.textContent = ecologyData.ko.title;
+          footerText.textContent = "푸터 영역";
+          listTitle.textContent = "오른쪽 영역 리스트";
+        } else {
+          headerTitle.textContent = ecologyData.en.title;
+          footerText.textContent = "Footer area";
+          listTitle.textContent = "Right area list";
+        }
+        renderList(currentLang);
+        renderEcology(currentLang);
+        hoverBox.style.display = "none";
+        hoverBox.setAttribute("aria-hidden", "true");
+      }
+
+      langSelect.addEventListener("change", (e) => {
+        currentLang = e.target.value;
+        updateTextLang();
+      });
+
+      // 초기 렌더링
       updateTextLang();
-    });
-
-    // 초기 렌더링
-    updateTextLang();
-
+    })();
   </script>
 </body>
 </html>
