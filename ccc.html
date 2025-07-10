@@ -2,114 +2,206 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>융합수업 프로젝트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>인트로 (ccc.html)</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+    }
+
+    .intro-section {
+      background: url('joseon-background.jpg') no-repeat center center/cover;
       height: 100vh;
+      color: white;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-    }
-
-    .intro-container {
       text-align: center;
-      animation: fadeIn 2s ease-in-out;
+      background-color: rgba(0,0,0,0.5);
+      background-blend-mode: darken;
+      position: relative;
     }
 
-    .intro-container h1 {
+    .intro-section h1 {
       font-size: 3rem;
-      color: #007acc;
       margin-bottom: 20px;
     }
 
-    .intro-container p {
-      font-size: 1.5rem;
+    .intro-section p {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      color: #e0e0e0;
+      max-width: 600px;
+    }
+
+    .intro-section a {
+      padding: 12px 28px;
+      background-color: #4a90e2;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .intro-section a:hover {
+      background-color: #276fc2;
+    }
+
+    /* 로딩 스타일 */
+    .loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
       color: #333;
-      margin-top: 10px;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
     }
 
-    .creator-list {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      color: #555;
+    .loading > div {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
     }
 
-    .creator-list span {
-      display: inline-block;
-      margin: 5px 10px;
-      padding: 8px 14px;
-      background: #e3f2fd;
-      border-radius: 20px;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* 언어 선택 UI 스타일 */
+    #lang-switcher {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.3);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: white;
+      user-select: none;
+    }
+
+    #lang-switcher label {
+      margin-right: 6px;
+    }
+
+    #lang-select-ccc {
+      font-size: 0.9rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: none;
+      outline: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="intro-container">
-    <h1 id="main-title">🌍 융합수업 프로젝트</h1>
-    <p id="main-subtitle">환경과 전염병의 연결고리를 탐구하다</p>
-    <div class="creator-list" id="creator-list">
-      <span>채우혁</span>
-      <span>채인혁</span>
-      <span>최진서</span>
-      <span>송형록</span>
-    </div>
+
+  <!-- 로딩 화면 -->
+  <div class="loading">
+    <span class="loading-text">로딩중...</span>
+    <div></div>
   </div>
 
+  <section class="intro-section">
+    <h1 id="main-title">자연이 바뀌면, 병도 바뀐다</h1>
+    <p id="subtitle">조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
+    <a href="main.html" id="go-main">탐색 시작</a>
+
+    <!-- 언어 선택 UI -->
+    <div id="lang-switcher">
+      <label for="lang-select-ccc">언어 선택:</label>
+      <select id="lang-select-ccc">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </section>
+
   <script>
+    // 1. URL에 lang이 없으면 강제로 ko로 설정해서 리다이렉트
+    const initialURL = new URL(location.href);
+    if (!initialURL.searchParams.get('lang')) {
+      initialURL.searchParams.set('lang', 'ko');
+      location.replace(initialURL.toString()); // history에 안 남기고 이동
+    }
+
+    // 2. 기본 설정
+    const btn = document.getElementById('go-main');
+    const loading = document.querySelector('.loading');
+    const loadingText = document.querySelector('.loading-text');
+    const langSelect = document.getElementById('lang-select-ccc');
+
+    // 다국어 텍스트 데이터
     const textData = {
       ko: {
-        title: "🌍 융합수업 프로젝트",
-        subtitle: "환경과 전염병의 연결고리를 탐구하다",
-        creators: ["채우혁", "채인혁", "최진서", "송형록"]
+        mainTitle: "자연이 바뀌면, 병도 바뀐다",
+        subtitle: "조선 시대 생태 변화와 전염병의 관계를 탐험해보세요",
+        btnText: "탐색 시작",
+        loadingText: "로딩중..."
       },
       en: {
-        title: "🌍 Convergence Class Project",
-        subtitle: "Exploring the Link Between Environment and Infectious Diseases",
-        creators: ["WooHyuk Chae", "InHyuk Chae", "JinSeo Choi", "HyungRok Song"]
+        mainTitle: "When Nature Changes, Diseases Change Too",
+        subtitle: "Explore the Relationship Between Ecological Changes and Infectious Diseases in the Joseon Era",
+        btnText: "Start Exploration",
+        loadingText: "Loading..."
       }
     };
 
-    const url = new URL(location.href);
-    const lang = url.searchParams.get('lang') || 'ko';
+    // 현재 언어 설정
+    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    langSelect.value = currentLang;
 
-    const data = textData[lang];
+    // 텍스트 적용 함수
+    function updateTexts(lang) {
+      document.getElementById('main-title').textContent = textData[lang].mainTitle;
+      document.getElementById('subtitle').textContent = textData[lang].subtitle;
+      btn.textContent = textData[lang].btnText;
+      loadingText.textContent = textData[lang].loadingText;
+    }
 
-    // 텍스트 바꾸기
-    document.getElementById('main-title').textContent = data.title;
-    document.getElementById('main-subtitle').textContent = data.subtitle;
+    updateTexts(currentLang);
 
-    // 이름도 다국어로 바꾸기
-    const creatorList = document.getElementById('creator-list');
-    creatorList.innerHTML = ''; // 기존 이름 지우고
-    data.creators.forEach(name => {
-      const span = document.createElement('span');
-      span.textContent = name;
-      creatorList.appendChild(span);
+    // 언어 변경 시 텍스트 갱신 + URL만 수정
+    langSelect.addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      updateTexts(currentLang);
+      const newUrl = new URL(location.href);
+      newUrl.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', newUrl.toString());
     });
 
-    // 4초 후 aaa.html로 이동 (언어 유지)
-    setTimeout(() => {
-      const next = new URL('aaa.html', location.origin);
-      next.searchParams.set('lang', lang);
-      window.location.href = next.toString();
-    }, 4000);
+    // 버튼 클릭 시 로딩 보여주고 lang 포함해서 main.html로 이동
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      loading.style.visibility = 'visible';
+      loading.style.opacity = '1';
+
+      const nextURL = new URL('main.html', location.origin);
+      nextURL.searchParams.set('lang', currentLang);
+
+      setTimeout(() => {
+        window.location.href = nextURL.toString();
+      }, 1000);
+    });
   </script>
+
 </body>
 </html>
