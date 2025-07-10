@@ -100,59 +100,65 @@
     <p>푸터 영역</p>
   </footer>
 
-  <script>
-    const descriptions = {
-      "1": {
-        title: "두창(천연두)",
-        preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
-      },
-      "2": {
-        title: "콜레라(호열자)",
-        preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
-      },
-      "3": {
-        title: "홍역(마마)",
-        preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
-      },
-      "4": {
-        title: "장티푸스 및 이질",
-        preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
-      },
-      "5": {
-        title: "인플루엔자",
-        preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
-      }
-    };
+ <script>
+  const descriptions = {
+    "1": {
+      title: "두창(천연두)",
+      preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
+    },
+    "2": {
+      title: "콜레라(호열자)",
+      preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
+    },
+    "3": {
+      title: "홍역(마마)",
+      preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
+    },
+    "4": {
+      title: "장티푸스 및 이질",
+      preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
+    },
+    "5": {
+      title: "인플루엔자",
+      preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
+    }
+  };
 
-    const hoverBox = document.getElementById("hover-box");
+  const hoverBox = document.getElementById("hover-box");
+  let hoverTimeout;
 
-    document.querySelectorAll(".bacteria-list > li").forEach(item => {
-      const id = item.getAttribute("data-id");
+  document.querySelectorAll(".bacteria-list > li").forEach(item => {
+    const id = item.getAttribute("data-id");
 
-      item.addEventListener("mouseenter", () => {
-        const data = descriptions[id];
-        if (data) {
-          hoverBox.innerHTML = `
-            <h3>${data.title}</h3>
-            <p>${data.preview}</p>
-            <button onclick="location.href='bbb.html?id=${id}'">자세히 보기</button>
-          `;
-          hoverBox.style.display = "block";
-        }
-      });
-
-      item.addEventListener("mouseleave", () => {
-        hoverBox.style.display = "none";
-      });
-
-      hoverBox.addEventListener("mouseenter", () => {
+    item.addEventListener("mouseenter", () => {
+      clearTimeout(hoverTimeout); // 숨기기 방지
+      const data = descriptions[id];
+      if (data) {
+        hoverBox.innerHTML = `
+          <h3>${data.title}</h3>
+          <p>${data.preview}</p>
+          <button onclick="location.href='bbb.html?id=${id}'">자세히 보기</button>
+        `;
         hoverBox.style.display = "block";
-      });
-
-      hoverBox.addEventListener("mouseleave", () => {
-        hoverBox.style.display = "none";
-      });
+      }
     });
-  </script>
+
+    item.addEventListener("mouseleave", () => {
+      // 약간 딜레이 주고 숨김 (hoverBox로 이동하는 시간 확보)
+      hoverTimeout = setTimeout(() => {
+        hoverBox.style.display = "none";
+      }, 200);
+    });
+  });
+
+  hoverBox.addEventListener("mouseenter", () => {
+    clearTimeout(hoverTimeout); // 다시 진입하면 숨김 취소
+    hoverBox.style.display = "block";
+  });
+
+  hoverBox.addEventListener("mouseleave", () => {
+    hoverBox.style.display = "none";
+  });
+</script>
 </body>
 </html>
