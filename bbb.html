@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>병 상세 설명</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 2em;
+    line-height: 1.5em;
+  }
+  h1 {
+    font-size: 1.8em;
+  }
+  .section-title {
+    font-weight: bold;
+    margin-top: 1em;
+  }
+  .source {
+    font-size: 0.8em;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    // URL에서 id 파라미터 가져오기
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    // 상세 내용 데이터
+    const details = {
+      "1": {
+        title: "두창(천연두)",
+        content: `
+          <div class="section-title">조선시대:</div>
+          <p>두창은 조선시대 대표적인 전염병으로 자연 치유 의존, 민간신앙과 함께 후기에는 종두법 도입 시도됨.</p>
+          <div class="source">출처: 「한국민족문화대백과사전」, 링크</div>
+
+          <div class="section-title">현대:</div>
+          <p>WHO 주도 전 세계 백신 접종으로 1980년 박멸 선언됨.</p>
+          <div class="source">출처: WHO 공식 페이지, 링크</div>
+        `
+      },
+      "2": {
+        title: "콜레라(호열자)",
+        content: `
+          <div class="section-title">조선시대:</div>
+          <p>19세기 개항 이후 유입, 시체 조기 매장과 이동 제한으로 대응함. 위생상태 매우 열악했음.</p>
+          <div class="source">출처: 「한국역사연구」 논문, 국립중앙도서관 자료</div>
+
+          <div class="section-title">현대:</div>
+          <p>수분 보충, 항생제 치료, 감염지역 격리, 국제 감시체계 운영</p>
+          <div class="source">출처: WHO 콜레라 개요, 링크</div>
+        `
+      },
+      "3": {
+        title: "홍역(마마)",
+        content: `
+          <div class="section-title">조선시대:</div>
+          <p>자연 면역 기대, 민간요법 주로 활용, 사망률 높았음.</p>
+          <div class="source">출처: 「조선시대 질병사 연구」 학술논문 (RISS)</div>
+
+          <div class="section-title">현대:</div>
+          <p>MMR 백신 보급으로 예방, 집단 면역 중요.</p>
+          <div class="source">출처: 질병관리청, 링크</div>
+        `
+      },
+      "4": {
+        title: "장티푸스 및 이질(장질부사)",
+        content: `
+          <div class="section-title">조선시대:</div>
+          <p>오염된 물과 음식으로 전파, 위생 문제 심각, 환자 격리 및 민간 치료법 사용.</p>
+          <div class="source">출처: 「한국 전염병사」 국립중앙도서관 자료</div>
+
+          <div class="section-title">현대:</div>
+          <p>항생제 치료 및 경구 예방접종, 상하수도 시설 개선으로 예방</p>
+          <div class="source">출처: WHO, 링크</div>
+        `
+      },
+      "5": {
+        title: "인플루엔자 (현대 중심)",
+        content: `
+          <div class="section-title">조선시대:</div>
+          <p>기록은 적지만, 현대에는 계절성 독감 및 팬데믹 발생, 백신과 항바이러스제 개발</p>
+          <div class="source">출처: 질병관리청, WHO</div>
+        `
+      }
+    };
+
+    const container = document.getElementById('content');
+
+    if (details[id]) {
+      container.innerHTML = `<h1>${details[id].title}</h1>` + details[id].content;
+    } else {
+      container.innerHTML = "<p>잘못된 접근입니다. 다시 목록에서 선택해 주세요.</p>";
+    }
+  </script>
+</body>
+</html>
