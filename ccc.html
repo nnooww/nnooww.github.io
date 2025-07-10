@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>인트로</title>
+  <title>인트로 (ccc.html)</title>
   <style>
     * {
       margin: 0; padding: 0; box-sizing: border-box;
@@ -41,6 +41,7 @@
       border-radius: 8px;
       text-decoration: none;
       transition: 0.3s;
+      cursor: pointer;
     }
     .intro-section a:hover {
       background-color: #276fc2;
@@ -48,7 +49,7 @@
 
     /* 로딩 스타일 */
     .loading {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
       background: rgba(225,225,255,0.8);
@@ -57,7 +58,8 @@
       justify-content: center;
       font-size: 60px;
       z-index: 9999;
-      opacity: 1;
+      opacity: 0;
+      visibility: hidden;
       transition: opacity 0.5s ease;
     }
     .loading h1 {
@@ -88,17 +90,25 @@
   <section class="intro-section">
     <h1>자연이 바뀌면, 병도 바뀐다</h1>
     <p>조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
-    <a href="aaa.html">탐색 시작</a>
+    <a href="aaa.html" id="go-aaa">탐색 시작</a>
   </section>
 
   <script>
-    window.onload = function() {
+    const btn = document.getElementById('go-aaa');
+    const loading = document.querySelector('.loading');
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // 기본 이동 차단
+      
+      // 로딩 보이기
+      loading.style.visibility = 'visible';
+      loading.style.opacity = 1;
+
+      // 1초 후 페이지 이동
       setTimeout(() => {
-        const loading = document.querySelector('.loading');
-        loading.style.opacity = 0;
-        setTimeout(() => loading.style.visibility = 'hidden', 500);
-      }, 2500);
-    };
+        window.location.href = btn.href;
+      }, 1000);
+    });
   </script>
 
 </body>
