@@ -31,21 +31,44 @@
       flex: 3;
       padding: 1em;
       background: #ddd;
-      position: relative; /* 중요: hover-box 절대 위치 기준 */
+      position: relative; /* hover-box 위치 기준 */
+      overflow: visible; /* hover-box가 밖으로 나와도 보이도록 */
     }
+    /* 언어 선택 박스 원래 위치 그대로 (오른쪽 위 고정) */
     #lang-select {
       position: absolute;
       top: 10px;
-      left: 10px;  /* 기존 위치 유지 (상단 왼쪽) */
+      right: 10px; /* 오른쪽 위 고정 - 이게 원래 위치 유지 */
       padding: 4px 8px;
       font-size: 0.9em;
       cursor: pointer;
       z-index: 20;
+      user-select: none;
     }
+    /* 자세히보기 버튼, lang-select 바로 위, 겹치도록 위치 */
+    #detail-btn {
+      position: absolute;
+      top: 0px; /* lang-select top 10px 보다 위에 */
+      right: 10px; /* lang-select과 같은 right 값 */
+      padding: 4px 10px;
+      font-size: 0.9em;
+      cursor: pointer;
+      background: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      z-index: 25;
+      user-select: none;
+      line-height: 1.5;
+    }
+    #detail-btn:hover {
+      background: #005a99;
+    }
+    /* hover-box 위치는 detail-btn과 거의 겹치게 */
     #hover-box {
       position: absolute;
-      top: 40px;     /* aside 내부 상단에서 40px 아래 */
-      right: 10px;   /* aside 오른쪽 끝에서 10px 안쪽 */
+      top: 0px;      /* detail-btn top과 동일 */
+      right: 10px;   /* detail-btn right과 동일 */
       width: 320px;
       background: rgba(255,255,255,0.95);
       border: 1px solid #aaa;
@@ -55,6 +78,7 @@
       z-index: 30;
       border-radius: 6px;
       user-select: none;
+      /* 언어선택 박스를 덮어서 가림 */
     }
     #hover-box h3 {
       margin-top: 0;
@@ -64,20 +88,6 @@
       margin: 0.5em 0;
       font-size: 0.9em;
       white-space: pre-wrap;
-    }
-    #hover-box button {
-      margin-top: 1em;
-      padding: 0.5em 1em;
-      font-size: 0.9em;
-      cursor: pointer;
-      border: none;
-      background-color: #007acc;
-      color: white;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-    #hover-box button:hover {
-      background-color: #005a99;
     }
     main {
       flex: 1;
@@ -162,11 +172,16 @@
 
   <div class="container">
     <aside>
+      <!-- 언어선택 박스 원래 위치 -->
       <select id="lang-select" aria-label="언어 선택">
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
 
+      <!-- 자세히보기 버튼 (hover-box 토글용) -->
+      <button id="detail-btn" aria-haspopup="true" aria-expanded="false" aria-controls="hover-box">자세히보기</button>
+
+      <!-- hover-box -->
       <div id="hover-box" role="tooltip" aria-hidden="true"></div>
 
       <section id="ecology-impact">
@@ -189,6 +204,7 @@
       const bacteriaList = document.querySelector(".bacteria-list");
       const hoverBox = document.getElementById("hover-box");
       const langSelect = document.getElementById("lang-select");
+      const detailBtn = document.getElementById("detail-btn");
 
       const headerTitle = document.getElementById("header-title");
       const listTitle = document.getElementById("list-title");
@@ -288,141 +304,173 @@
           title: "Why is ecological change related to infectious diseases?",
           items: [
             {
-              heading: "1. Ecosystems are homes for viruses",
-              text: "Viruses and bacteria live in animals, water, and plants.\nWhen nature changes, pathogen habitats change too."
+              heading: "1. Ecosystems are home to viruses",
+              text: "Viruses and bacteria live in nature — animals, water, plants.\nWhen nature changes, habitats of pathogens change too."
             },
             {
-              heading: "2. Viruses follow when humans cross boundaries",
-              text: "Building cities by cutting forests brings humans closer to wildlife.\nThis can transfer animal viruses to people."
+              heading: "2. When humans cross boundaries, viruses follow",
+              text: "Clearing forests and building cities brings us closer to wildlife.\nViruses from animals can jump to humans in this process."
             },
             {
-              heading: "3. Climate change expands disease ranges",
-              text: "Higher temperatures spread vectors like mosquitoes and ticks.\nTropical diseases may spread to new countries."
+              heading: "3. Climate change expands disease range",
+              text: "Rising temperatures allow vectors like mosquitoes and ticks to spread wider.\nThis leads to tropical diseases spreading to new regions."
             },
             {
-              heading: "4. Ecological change weakens people",
-              text: "Famine, floods, and drought pollute water and cause hunger.\nThis lowers immunity, making people vulnerable to infections."
+              heading: "4. Ecological changes weaken people",
+              text: "Famine, floods, and droughts contaminate water and cause hunger.\nThis weakens immunity making people more vulnerable."
             }
           ],
           quote: "“The health of ecosystems is directly linked to human health.”"
         }
       };
 
-      let currentLang = "ko";
-
-      function clearHoverBox() {
-        hoverBox.style.display = "none";
-        hoverBox.innerHTML = "";
-        hoverBox.setAttribute("aria-hidden", "true");
-      }
-
-      function showHoverBox(content) {
-        hoverBox.innerHTML = content;
-        hoverBox.style.display = "block";
-        hoverBox.setAttribute("aria-hidden", "false");
-      }
-
-      function createHoverContent(id) {
-        const desc = descriptions[currentLang][id];
-        if (!desc) return "";
-
-        return `
-          <h3>${desc.title}</h3>
-          <p>${desc.preview}</p>
-          <button type="button" aria-label="자세히 보기 닫기" onclick="clearHoverBox()">닫기</button>
-        `;
-      }
-
-      // 리스트 생성 및 이벤트 연결
-      function populateList() {
+      function createList(lang) {
         bacteriaList.innerHTML = "";
-        items[currentLang].forEach((item, idx) => {
+        items[lang].forEach((item, i) => {
           const li = document.createElement("li");
           li.textContent = item;
-          li.setAttribute("data-id", idx + 1);
+          li.setAttribute("data-id", i + 1);
           li.setAttribute("tabindex", "0");
-          li.setAttribute("role", "listitem");
-          li.style.userSelect = "none";
-
-          li.addEventListener("mouseenter", () => {
-            const content = createHoverContent(li.getAttribute("data-id"));
-            showHoverBox(content);
-          });
-          li.addEventListener("mouseleave", () => {
-            clearHoverBox();
-          });
-          li.addEventListener("focus", () => {
-            const content = createHoverContent(li.getAttribute("data-id"));
-            showHoverBox(content);
-          });
-          li.addEventListener("blur", () => {
-            clearHoverBox();
-          });
-
+          li.setAttribute("role", "button");
+          li.setAttribute("aria-pressed", "false");
           bacteriaList.appendChild(li);
         });
       }
 
-      // ecology 내용 업데이트
-      function updateEcology() {
-        const eco = ecologyData[currentLang];
-        ecologyTitle.textContent = eco.title;
+      function showHoverBox(id, lang) {
+        if (!descriptions[lang][id]) {
+          hoverBox.style.display = "none";
+          hoverBox.setAttribute("aria-hidden", "true");
+          return;
+        }
+        const { title, preview } = descriptions[lang][id];
+        hoverBox.innerHTML = `<h3>${title}</h3><p>${preview}</p>`;
+        hoverBox.style.display = "block";
+        hoverBox.setAttribute("aria-hidden", "false");
+      }
+      function hideHoverBox() {
+        hoverBox.style.display = "none";
+        hoverBox.setAttribute("aria-hidden", "true");
+      }
 
+      // Ecology info 세팅
+      function updateEcology(lang) {
+        ecologyTitle.textContent = ecologyData[lang].title;
         ecologyContent.innerHTML = "";
-        eco.items.forEach(item => {
+        ecologyData[lang].items.forEach(item => {
           const div = document.createElement("div");
-          div.className = "info-box";
-          div.tabIndex = 0;
-
+          div.classList.add("info-box");
           const h4 = document.createElement("h4");
           h4.textContent = item.heading;
-
           const p = document.createElement("p");
           p.textContent = item.text;
-
           div.appendChild(h4);
           div.appendChild(p);
+          ecologyContent.appendChild(div);
 
-          div.addEventListener("click", () => {
+          // 클릭시 펼침/접힘
+          h4.addEventListener("click", () => {
             div.classList.toggle("active");
           });
-          div.addEventListener("keydown", (e) => {
+          h4.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               div.classList.toggle("active");
             }
           });
-
-          ecologyContent.appendChild(div);
         });
-
-        ecologyQuote.textContent = eco.quote;
+        ecologyQuote.textContent = ecologyData[lang].quote;
       }
 
-      // 페이지 텍스트 업데이트
-      function updateTexts() {
-        if(currentLang === "ko"){
+      // 초기 언어 셋팅
+      let currentLang = langSelect.value || "ko";
+      createList(currentLang);
+      updateEcology(currentLang);
+
+      // 리스트 아이템 hover 시 hover-box 보이도록 이벤트
+      bacteriaList.addEventListener("mouseover", (e) => {
+        if (e.target.tagName === "LI") {
+          const id = e.target.getAttribute("data-id");
+          showHoverBox(id, currentLang);
+        }
+      });
+      bacteriaList.addEventListener("mouseout", (e) => {
+        if (e.target.tagName === "LI") {
+          hideHoverBox();
+        }
+      });
+      bacteriaList.addEventListener("focusin", (e) => {
+        if (e.target.tagName === "LI") {
+          const id = e.target.getAttribute("data-id");
+          showHoverBox(id, currentLang);
+        }
+      });
+      bacteriaList.addEventListener("focusout", (e) => {
+        if (e.target.tagName === "LI") {
+          hideHoverBox();
+        }
+      });
+
+      // 언어 변경시 리스트, ecology, 제목 변경
+      langSelect.addEventListener("change", () => {
+        currentLang = langSelect.value;
+        createList(currentLang);
+        updateEcology(currentLang);
+
+        // 제목 바꾸기
+        if (currentLang === "ko") {
           headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
           listTitle.textContent = "오른쪽 영역 리스트";
         } else {
           headerTitle.textContent = "Why is ecological change related to infectious diseases?";
-          listTitle.textContent = "Right side list";
+          listTitle.textContent = "Right Area List";
+        }
+      });
+
+      // --- 자세히보기 hover-box 보이기/숨기기 로직 ---
+      // 버튼과 박스 위 마우스 상태 추적용 변수
+      let isOverDetailBtn = false;
+      let isOverHoverBox = false;
+
+      function updateHoverBoxVisibility() {
+        if (isOverDetailBtn || isOverHoverBox) {
+          hoverBox.style.display = "block";
+          hoverBox.setAttribute("aria-hidden", "false");
+          detailBtn.setAttribute("aria-expanded", "true");
+        } else {
+          hoverBox.style.display = "none";
+          hoverBox.setAttribute("aria-hidden", "true");
+          detailBtn.setAttribute("aria-expanded", "false");
         }
       }
 
-      // 언어 선택 변경시
-      langSelect.addEventListener("change", () => {
-        currentLang = langSelect.value;
-        populateList();
-        updateEcology();
-        updateTexts();
-        clearHoverBox();
+      // '자세히보기' 버튼에 마우스 올림
+      detailBtn.addEventListener("mouseenter", () => {
+        isOverDetailBtn = true;
+        updateHoverBoxVisibility();
+      });
+      detailBtn.addEventListener("mouseleave", () => {
+        isOverDetailBtn = false;
+        // 딜레이를 조금 줘서 박스로 바로 넘어갈 때 깜빡임 방지
+        setTimeout(updateHoverBoxVisibility, 100);
       });
 
-      // 초기화
-      populateList();
-      updateEcology();
-      updateTexts();
+      // hover-box에 마우스 올림
+      hoverBox.addEventListener("mouseenter", () => {
+        isOverHoverBox = true;
+        updateHoverBoxVisibility();
+      });
+      hoverBox.addEventListener("mouseleave", () => {
+        isOverHoverBox = false;
+        // 딜레이로 깜빡임 방지
+        setTimeout(updateHoverBoxVisibility, 100);
+      });
+
+      // hover-box 내용 세팅 (예시 텍스트)
+      hoverBox.innerHTML = `
+        <h3>자세히보기 내용</h3>
+        <p>여기에 자세한 설명이 들어갑니다.<br>마우스를 '자세히보기' 버튼이나 이 박스 위에 올려두면 이 박스가 유지됩니다.</p>
+      `;
     })();
   </script>
 </body>
