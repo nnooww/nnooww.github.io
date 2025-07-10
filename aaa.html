@@ -109,14 +109,7 @@
 <body>
   <div class="left-panel">
     <div class="intro-container">
-      <h1>🌍 융합수업 프로젝트</h1>
-      <p>환경과 전염병의 연결고리를 탐구하다</p>
-      <div class="creator-list">
-        <span>채우혁</span>
-        <span>채인혁</span>
-        <span>최진서</span>
-        <span>송형록</span>
-      </div>
+      <!-- 여기는 JS로 동적 변경 -->
     </div>
   </div>
 
@@ -134,34 +127,64 @@
   <script>
     const data = {
       ko: {
-        "1": { title: "왜 생태 변화가 전염병과 관련이 있을까?" },
-        "2": { title: "조선 시대의 생태" },
-        "3": { title: "조선 시대의 전염병" },
-        "4": { title: "현대 시대의 생태" },
-        "5": { title: "현대 생태 변화가 만든 전염병" },
-        "6": { title: "생태 변화와 바이러스의 진화" },
-        "7": { title: "전염병과 생태 변화 퀴즈" }
+        titles: {
+          mainTitle: "🌍 융합수업 프로젝트",
+          subtitle: "환경과 전염병의 연결고리를 탐구하다",
+          creators: ["채우혁", "채인혁", "최진서", "송형록"]
+        },
+        contents: {
+          "1": { title: "왜 생태 변화가 전염병과 관련이 있을까?" },
+          "2": { title: "조선 시대의 생태" },
+          "3": { title: "조선 시대의 전염병" },
+          "4": { title: "현대 시대의 생태" },
+          "5": { title: "현대 생태 변화가 만든 전염병" },
+          "6": { title: "생태 변화와 바이러스의 진화" },
+          "7": { title: "전염병과 생태 변화 퀴즈" }
+        }
       },
       en: {
-        "1": { title: "Why Is Ecological Change Related to Infectious Diseases?" },
-        "2": { title: "Ecology of the Joseon Dynasty" },
-        "3": { title: "Infectious Diseases in Joseon Era" },
-        "4": { title: "Modern Ecology" },
-        "5": { title: "Infectious Diseases Created by Modern Ecological Changes" },
-        "6": { title: "Virus Evolution and Ecological Changes" },
-        "7": { title: "Epidemics and Ecological Change Quiz" }
+        titles: {
+          mainTitle: "🌍 Convergence Class Project",
+          subtitle: "Exploring the Link Between Environment and Infectious Diseases",
+          creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
+        },
+        contents: {
+          "1": { title: "Why Is Ecological Change Related to Infectious Diseases?" },
+          "2": { title: "Ecology of the Joseon Dynasty" },
+          "3": { title: "Infectious Diseases in Joseon Era" },
+          "4": { title: "Modern Ecology" },
+          "5": { title: "Infectious Diseases Created by Modern Ecological Changes" },
+          "6": { title: "Virus Evolution and Ecological Changes" },
+          "7": { title: "Epidemics and Ecological Change Quiz" }
+        }
       }
     };
 
     const langSelect = document.getElementById('lang-select');
     const listArea = document.getElementById('list-area');
     const listTitle = document.getElementById('list-title');
+    const introContainer = document.querySelector('.intro-container');
 
+    // 현재 URL에 lang 파라미터 있으면 사용, 없으면 'ko' 기본값
     let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
     langSelect.value = currentLang;
 
+    // 왼쪽 제목, 부제, 팀원 동적 생성 함수
+    function renderTitles(lang) {
+      const titles = data[lang].titles;
+
+      introContainer.innerHTML = `
+        <h1>${titles.mainTitle}</h1>
+        <p>${titles.subtitle}</p>
+        <div class="creator-list">
+          ${titles.creators.map(name => `<span>${name}</span>`).join('')}
+        </div>
+      `;
+    }
+
+    // 오른쪽 콘텐츠 목록 렌더링
     function renderList(lang) {
-      const langData = data[lang];
+      const langData = data[lang].contents;
       listArea.innerHTML = "";
 
       Object.keys(langData).forEach(id => {
@@ -175,17 +198,21 @@
       listTitle.textContent = lang === "ko" ? "콘텐츠 목록" : "Contents List";
     }
 
+    // 언어 변경 시 처리
     langSelect.addEventListener('change', (e) => {
       const selectedLang = e.target.value;
       currentLang = selectedLang;
       const url = new URL(location.href);
       url.searchParams.set("lang", selectedLang);
       history.replaceState(null, "", url.toString());
+
       renderList(selectedLang);
+      renderTitles(selectedLang);
     });
 
     // 초기 렌더링
     renderList(currentLang);
+    renderTitles(currentLang);
   </script>
 </body>
 </html>
