@@ -13,6 +13,33 @@
       display: flex;
       overflow: hidden;
     }
+    .loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #333;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+    }
+    .loading > div {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     .left-panel {
       flex: 1;
@@ -124,6 +151,11 @@
     <div id="list-area"></div>
   </div>
 
+  <div class="loading">
+    로딩중...
+    <div></div>
+  </div>
+
   <script>
     // 데이터 구조
     const data = {
@@ -165,6 +197,7 @@
     const listArea = document.getElementById('list-area');
     const listTitle = document.getElementById('list-title');
     const introContainer = document.querySelector('.intro-container');
+    const loading = document.querySelector('.loading');
 
     // 현재 URL에 lang 쿼리 있으면 사용, 없으면 ko 기본
     let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
@@ -194,6 +227,19 @@
         }
       }
       listTitle.textContent = lang === 'ko' ? '콘텐츠 목록' : 'Contents List';
+
+      // 링크 클릭 시 로딩 효과 적용
+      listArea.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          loading.style.visibility = 'visible';
+          loading.style.opacity = '1';
+
+          setTimeout(() => {
+            window.location.href = a.href;
+          }, 1000);
+        });
+      });
     }
 
     langSelect.addEventListener('change', e => {
