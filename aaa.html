@@ -2,402 +2,181 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>왜 생태 변화가 전염병과 관련이 있을까? (aaa.html)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>융합수업 프로젝트</title>
   <style>
-    * { box-sizing: border-box; }
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-    }
-    header, footer {
-      background: #444;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-      flex-shrink: 0;
-      position: relative;
-    }
-    .container {
-      display: flex;
-      min-height: calc(100vh - 160px);
-    }
-    aside {
-      flex: 2.5;
-      padding: 1em;
-      background: #ddd;
-      position: relative;
-    }
-    footer {
-      background: #444;
-      padding-top: 25px;
-      padding-bottom: 25px;
-    }
-    #lang-select {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 4px 8px;
-      font-size: 0.9em;
-      cursor: pointer;
-      z-index: 20;
-    }
-    main {
-      flex: 1;
-      padding: 1em;
-      background: #eee;
-    }
-    .bacteria-list > li {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-bottom: 1em;
-      cursor: pointer;
-    }
-    #hover-box {
-      position: absolute;
-      top: 50px;
-      right: 10px;
-      width: 350px;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #aaa;
-      padding: 1em;
-      display: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 10;
-    }
-    #hover-box h3 {
-      margin-top: 0;
-      font-size: 1.1em;
-    }
-    #hover-box p {
-      margin: 0.5em 0;
-      font-size: 0.9em;
-    }
-    #hover-box button {
-      margin-top: 1em;
-      padding: 0.5em 1em;
-      font-size: 0.9em;
-      cursor: pointer;
-    }
-    #ecology-impact {
-      margin-top: 20px;
-      background: #f2f8ff;
-      padding: 15px;
-      border-radius: 6px;
       font-family: 'Noto Sans KR', sans-serif;
-    }
-    #ecology-impact .info-box {
-      background: #fff;
-      border-left: 5px solid #4a90e2;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      height: 100vh;
+      display: flex;
       overflow: hidden;
     }
-    #ecology-impact .info-box h4 {
-      font-size: 1rem;
-      color: #114a77;
-      margin: 0;
-      padding: 10px 12px;
-      cursor: pointer;
-      background-color: #e6f1ff;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    #ecology-impact .info-box h4:hover {
-      background-color: #d0e6ff;
-    }
-    #ecology-impact .info-box p {
-      font-size: 0.9rem;
-      color: #333;
-      line-height: 1.4;
-      padding: 0 12px 10px;
-      display: none;
-      margin: 0;
-    }
-    blockquote {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #2c3e50;
-      background: #e3f1ff;
-      border-left: 5px solid #007acc;
-      padding: 12px;
-      border-radius: 6px;
-      margin-top: 15px;
-      text-align: center;
-      line-height: 1.5;
-    }
-    .loading {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(225,225,255,0.8);
+
+    .left-panel {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .intro-container {
+      text-align: center;
+    }
+
+    .intro-container h1 {
+      font-size: 3rem;
+      color: #007acc;
+      margin-bottom: 20px;
+    }
+
+    .intro-container p {
+      font-size: 1.5rem;
       color: #333;
-      z-index: 9999;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease;
+      margin-top: 10px;
     }
-    .loading > div {
-      width: 50px; height: 50px;
-      border: 6px solid #ccc;
-      border-top: 6px solid #333;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-left: 20px;
+
+    .creator-list {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #555;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
+
+    .creator-list span {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 8px 14px;
+      background: #e3f2fd;
+      border-radius: 20px;
+    }
+
+    .right-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 20px;
+      background: #ffffff;
+      border-left: 3px solid #cce5f6;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #114a77;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .card {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-left: 6px solid #4a90e2;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transition: background 0.2s;
+    }
+
+    .card:hover {
+      background: #e9f5ff;
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <header><h1 id="header-title">왜 생태 변화가 전염병과 관련이 있을까?</h1></header>
-  <div class="container">
-    <aside>
-      <select id="lang-select" aria-label="언어 선택">
+  <div class="left-panel">
+    <div class="intro-container">
+      <h1>🌍 융합수업 프로젝트</h1>
+      <p>환경과 전염병의 연결고리를 탐구하다</p>
+      <div class="creator-list">
+        <span>채우혁</span>
+        <span>채인혁</span>
+        <span>최진서</span>
+        <span>송형록</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="header">
+      <h2 id="list-title">콘텐츠 목록</h2>
+      <select id="lang-select">
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
-      <div id="hover-box"></div>
-      <section id="ecology-impact">
-        <h3 id="ecology-title"></h3>
-        <div id="ecology-content"></div>
-        <blockquote id="ecology-quote"></blockquote>
-      </section>
-    </aside>
-    <main>
-      <h2 id="list-title">리스트</h2>
-      <ol class="bacteria-list"></ol>
-    </main>
+    </div>
+    <div id="list-area"></div>
   </div>
-  <footer></footer>
-
-  <div class="loading">로딩중...<div></div></div>
 
   <script>
-    const bacteriaList = document.querySelector(".bacteria-list");
-    const hoverBox = document.getElementById("hover-box");
-    const langSelect = document.getElementById("lang-select");
-    const headerTitle = document.getElementById("header-title");
-    const listTitle = document.getElementById("list-title");
-    const ecologyTitle = document.getElementById("ecology-title");
-    const ecologyContent = document.getElementById("ecology-content");
-    const ecologyQuote = document.getElementById("ecology-quote");
-    const loadingDiv = document.querySelector('.loading');
-
-    let hideTimer = null;
-    let currentLang = "ko";
-
-    const items = {
-  ko: [
-    "왜 생태 변화가 전염병과 관련이 있을까?",
-    "조선 시대의 생태",
-    "조선 시대의 전염병 소개",
-    "현대 시대의 생태 소개",
-    "현대 시대 생태에 따른 전염병들",
-    "생태 변화와 바이러스의 진화",   // 6번
-    "전염병과 생태 변화 퀴즈"        // 7번
-  ],
-  en: [
-    "Why Is Ecological Change Related to Infectious Diseases?",
-    "Ecology in the Joseon Dynasty",
-    "Introduction to Infectious Diseases in the Joseon Era",
-    "Introduction to Modern Ecology",
-    "Infectious Diseases Related to Modern Ecological Changes",
-    "Ecological Change and Virus Evolution",  // 6
-    "Quiz: Epidemics and Ecological Change"   // 7
-  ]
-};
-
-    const descriptions_ko = {
-  "1": { 
-    title: "왜 생태 변화가 전염병과 관련이 있을까?", 
-    preview: "조선시대 주요 전염병과 WHO 백신 접종으로 인한 박멸 사례를 소개합니다." 
-  },
-  "2": { 
-    title: "조선 시대의 생태", 
-    preview: "19세기 이후 변화한 생태 환경과 수분 보충, 항생제 치료 및 국제 감시체계 운영 현황입니다." 
-  },
-  "3": { 
-    title: "조선 시대의 전염병 소개", 
-    preview: "자연 면역과 백신 도입으로 예방이 가능해진 조선시대 전염병들을 다룹니다." 
-  },
-  "4": { 
-    title: "현대 시대의 생태 소개", 
-    preview: "오염된 물과 음식을 통한 전파 경로와 항생제, 위생 개선을 통한 예방 방법을 설명합니다." 
-  },
-  "5": { 
-    title: "현대 시대 생태에 따른 전염병들", 
-    preview: "계절성 독감과 팬데믹 사례, 그리고 백신과 항바이러스제 개발 현황을 소개합니다." 
-  },
-  "6":{
-    title: "생태 변화와 바이러스의 진화",
-    preview: "기후 변화와 서식지 파괴가 바이러스 진화에 미치는 영향에 대해 알아봅니다."
-  },
-  "7": {
-    title: "전염병과 생태 변화 퀴즈",
-    preview: "생태 변화와 전염병에 관한 간단한 퀴즈를 풀어봅니다."
-  }
-    };
-
-const descriptions_en = {
-  "1": { 
-    title: "Why Is Ecological Change Related to Infectious Diseases?", 
-    preview: "An overview of major infectious diseases in the Joseon Dynasty and their eradication through WHO vaccination." 
-  },
-  "2": { 
-    title: "Ecology in the Joseon Dynasty", 
-    preview: "Changes in the ecological environment after the 19th century, including hydration therapy, antibiotics, and international surveillance." 
-  },
-  "3": { 
-    title: "Introduction to Infectious Diseases in the Joseon Era", 
-    preview: "Discussion of infectious diseases relying on natural immunity and preventable through vaccine introduction." 
-  },
-  "4": { 
-    title: "Introduction to Modern Ecology", 
-    preview: "Explanation of transmission via contaminated food and water, with prevention through antibiotics and improved sanitation." 
-  },
-  "5": { 
-    title: "Infectious Diseases Related to Modern Ecological Changes", 
-    preview: "Introduction to seasonal flu, pandemics, and the development of vaccines and antiviral drugs." 
-  },
-  "6": {
-  title: "Ecological Change and Virus Evolution",
-  preview: "Learn about how climate change and habitat destruction affect virus evolution."
-  },
-  "7": {
-  title: "Quiz: Epidemics and Ecological Change",
-  preview: "Try a simple quiz on ecological changes and infectious diseases."
-}
-};
-
-    const ecologyData = {
+    const data = {
       ko: {
-        title: "왜 생태 변화가 전염병과 관련이 있을까?",
-        items: [
-          { heading: "1. 생태계는 바이러스의 집이다", text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다." },
-          { heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다", text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다." },
-          { heading: "3. 기후 변화는 병의 활동 범위를 넓힌다", text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다." },
-          { heading: "4. 생태 변화는 사람을 더 약하게 만든다", text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다." }
-        ],
-        quote: "생태계 변화가 인류 건강에 미치는 영향은 과학적 연구로 점점 더 명확해지고 있습니다."
+        "1": { title: "기후 변화로 확산된 전염병" },
+        "2": { title: "삼림 파괴와 전염병" },
+        "3": { title: "코로나19와 바이러스 구조" }
       },
       en: {
-        title: "Why Is Ecological Change Related to Infectious Diseases?",
-        items: [
-          { heading: "1. Ecosystems Are Homes for Viruses", text: "Viruses and bacteria live in animals, water, and plants.\nWhen nature changes, habitats for pathogens also shift." },
-          { heading: "2. Crossing Boundaries Brings Viruses Along", text: "Building cities by clearing forests increases contact with wildlife.\nViruses in animals can transfer to humans." },
-          { heading: "3. Climate Change Expands Disease Range", text: "Higher temperatures let disease vectors like mosquitoes spread wider.\nTropical diseases can then spread to new areas." },
-          { heading: "4. Ecological Change Weakens Humans", text: "Famine, floods, and drought pollute water and weaken people.\nThose with weak immunity get sick more easily." }
-        ],
-        quote: "The impact of ecological changes on human health is becoming clearer through scientific research."
+        "1": { title: "Diseases Spread by Climate Change" },
+        "2": { title: "Deforestation and Epidemics" },
+        "3": { title: "COVID-19 and Virus Structure" }
       }
     };
 
-    function populateList() {
-      bacteriaList.innerHTML = "";
-      items[currentLang].forEach((name, idx) => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        li.dataset.id = idx + 1;
-        bacteriaList.appendChild(li);
+    const langSelect = document.getElementById('lang-select');
+    const listArea = document.getElementById('list-area');
+    const listTitle = document.getElementById('list-title');
+
+    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    langSelect.value = currentLang;
+
+    function renderList(lang) {
+      const langData = data[lang];
+      listArea.innerHTML = "";
+      Object.keys(langData).forEach(id => {
+        const item = langData[id];
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<a href="bbb.html?id=${id}&lang=${lang}">▶️ ${item.title}</a>`;
+        listArea.appendChild(card);
       });
+
+      listTitle.textContent = lang === "ko" ? "콘텐츠 목록" : "Contents List";
     }
 
-    function showHoverBox(id) {
-      const data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
-      if (!data) return;
-
-      hoverBox.innerHTML = `
-        <h3>${data.title}</h3>
-        <p>${data.preview}</p>
-        <button class="go-bbb" data-url="bbb.html?id=${id}&lang=${currentLang}">
-          ${currentLang === "ko" ? "자세히 보기" : "Details"}
-        </button>
-      `;
-      hoverBox.style.display = "block";
-
-      if (hideTimer) clearTimeout(hideTimer);
-    }
-
-    function hideHoverBoxDelayed() {
-      hideTimer = setTimeout(() => {
-        hoverBox.style.display = "none";
-        hoverBox.innerHTML = "";
-      }, 500);
-    }
-
-    hoverBox.addEventListener("mouseover", () => {
-      if (hideTimer) clearTimeout(hideTimer);
-    });
-    hoverBox.addEventListener("mouseout", hideHoverBoxDelayed);
-
-    bacteriaList.addEventListener("mouseover", e => {
-      if (e.target.tagName === "LI") showHoverBox(e.target.dataset.id);
-    });
-    bacteriaList.addEventListener("mouseout", e => {
-      if (e.target.tagName === "LI") hideHoverBoxDelayed();
+    langSelect.addEventListener('change', (e) => {
+      const selectedLang = e.target.value;
+      currentLang = selectedLang;
+      const url = new URL(location.href);
+      url.searchParams.set("lang", selectedLang);
+      history.replaceState(null, "", url.toString());
+      renderList(selectedLang);
     });
 
-    langSelect.addEventListener("change", e => {
-      currentLang = e.target.value;
-      populateList();
-      updateTexts();
-      updateEcology();
-      hoverBox.style.display = "none";
-    });
-
-    function updateTexts() {
-      headerTitle.textContent = currentLang === "ko" ? "왜 생태 변화가 전염병과 관련이 있을까?" : "Why Is Ecological Change Related to Infectious Diseases?";
-      listTitle.textContent = currentLang === "ko" ? "리스트" : "List";
-    }
-
-    function updateEcology() {
-      const data = ecologyData[currentLang];
-      ecologyTitle.textContent = data.title;
-      ecologyContent.innerHTML = "";
-      data.items.forEach(item => {
-        const box = document.createElement("div");
-        box.className = "info-box";
-
-        const h4 = document.createElement("h4");
-        h4.textContent = item.heading;
-        box.appendChild(h4);
-
-        const p = document.createElement("p");
-        p.textContent = item.text;
-        box.appendChild(p);
-
-        h4.addEventListener("click", () => {
-          p.style.display = p.style.display === "block" ? "none" : "block";
-        });
-
-        ecologyContent.appendChild(box);
-      });
-      ecologyQuote.textContent = data.quote;
-    }
-
-    document.body.addEventListener("click", e => {
-      if (e.target.classList.contains("go-bbb")) {
-        e.preventDefault();
-        const url = e.target.getAttribute("data-url");
-        if (!url) return;
-        loadingDiv.style.visibility = "visible";
-        loadingDiv.style.opacity = "1";
-        setTimeout(() => { window.location.href = url; }, 1000);
-      }
-    });
-
-    populateList();
-    updateTexts();
-    updateEcology();
+    // 초기 렌더링
+    renderList(currentLang);
   </script>
 </body>
 </html>
