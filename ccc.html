@@ -12,6 +12,7 @@
       height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
     }
+
     .intro-section {
       background: url('joseon-background.jpg') no-repeat center center/cover;
       height: 100vh;
@@ -24,15 +25,18 @@
       background-color: rgba(0,0,0,0.5);
       background-blend-mode: darken;
     }
+
     .intro-section h1 {
       font-size: 3rem;
       margin-bottom: 20px;
     }
+
     .intro-section p {
       font-size: 1.3rem;
       margin-bottom: 40px;
       color: #e0e0e0;
     }
+
     .intro-section a {
       padding: 12px 28px;
       background-color: #4a90e2;
@@ -43,11 +47,12 @@
       transition: 0.3s;
       cursor: pointer;
     }
+
     .intro-section a:hover {
       background-color: #276fc2;
     }
 
-    /* 로딩 스타일 */
+    /* 로딩 스타일 (aaa.html과 동일하게 맞춤) */
     .loading {
       position: fixed;
       top: 0; left: 0;
@@ -56,17 +61,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 60px;
+      font-size: 40px;
+      color: #333;
       z-index: 9999;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.5s ease;
     }
-    .loading h1 {
-      font-size: 40px;
-      color: #333;
-    }
-    .spinner {
+
+    .loading > div {
       width: 50px; height: 50px;
       border: 6px solid #ccc;
       border-top: 6px solid #333;
@@ -74,17 +77,19 @@
       animation: spin 1s linear infinite;
       margin-left: 20px;
     }
+
     @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
 
+  <!-- 로딩 화면 -->
   <div class="loading">
-    <h1>로딩중...</h1>
-    <div class="spinner"></div>
+    로딩중...
+    <div></div>
   </div>
 
   <section class="intro-section">
@@ -99,10 +104,10 @@
 
     btn.addEventListener('click', (e) => {
       e.preventDefault(); // 기본 이동 차단
-      
+
       // 로딩 보이기
       loading.style.visibility = 'visible';
-      loading.style.opacity = 1;
+      loading.style.opacity = '1';
 
       // 1초 후 페이지 이동
       setTimeout(() => {
