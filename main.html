@@ -2,97 +2,83 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>융합수업 프로젝트</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>융합수업 프로젝트 메인</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
     body {
       margin: 0; padding: 0;
       font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #ffffff);
-      height: 100vh;
+      background: linear-gradient(135deg, #fafafa, #e3f2fd);
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-    }
-
-    .intro-container {
+      color: #004a8f;
+      padding: 40px 20px;
       text-align: center;
-      animation: fadeIn 2s ease-in-out;
     }
 
-    .intro-container h1 {
-      font-size: 3rem;
-      color: #007acc;
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
       margin-bottom: 20px;
+      text-shadow: 1px 1px 6px rgba(0,74,143,0.3);
     }
 
-    .intro-container p {
-      font-size: 1.5rem;
-      color: #333;
-      margin-top: 10px;
-    }
-
-    .creator-list {
-      margin-top: 20px;
+    p {
       font-size: 1.2rem;
-      color: #555;
+      max-width: 600px;
+      margin-bottom: 30px;
+      line-height: 1.5;
     }
 
-    .creator-list span {
-      display: inline-block;
-      margin: 5px 10px;
-      padding: 8px 14px;
-      background: #e3f2fd;
-      border-radius: 20px;
+    nav {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    nav a {
+      padding: 14px 30px;
+      background-color: #007acc;
+      color: white;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 5px 16px rgba(0,122,204,0.4);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    nav a:hover, nav a:focus {
+      background-color: #005f99;
+      outline: none;
+      box-shadow: 0 7px 18px rgba(0,95,153,0.7);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.4rem;
+      }
+      nav a {
+        flex: 1 1 100%;
+        margin-bottom: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="intro-container">
-    <h1 id="title">🌍 융합수업 프로젝트</h1>
-    <p id="desc">환경과 전염병의 연결고리를 탐구하다</p>
-    <div class="creator-list" id="creators">
-      <span>채우혁</span>
-      <span>채인혁</span>
-      <span>최진서</span>
-      <span>송형록</span>
-    </div>
-  </div>
-
-  <script>
-    const params = new URL(location.href).searchParams;
-    const lang = params.get('lang') || 'ko';
-
-    const text = {
-      ko: {
-        title: "🌍 융합수업 프로젝트",
-        desc: "환경과 전염병의 연결고리를 탐구하다",
-        names: ["채우혁", "채인혁", "최진서", "송형록"]
-      },
-      en: {
-        title: "🌍 Interdisciplinary Project",
-        desc: "Exploring the Link Between Environment and Epidemics",
-        names: ["WooHyuk Chae", "InHyuk Chae", "JinSeo Choi", "HyungRok Song"]
-      }
-    };
-
-    // 텍스트 반영
-    document.getElementById('title').textContent = text[lang].title;
-    document.getElementById('desc').textContent = text[lang].desc;
-
-    const creators = document.getElementById('creators');
-    creators.innerHTML = text[lang].names.map(name => `<span>${name}</span>`).join('');
-
-    // 4초 후 aaa.html 이동
-    setTimeout(() => {
-      window.location.href = `aaa.html?lang=${lang}`;
-    }, 4000);
-  </script>
+  <h1>융합수업 프로젝트에 오신 것을 환영합니다</h1>
+  <p>전염병과 생태 변화에 대해 배우고, 퀴즈도 풀어보세요.</p>
+  <nav aria-label="메인 내비게이션">
+    <a href="aaa.html?lang=ko">콘텐츠 목록 (한국어)</a>
+    <a href="aaa.html?lang=en">Content List (English)</a>
+    <a href="ccc.html?lang=ko">퀴즈 풀기 (한국어)</a>
+    <a href="ccc.html?lang=en">Take Quiz (English)</a>
+  </nav>
 </body>
 </html>
