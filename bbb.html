@@ -35,6 +35,7 @@
     overflow-y: auto;
     border-radius: 0; /* 여백 없애기 */
     box-shadow: none; /* 그림자 없애서 꽉찬 느낌 */
+    position: relative; /* 언어선택 위치 절대 기준 */
   }
   h1, h3 {
     margin-top: 0;
@@ -59,6 +60,7 @@
     text-decoration: underline;
   }
 
+  /* 언어 선택 박스 - main 내부 오른쪽 위 위치 */
   #lang-select {
     position: absolute;
     top: 10px;
@@ -72,14 +74,15 @@
 <body>
 <header>
   <h1 id="header-title">병 이름 상세 설명</h1>
+  <!-- 언어 선택 박스는 main으로 옮겼으므로 여기는 비움 -->
+</header>
+
+<main id="detail-content">
   <select id="lang-select" aria-label="언어 선택">
     <option value="ko">한국어</option>
     <option value="en">English</option>
   </select>
-</header>
-
-<main id="detail-content">
-  <!-- 상세 내용이 여기 들어감 -->
+  <!-- 상세 내용이 여기 들어갑니다 -->
 </main>
 
 <footer>
@@ -189,6 +192,9 @@
     // 뒤로가기 링크 추가 (언어 유지하면서 aaa.html로)
     const backLinkText = lang === "ko" ? "목록으로 돌아가기" : "Back to List";
     detailContent.insertAdjacentHTML("beforeend", `<a class="back-link" href="aaa.html?lang=${lang}">${backLinkText}</a>`);
+
+    // 다시 언어 선택 박스를 넣어줌 (위에서 innerHTML 덮었으니까)
+    detailContent.appendChild(langSelect);
   }
 
   // 처음 렌더링
