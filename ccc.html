@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>인트로 (ccc.html)</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body, html {
       height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
     }
@@ -25,8 +27,18 @@
       position: relative;
     }
 
-    .intro-section h1 { font-size: 3rem; margin-bottom: 20px; }
-    .intro-section p { font-size: 1.3rem; margin-bottom: 40px; max-width: 600px; }
+    .intro-section h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .intro-section p {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      color: #e0e0e0;
+      max-width: 600px;
+    }
+
     .intro-section a {
       padding: 12px 28px;
       background-color: #4a90e2;
@@ -37,9 +49,43 @@
       transition: 0.3s;
       cursor: pointer;
     }
-    .intro-section a:hover { background-color: #276fc2; }
 
-    /* 언어 선택 UI */
+    .intro-section a:hover {
+      background-color: #276fc2;
+    }
+
+    /* 로딩 스타일 */
+    .loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #333;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading > div {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* 언어 선택 UI 스타일 - 오른쪽 하단 작게 */
     #lang-switcher {
       position: absolute;
       bottom: 20px;
@@ -48,7 +94,14 @@
       padding: 6px 10px;
       border-radius: 8px;
       font-size: 0.9rem;
+      color: white;
+      user-select: none;
     }
+
+    #lang-switcher label {
+      margin-right: 6px;
+    }
+
     #lang-select-ccc {
       font-size: 0.9rem;
       padding: 2px 6px;
@@ -61,11 +114,18 @@
 </head>
 <body>
 
+  <!-- 로딩 화면 -->
+  <div class="loading">
+    <span class="loading-text">로딩중...</span>
+    <div></div>
+  </div>
+
   <section class="intro-section">
     <h1 id="main-title">자연이 바뀌면, 병도 바뀐다</h1>
     <p id="subtitle">조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
-    <a href="#" id="go-main">탐색 시작</a>
+    <a href="main.html" id="go-main">탐색 시작</a>
 
+    <!-- 한영 언어 선택 UI -->
     <div id="lang-switcher">
       <label for="lang-select-ccc">언어 선택:</label>
       <select id="lang-select-ccc">
@@ -77,44 +137,66 @@
 
   <script>
     const btn = document.getElementById('go-main');
-    const langSelect = document.getElementById('lang-select-ccc');
-    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    const loading = document.querySelector('.loading');
+    const loadingText = document.querySelector('.loading-text');
+    const langSelectCCC = document.getElementById('lang-select-ccc');
 
+    // 텍스트 데이터
     const textData = {
       ko: {
         mainTitle: "자연이 바뀌면, 병도 바뀐다",
         subtitle: "조선 시대 생태 변화와 전염병의 관계를 탐험해보세요",
-        btnText: "탐색 시작"
+        btnText: "탐색 시작",
+        loadingText: "로딩중..."
       },
       en: {
         mainTitle: "When Nature Changes, Diseases Change Too",
         subtitle: "Explore the Relationship Between Ecological Changes and Infectious Diseases in the Joseon Era",
-        btnText: "Start Exploration"
+        btnText: "Start Exploration",
+        loadingText: "Loading..."
       }
     };
 
+    // 페이지 로드 시 URL lang 파라미터 읽기 (없으면 'ko')
+    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    langSelectCCC.value = currentLang;
+
+    // 텍스트 업데이트 함수
     function updateTexts(lang) {
       document.getElementById('main-title').textContent = textData[lang].mainTitle;
       document.getElementById('subtitle').textContent = textData[lang].subtitle;
       btn.textContent = textData[lang].btnText;
+      loadingText.textContent = textData[lang].loadingText;
     }
 
+    // 초기 텍스트 세팅
     updateTexts(currentLang);
-    langSelect.value = currentLang;
 
-    langSelect.addEventListener('change', (e) => {
+    // 언어 선택 바뀌었을 때 처리
+    langSelectCCC.addEventListener('change', (e) => {
       currentLang = e.target.value;
       updateTexts(currentLang);
 
+      // URL에 lang 쿼리 붙임 (주소창만 변경, 페이지 리로드 X)
       const url = new URL(location.href);
       url.searchParams.set('lang', currentLang);
       history.replaceState(null, '', url.toString());
     });
 
+    // 탐색 시작 버튼 클릭시 로딩 보여주고 4초 후 main.html로 이동
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const nextURL = `main.html?lang=${currentLang}`;
-      window.location.href = nextURL;
+
+      loading.style.visibility = 'visible';
+      loading.style.opacity = '1';
+
+      // 이동 URL에 lang 유지
+      const url = new URL(btn.href, location.origin);
+      url.searchParams.set('lang', currentLang);
+
+      setTimeout(() => {
+        window.location.href = url.toString();
+      }, 4000);
     });
   </script>
 
