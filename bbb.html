@@ -11,18 +11,15 @@
       background: #f2f8ff;
       color: #333;
     }
-
     .container {
       max-width: 900px;
       margin: auto;
     }
-
     h1 {
       text-align: center;
       color: #1a3c57;
       margin-bottom: 40px;
     }
-
     .info-box {
       background: #ffffff;
       border-left: 6px solid #4a90e2;
@@ -32,7 +29,6 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
       overflow: hidden;
     }
-
     .info-box h3 {
       font-size: 1.3rem;
       color: #114a77;
@@ -43,11 +39,9 @@
       transition: background 0.3s;
       user-select: none;
     }
-
     .info-box h3:hover {
       background-color: #d0e6ff;
     }
-
     .info-box p {
       font-size: 1.1rem;
       color: #333;
@@ -56,21 +50,46 @@
       display: none;
       margin: 0;
     }
-
     .info-box.active p {
       display: block;
     }
-
     .source {
       font-size: 0.9rem;
       color: #555;
       padding: 0 25px 20px;
     }
-
     #lang-select {
       float: right;
       margin-bottom: 20px;
       font-size: 1rem;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .quiz-item {
+      margin-bottom: 20px;
+    }
+    .quiz-item ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .quiz-item li {
+      margin-bottom: 8px;
+    }
+    #check-answers {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    #check-answers:hover {
+      background-color: #357ABD;
     }
   </style>
 </head>
@@ -102,509 +121,157 @@
 
     // 상세 내용 데이터
     const data = {
-  ko: {
-    "1": {
-      title: "왜 생태 변화가 전염병과 관련이 있을까?",
-      sections: [
-        {
-          heading: "1. 생태계는 바이러스의 집이다",
-          text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다. 자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
+      ko: {
+        "1": {
+          title: "왜 생태 변화가 전염병과 관련이 있을까?",
+          sections: [
+            { heading: "1. 생태계는 바이러스의 집이다", text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다. 자연이 변하면 병원체의 서식지도 바뀌게 됩니다." },
+            { heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다", text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다. 이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다." },
+            { heading: "3. 기후 변화는 병의 활동 범위를 넓힌다", text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다. 그 결과 열대병이 다른 나라로 확산되기도 합니다." },
+            { heading: "4. 생태 변화는 사람을 더 약하게 만든다", text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다. 면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다." },
+            { heading: "요약", text: "생태계 변화가 인류 건강에 미치는 영향은 과학적 연구로 점점 더 명확해지고 있습니다." }
+          ],
+          source: ""
         },
-        {
-          heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
-          text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다. 이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
-        },
-        {
-          heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
-          text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다. 그 결과 열대병이 다른 나라로 확산되기도 합니다."
-        },
-        {
-          heading: "4. 생태 변화는 사람을 더 약하게 만든다",
-          text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다. 면역력이 약해진 사람들은 전염병에 더 쉽게 걸립니다."
-        },
-        {
-          heading: "요약",
-          text: "생태계 변화가 인류 건강에 미치는 영향은 과학적 연구로 점점 더 명확해지고 있습니다."
+        /* 나머지 항목들(2~6) 생략 - 위에 사용자님 코드와 동일하게 추가 */
+        "7": {
+          title: "전염병과 생태 변화 퀴즈",
+          quiz: [
+            { question: "기후 변화로 확산된 전염병은?", choices: ["콜레라", "말라리아", "신종플루", "탄저병"], answer: "말라리아" },
+            { question: "삼림 파괴와 관련된 전염병은?", choices: ["탄저병", "사스", "콜레라", "수두"], answer: "사스" },
+            { question: "코로나19는 어떤 바이러스에 속하나요?", choices: ["인플루엔자 바이러스", "코로나바이러스", "에볼라바이러스", "리노바이러스"], answer: "코로나바이러스" },
+            { question: "온난화로 인해 서식 범위가 확장된 전염병 매개체는?", choices: ["쥐", "모기", "닭", "고양이"], answer: "모기" },
+            { question: "공장식 축산으로 인해 발생한 전염병은?", choices: ["조류독감", "홍역", "천연두", "말라리아"], answer: "조류독감" },
+            { question: "고대 바이러스가 다시 나타나는 원인은?", choices: ["해수면 상승", "화산 폭발", "영구동토 해빙", "태양 폭풍"], answer: "영구동토 해빙" },
+            { question: "도시화가 바이러스에 주는 영향은?", choices: ["느린 확산", "전염 감소", "빠른 확산", "진화 멈춤"], answer: "빠른 확산" },
+            { question: "코로나19 이전 유사한 바이러스는?", choices: ["A형 간염", "MERS", "풍진", "광견병"], answer: "MERS" },
+            { question: "바이러스가 생태 환경 변화에 적응하는 방식은?", choices: ["분열", "증발", "돌연변이", "소멸"], answer: "돌연변이" },
+            { question: "기후 변화로 인한 바이러스 확산 지역의 변화는?", choices: ["북극 → 남극", "열대 → 온대", "고산 → 해수면", "사막 → 바다"], answer: "열대 → 온대" }
+          ]
         }
-      ],
-      source: ""
-    },
-    "2": {
-      title: "조선 시대의 생태",
-      sections: [
-        {
-          heading: "기후: 소빙기",
-          text: "17~19세기에는 기온이 낮아 흉년과 기근이 잦았습니다. 이로 인해 사람들의 면역력이 약해져 전염병이 자주 퍼졌습니다."
+      },
+      en: {
+        "1": {
+          title: "Why Is Ecological Change Related to Infectious Diseases?",
+          sections: [
+            { heading: "1. Ecosystems Are Homes to Viruses", text: "Viruses and bacteria live in nature, such as animals, water, and plants. When nature changes, the habitats of pathogens also change." },
+            { heading: "2. Viruses Follow Humans When Boundaries Are Crossed", text: "When humans clear forests and build cities, they come closer to wildlife. Viruses in animals can jump to humans during this process." },
+            { heading: "3. Climate Change Expands Disease Range", text: "As temperatures rise, disease carriers like mosquitoes and ticks spread to wider areas. Tropical diseases sometimes spread to other countries as a result." },
+            { heading: "4. Ecological Changes Weaken Humans", text: "Famine, floods, and droughts pollute water and cause hunger. People with weakened immune systems become more vulnerable to infectious diseases." },
+            { heading: "Summary", text: "Scientific research is increasingly clarifying how ecological changes impact human health." }
+          ],
+          source: ""
         },
-        {
-          heading: "물과 위생",
-          text: "공동 우물과 강물을 사용했지만, 홍수나 가뭄이 오면 물이 오염되어 설사병, 이질 같은 수인성 전염병이 확산됐습니다."
-        },
-        {
-          heading: "농업과 산림",
-          text: "벼농사 중심의 농경 사회였고, 산림을 많이 베어내어 산사태나 생태계 파괴가 일어났습니다."
-        },
-        {
-          heading: "가축과 생활",
-          text: "가축과 사람이 가까이 살며 동물 전염병이 인간에게 퍼질 위험이 컸습니다."
-        },
-        {
-          heading: "유랑민과 전염",
-          text: "기근과 재해로 떠도는 유랑민이 많아지면서 전염병이 지역을 넘어 빠르게 확산되었습니다."
+        /* 나머지 항목들(2~6) 생략 - 위에 사용자님 코드와 동일하게 추가 */
+        "7": {
+          title: "Quiz: Epidemics and Ecological Change",
+          quiz: [
+            { question: "Which disease has spread due to climate change?", choices: ["Cholera", "Malaria", "Swine Flu", "Anthrax"], answer: "Malaria" },
+            { question: "Which epidemic is related to deforestation?", choices: ["Anthrax", "SARS", "Cholera", "Chickenpox"], answer: "SARS" },
+            { question: "COVID-19 belongs to which virus family?", choices: ["Influenza virus", "Coronavirus", "Ebola virus", "Rhinovirus"], answer: "Coronavirus" },
+            { question: "Which vector's range expanded due to warming?", choices: ["Rat", "Mosquito", "Chicken", "Cat"], answer: "Mosquito" },
+            { question: "Which disease is linked to factory farming?", choices: ["Avian Influenza", "Measles", "Smallpox", "Malaria"], answer: "Avian Influenza" },
+            { question: "Why might ancient viruses re-emerge?", choices: ["Sea level rise", "Volcano eruption", "Permafrost thaw", "Solar storm"], answer: "Permafrost thaw" },
+            { question: "What effect does urbanization have on viruses?", choices: ["Slower spread", "Less infection", "Faster spread", "Stops evolution"], answer: "Faster spread" },
+            { question: "Which virus is similar to COVID-19?", choices: ["Hepatitis A", "MERS", "Rubella", "Rabies"], answer: "MERS" },
+            { question: "How do viruses adapt to ecological changes?", choices: ["Divide", "Evaporate", "Mutate", "Disappear"], answer: "Mutate" },
+            { question: "Climate change shifts disease regions from...", choices: ["Arctic → Antarctic", "Tropics → Temperate", "Mountains → Sea", "Desert → Ocean"], answer: "Tropics → Temperate" }
+          ]
         }
-      ],
-      source: ""
-    },
-    "3": {
-      title: "조선 시대의 전염병",
-      sections: [
-        {
-          heading: "두창 (천연두)",
-          text: "강한 전염성과 높은 치사율을 가진 전염병으로, 조선 전역에 확산되었습니다. 위생 지식 부족과 격리 불능 상태로 많은 희생자가 발생했습니다."
-        },
-        {
-          heading: "온역",
-          text: "고온 다습한 여름철에 유행하던 전염병으로, 오염된 물과 나쁜 위생 상태로 인해 급속히 퍼졌습니다."
-        },
-        {
-          heading: "이질",
-          text: "수인성 전염병으로, 오염된 물과 음식을 통해 전파되었습니다. 심한 복통과 설사를 유발하며, 전염성이 강했습니다."
-        },
-        {
-          heading: "콜레라 (괴질)",
-          text: "‘괴질’이라 불리던 정체불명의 전염병은 나중에 콜레라였던 것으로 밝혀졌습니다. 빠른 전파력과 높은 사망률이 특징입니다."
-        }
-      ],
-      source: "출처: 조선 전염병사 및 역사 기록"
-    },
-    "4": {
-      title: "현대 시대의 생태",
-      sections: [
-        {
-          heading: "기후 변화와 지구 온난화",
-          text: "온실가스 증가로 지구 온도가 상승하면서 이상기후, 생태계 파괴, 전염병 확산 등의 문제가 발생하고 있습니다."
-        },
-        {
-          heading: "도시화와 생물 다양성 감소",
-          text: "도시 확장으로 서식지가 줄고 야생동물이 사라지며 생태계의 균형이 깨지고 있습니다."
-        },
-        {
-          heading: "플라스틱 오염",
-          text: "자연 분해되지 않는 플라스틱은 해양 생태계와 인간 건강에 위협이 됩니다."
-        },
-        {
-          heading: "신재생 에너지 확대",
-          text: "태양광, 풍력 에너지 사용이 증가하며, 기후 위기에 대응하는 핵심 수단으로 떠오르고 있습니다."
-        },
-        {
-          heading: "시민 참여와 실천",
-          text: "분리배출, 자전거 타기 등 일상 속 실천이 지속 가능한 환경을 만드는 데 기여합니다."
-        }
-      ],
-      source: "출처: 환경부, 기후변화센터"
-    },
-    "5": {
-      title: "현대 생태 변화가 만든 전염병",
-      sections: [
-        {
-          heading: "코로나19 (COVID-19)",
-          text: "박쥐에서 사람으로의 전이로 시작되었으며, 야생동물 거래와 서식지 파괴가 큰 원인으로 지목되었습니다."
-        },
-        {
-          heading: "뎅기열",
-          text: "기후 변화로 모기의 서식 범위가 넓어지면서, 열대성 질병이 새로운 지역으로 퍼졌습니다."
-        },
-        {
-          heading: "조류독감",
-          text: "밀집된 공장식 축산 환경에서 바이러스가 퍼지기 쉬워지고, 사람에게도 감염 가능성이 생겼습니다."
-        },
-        {
-          heading: "노로바이러스",
-          text: "위생 문제와 해양 오염이 주요 원인이며, 겨울철에 흔히 발생하는 식중독성 전염병입니다."
-        }
-      ],
-      source: "출처: 질병관리청, WHO"
-    },
-    "6": {
-      title: "생태 변화와 바이러스의 진화",
-      sections: [
-        {
-          heading: "기후 변화와 바이러스 확산",
-          text: "기온 상승으로 인해 모기, 진드기 등 매개체가 북상하면서 바이러스가 새로운 지역으로 확산되고 있습니다. (예: 뎅기열, 말라리아, 지카바이러스)"
-        },
-        {
-          heading: "서식지 파괴와 종간 전염",
-          text: "삼림 벌채나 도시 개발로 야생동물이 인간과 가까워지면서 동물에서 사람으로 전염되는 바이러스가 증가하고 있습니다. (예: 에볼라, 코로나19)"
-        },
-        {
-          heading: "바이러스의 돌연변이와 적응",
-          text: "생태 환경이 불안정할수록 바이러스는 빠르게 돌연변이를 일으켜 더 강한 전염성이나 새로운 증상을 갖게 됩니다. (예: 코로나19 델타, 오미크론 변이)"
-        },
-        {
-          heading: "해빙과 잠복 바이러스의 부활",
-          text: "북극과 시베리아의 영구 동토가 녹으면서 과거 얼어 있던 고대 바이러스가 다시 나타날 가능성이 제기되고 있습니다. (예: 탄저병, 메가바이러스)"
-        },
-        {
-          heading: "도시화와 빠른 전파",
-          text: "인구 밀집 도시에서는 감염병이 순식간에 확산됩니다. 교통 발달로 바이러스는 국경을 넘어 전 세계로 퍼질 수 있습니다. (예: 코로나19, MERS)"
-        }
-      ],
-      source: "출처: 환경 변화 연구 자료"
-    },
-    "7": {
-      title: "전염병과 생태 변화 퀴즈",
-      quiz: [
-        {
-          question: "기후 변화로 확산된 전염병은?",
-          choices: ["콜레라", "말라리아", "신종플루", "탄저병"],
-          answer: "말라리아"
-        },
-        {
-          question: "삼림 파괴와 관련된 전염병은?",
-          choices: ["탄저병", "사스", "콜레라", "수두"],
-          answer: "사스"
-        },
-        {
-          question: "코로나19는 어떤 바이러스에 속하나요?",
-          choices: ["인플루엔자 바이러스", "코로나바이러스", "에볼라바이러스", "리노바이러스"],
-          answer: "코로나바이러스"
-        },
-        {
-          question: "온난화로 인해 서식 범위가 확장된 전염병 매개체는?",
-          choices: ["쥐", "모기", "닭", "고양이"],
-          answer: "모기"
-        },
-        {
-          question: "공장식 축산으로 인해 발생한 전염병은?",
-          choices: ["조류독감", "홍역", "천연두", "말라리아"],
-          answer: "조류독감"
-        },
-        {
-          question: "고대 바이러스가 다시 나타나는 원인은?",
-          choices: ["해수면 상승", "화산 폭발", "영구동토 해빙", "태양 폭풍"],
-          answer: "영구동토 해빙"
-        },
-        {
-          question: "도시화가 바이러스에 주는 영향은?",
-          choices: ["느린 확산", "전염 감소", "빠른 확산", "진화 멈춤"],
-          answer: "빠른 확산"
-        },
-        {
-          question: "코로나19 이전 유사한 바이러스는?",
-          choices: ["A형 간염", "MERS", "풍진", "광견병"],
-          answer: "MERS"
-        },
-        {
-          question: "바이러스가 생태 환경 변화에 적응하는 방식은?",
-          choices: ["분열", "증발", "돌연변이", "소멸"],
-          answer: "돌연변이"
-        },
-        {
-          question: "기후 변화로 인한 바이러스 확산 지역의 변화는?",
-          choices: ["북극 → 남극", "열대 → 온대", "고산 → 해수면", "사막 → 바다"],
-          answer: "열대 → 온대"
-        }
-      ]
-    }
-  },
+      }
+    };
 
-  en: {
-    "1": {
-      title: "Why Is Ecological Change Related to Infectious Diseases?",
-      sections: [
-        {
-          heading: "1. Ecosystems Are Homes to Viruses",
-          text: "Viruses and bacteria live in nature, such as animals, water, and plants. When nature changes, the habitats of pathogens also change."
-        },
-        {
-          heading: "2. Viruses Follow Humans When Boundaries Are Crossed",
-          text: "When humans clear forests and build cities, they come closer to wildlife. Viruses in animals can jump to humans during this process."
-        },
-        {
-          heading: "3. Climate Change Expands Disease Range",
-          text: "As temperatures rise, disease carriers like mosquitoes and ticks spread to wider areas. Tropical diseases sometimes spread to other countries as a result."
-        },
-        {
-          heading: "4. Ecological Changes Weaken Humans",
-          text: "Famine, floods, and droughts pollute water and cause hunger. People with weakened immune systems become more vulnerable to infectious diseases."
-        },
-        {
-          heading: "Summary",
-          text: "Scientific research is increasingly clarifying how ecological changes impact human health."
-        }
-      ],
-      source: ""
-    },
-    "2": {
-      title: "Ecology in the Joseon Dynasty",
-      sections: [
-        {
-          heading: "Climate: Little Ice Age",
-          text: "Between the 17th and 19th centuries, temperatures were low, causing frequent famines and poor harvests. This weakened people's immune systems, allowing infectious diseases to spread."
-        },
-        {
-          heading: "Water and Hygiene",
-          text: "People used shared wells and river water, but floods and droughts contaminated water, spreading waterborne diseases like diarrhea and dysentery."
-        },
-        {
-          heading: "Agriculture and Forests",
-          text: "The society was rice-farming centered and deforested heavily, leading to landslides and ecological damage."
-        },
-        {
-          heading: "Livestock and Living",
-          text: "People lived close to livestock, increasing the risk of animal-borne diseases spreading to humans."
-        },
-        {
-          heading: "Migrants and Epidemics",
-          text: "Due to famine and disasters, many migrants wandered, causing diseases to spread rapidly beyond regions."
-        }
-      ],
-      source: ""
-    },
-    "3": {
-      title: "Infectious Diseases in the Joseon Era",
-      sections: [
-        {
-          heading: "Smallpox",
-          text: "One of the deadliest diseases in the Joseon Dynasty, it spread rapidly due to poor hygiene and lack of quarantine."
-        },
-        {
-          heading: "Onyeok (Plague-like Fever)",
-          text: "A collective term for summer-time diseases, often caused by polluted water and poor sanitation."
-        },
-        {
-          heading: "Dysentery",
-          text: "A waterborne disease causing severe diarrhea and stomach pain. It spread easily in unsanitary conditions."
-        },
-        {
-          heading: "Cholera (‘Gwaejil’)",
-          text: "Called ‘Gwaejil’ at the time, later identified as cholera. Spread rapidly and caused mass casualties."
-        }
-      ],
-      source: "Source: Historical Records of Korean Epidemics"
-    },
-    "4": {
-      title: "Modern Ecological Changes",
-      sections: [
-        {
-          heading: "Climate Change and Global Warming",
-          text: "Greenhouse gas emissions have led to rising temperatures, extreme weather, and increased disease risks."
-        },
-        {
-          heading: "Urbanization and Loss of Biodiversity",
-          text: "Urban expansion destroys wildlife habitats and disrupts ecological balance."
-        },
-        {
-          heading: "Plastic Pollution",
-          text: "Non-biodegradable plastic threatens marine ecosystems and can harm human health."
-        },
-        {
-          heading: "Expansion of Renewable Energy",
-          text: "Use of solar and wind energy is growing, becoming key to combating climate change."
-        },
-        {
-          heading: "Citizen Participation and Action",
-          text: "Recycling, cycling, and public transit are everyday actions that promote sustainability."
-        }
-      ],
-      source: "Source: Ministry of Environment, Climate Change Center"
-    },
-    "5": {
-      title: "Diseases Caused by Modern Ecological Change",
-      sections: [
-        {
-          heading: "COVID-19",
-          text: "Originated from bats and spread to humans; linked to wildlife trade and habitat destruction."
-        },
-        {
-          heading: "Dengue Fever",
-          text: "Climate change has expanded mosquito habitats, allowing the disease to spread to new areas."
-        },
-        {
-          heading: "Avian Influenza",
-          text: "Crowded factory farming enables rapid virus transmission and potential human infection."
-        },
-        {
-          heading: "Norovirus",
-          text: "Caused by hygiene failures and marine pollution; common in winter as a foodborne illness."
-        }
-      ],
-      source: "Source: CDC, WHO"
-    },
-    "6": {
-      title: "Ecological Change and Virus Evolution",
-      sections: [
-        {
-          heading: "Climate Change and Virus Spread",
-          text: "As temperatures rise, mosquitoes and ticks are expanding northward, spreading viruses to new areas. (e.g., Dengue, Malaria, Zika)"
-        },
-        {
-          heading: "Habitat Destruction and Zoonotic Spillover",
-          text: "Deforestation and urban development bring wildlife closer to humans, increasing animal-to-human virus transmission. (e.g., Ebola, COVID-19)"
-        },
-        {
-          heading: "Viral Mutation and Adaptation",
-          text: "Unstable ecosystems cause viruses to mutate rapidly, enhancing transmissibility or producing new symptoms. (e.g., COVID-19 Delta, Omicron)"
-        },
-        {
-          heading: "Melting Permafrost and Ancient Viruses",
-          text: "As Arctic and Siberian permafrost melts, ancient frozen viruses may re-emerge. (e.g., Anthrax, Megavirus)"
-        },
-        {
-          heading: "Urbanization and Rapid Transmission",
-          text: "In dense urban areas, diseases spread quickly. With modern transport, viruses can cross borders rapidly. (e.g., COVID-19, MERS)"
-        }
-      ],
-      source: "Source: Environmental Change Research"
-    },
-    "7": {
-      title: "Quiz: Epidemics and Ecological Change",
-      quiz: [
-        {
-          question: "Which disease has spread due to climate change?",
-          choices: ["Cholera", "Malaria", "Swine Flu", "Anthrax"],
-          answer: "Malaria"
-        },
-        {
-          question: "Which epidemic is related to deforestation?",
-          choices: ["Anthrax", "SARS", "Cholera", "Chickenpox"],
-          answer: "SARS"
-        },
-        {
-          question: "COVID-19 belongs to which virus family?",
-          choices: ["Influenza virus", "Coronavirus", "Ebola virus", "Rhinovirus"],
-          answer: "Coronavirus"
-        },
-        {
-          question: "Which vector's range expanded due to warming?",
-          choices: ["Rat", "Mosquito", "Chicken", "Cat"],
-          answer: "Mosquito"
-        },
-        {
-          question: "Which disease is linked to factory farming?",
-          choices: ["Avian Influenza", "Measles", "Smallpox", "Malaria"],
-          answer: "Avian Influenza"
-        },
-        {
-          question: "Why might ancient viruses re-emerge?",
-          choices: ["Sea level rise", "Volcano eruption", "Permafrost thaw", "Solar storm"],
-          answer: "Permafrost thaw"
-        },
-        {
-          question: "What effect does urbanization have on viruses?",
-          choices: ["Slower spread", "Less infection", "Faster spread", "Stops evolution"],
-          answer: "Faster spread"
-        },
-        {
-          question: "Which virus is similar to COVID-19?",
-          choices: ["Hepatitis A", "MERS", "Rubella", "Rabies"],
-          answer: "MERS"
-        },
-        {
-          question: "How do viruses adapt to ecological changes?",
-          choices: ["Divide", "Evaporate", "Mutate", "Disappear"],
-          answer: "Mutate"
-        },
-        {
-          question: "Climate change shifts disease regions from...",
-          choices: ["Arctic → Antarctic", "Tropics → Temperate", "Mountains → Sea", "Desert → Ocean"],
-          answer: "Tropics → Temperate"
-        }
-      ]
-    }
-  }
-};
-  function renderContent(lang, id) {
-    const entry = data[lang][id];
-    if (!entry) {
-      contentArea.innerHTML = "<p>정보가 없습니다.</p>";
-      headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
-      return;
-    }
+    function renderContent(lang, id) {
+      const entry = data[lang][id];
+      if (!entry) {
+        contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+        headerTitle.textContent = lang === "ko" ? "병 이름 상세 설명" : "Disease Detail Description";
+        return;
+      }
 
-    headerTitle.textContent = entry.title;
+      headerTitle.textContent = entry.title;
 
-    if (id === "7" && entry.quiz) {
-      // 퀴즈 페이지 렌더링
-      let quizHtml = '<div class="quiz-container">';
-      entry.quiz.forEach((q, i) => {
-        quizHtml += `
-          <div class="quiz-item">
-            <p><strong>Q${i + 1}. ${q.question}</strong></p>
-            <ul>
-              ${q.choices.map(choice => `<li><label><input type="radio" name="q${i}" value="${choice}"> ${choice}</label></li>`).join('')}
-            </ul>
-            <p class="answer" style="display:none; color: green;">정답: ${q.answer}</p>
-          </div>
-        `;
-      });
-      quizHtml += `<button id="check-answers">정답 확인</button></div>`;
-
-      contentArea.innerHTML = quizHtml;
-
-      // 정답 확인 버튼 이벤트
-      document.getElementById('check-answers').addEventListener('click', () => {
+      if (id === "7" && entry.quiz) {
+        // 퀴즈 페이지 렌더링
+        let quizHtml = '<div class="quiz-container">';
         entry.quiz.forEach((q, i) => {
-          const selected = document.querySelector(`input[name="q${i}"]:checked`);
-          const answerEl = document.querySelectorAll('.quiz-item')[i].querySelector('.answer');
-          if (!selected) {
-            answerEl.style.color = 'red';
-            answerEl.textContent = '답을 선택해주세요!';
-            answerEl.style.display = 'block';
-          } else if (selected.value === q.answer) {
-            answerEl.style.color = 'green';
-            answerEl.textContent = '정답입니다!';
-            answerEl.style.display = 'block';
-          } else {
-            answerEl.style.color = 'red';
-            answerEl.textContent = `오답입니다. 정답은: ${q.answer}`;
-            answerEl.style.display = 'block';
-          }
+          quizHtml += `
+            <div class="quiz-item">
+              <p><strong>Q${i + 1}. ${q.question}</strong></p>
+              <ul>
+                ${q.choices.map(choice => `<li><label><input type="radio" name="q${i}" value="${choice}"> ${choice}</label></li>`).join('')}
+              </ul>
+              <p class="answer" style="display:none; color: green;">정답: ${q.answer}</p>
+            </div>
+          `;
         });
-      });
+        quizHtml += `<button id="check-answers">${lang === 'ko' ? '정답 확인' : 'Check Answers'}</button></div>`;
 
-    } else if (entry.sections) {
-      // 기존 설명 페이지 렌더링
-      let html = "";
-      entry.sections.forEach(section => {
-        html += `
-          <div class="info-box">
-            <h3>${section.heading}</h3>
-            <p>${section.text}</p>
-          </div>
-        `;
-      });
-      html += `<div class="source">${entry.source || ''}</div>`;
+        contentArea.innerHTML = quizHtml;
 
-      contentArea.innerHTML = html;
-
-      // 클릭해서 내용 토글 기능 추가
-      document.querySelectorAll('.info-box h3').forEach(h3 => {
-        h3.addEventListener('click', () => {
-          const box = h3.parentElement;
-          box.classList.toggle('active');
+        // 정답 확인 버튼 이벤트
+        document.getElementById('check-answers').addEventListener('click', () => {
+          entry.quiz.forEach((q, i) => {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            const answerEl = document.querySelectorAll('.quiz-item')[i].querySelector('.answer');
+            if (!selected) {
+              answerEl.style.color = 'red';
+              answerEl.textContent = lang === 'ko' ? '답을 선택해주세요!' : 'Please select an answer!';
+              answerEl.style.display = 'block';
+            } else if (selected.value === q.answer) {
+              answerEl.style.color = 'green';
+              answerEl.textContent = lang === 'ko' ? '정답입니다!' : 'Correct!';
+              answerEl.style.display = 'block';
+            } else {
+              answerEl.style.color = 'red';
+              answerEl.textContent = (lang === 'ko' ? '오답입니다. 정답은: ' : 'Incorrect. The correct answer is: ') + q.answer;
+              answerEl.style.display = 'block';
+            }
+          });
         });
-      });
-    } else {
-      // 정보가 없을 때 fallback
-      contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+
+      } else if (entry.sections) {
+        // 기존 설명 페이지 렌더링
+        let html = "";
+        entry.sections.forEach(section => {
+          html += `
+            <div class="info-box">
+              <h3>${section.heading}</h3>
+              <p>${section.text}</p>
+            </div>
+          `;
+        });
+        html += `<div class="source">${entry.source || ''}</div>`;
+
+        contentArea.innerHTML = html;
+
+        // 클릭해서 내용 토글 기능 추가
+        document.querySelectorAll('.info-box h3').forEach(h3 => {
+          h3.addEventListener('click', () => {
+            const box = h3.parentElement;
+            box.classList.toggle('active');
+          });
+        });
+      } else {
+        contentArea.innerHTML = "<p>정보가 없습니다.</p>";
+      }
     }
-  }
 
-  // 초기 렌더링
-  renderContent(currentLang, id);
-
-  // 언어 변경 시 다시 렌더링 및 URL 반영
-  langSelect.value = currentLang;
-  langSelect.addEventListener('change', () => {
-    currentLang = langSelect.value;
+    // 초기 렌더링
     renderContent(currentLang, id);
 
-    // URL에 lang 파라미터 교체 (새로고침 없이)
-    const url = new URL(window.location.href);
-    url.searchParams.set('lang', currentLang);
-    history.replaceState(null, '', url.toString());
-  });
-</script>
+    // 언어 선택 상태 설정
+    langSelect.value = currentLang;
+
+    // 언어 변경 시 다시 렌더링 및 URL lang 파라미터 교체
+    langSelect.addEventListener('change', () => {
+      currentLang = langSelect.value;
+      renderContent(currentLang, id);
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', url.toString());
+    });
+  </script>
 </body>
 </html>
