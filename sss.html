@@ -7,19 +7,8 @@
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f0f0f0;
-      padding: 50px;
-      margin: 0;
-      /* 전체 화면 가운데 정렬 */
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 50px; /* 좌우 사이 간격 */
-      height: 100vh;
-      box-sizing: border-box;
-    }
-    .content {
       text-align: center;
-      max-width: 400px;
+      padding: 50px;
     }
     h1 {
       color: #333366;
@@ -39,40 +28,49 @@
     button:hover {
       background-color: #45a049;
     }
-    .sidebar {
+    ul {
+      list-style: disc;
       max-width: 200px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin: 20px auto 0;
+      padding-left: 20px;
       text-align: left;
+      display: none; /* 기본 숨김 */
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
-    .sidebar ul {
-      list-style: disc inside;
-      padding-left: 0;
-      margin: 0;
+    ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
     }
-    .sidebar li {
-      margin-bottom: 10px;
-      font-size: 16px;
-      color: #333;
+    ul li:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
 <body>
-  <div class="content">
-    <h1>나의 첫 번째 웹페이지</h1>
-    <p>이 페이지는 HTML과 간단한 CSS로 만들어졌습니다.</p>
-    <button onclick="alert('안녕하세요!')">클릭해 보세요</button>
-  </div>
+  <h1>나의 첫 번째 웹페이지</h1>
+  <p>이 페이지는 HTML과 간단한 CSS로 만들어졌습니다.</p>
+  <button id="toggleBtn">클릭해 보세요</button>
 
-  <div class="sidebar">
-    <ul>
-      <li>리스트 아이템 1</li>
-      <li>리스트 아이템 2</li>
-      <li>리스트 아이템 3</li>
-      <li>리스트 아이템 4</li>
-    </ul>
-  </div>
+  <ul id="myList">
+    <li>리스트 아이템 1</li>
+    <li>리스트 아이템 2</li>
+    <li>리스트 아이템 3</li>
+    <li>리스트 아이템 4</li>
+  </ul>
+
+  <script>
+    const btn = document.getElementById('toggleBtn');
+    const list = document.getElementById('myList');
+
+    btn.addEventListener('click', () => {
+      if (list.style.display === 'none' || list.style.display === '') {
+        list.style.display = 'block';
+      } else {
+        list.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
