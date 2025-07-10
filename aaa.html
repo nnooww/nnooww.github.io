@@ -58,11 +58,74 @@
     .bacteria-list > li:hover {
       color: #007acc;
     }
-    /* hover-box를 오른쪽 위 고정 */
+    /* #ecology-impact 위치 기준 상대 위치 지정 */
+    #ecology-impact {
+      margin-top: 20px;
+      background: #f2f8ff;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Noto Sans KR', sans-serif;
+      position: relative; /* 중요! */
+    }
+    #ecology-impact h3 {
+      color: #1a3c57;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    #ecology-impact .info-box {
+      background: #fff;
+      border-left: 5px solid #4a90e2;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    #ecology-impact .info-box h4 {
+      font-size: 1rem;
+      color: #114a77;
+      margin: 0;
+      padding: 10px 12px;
+      background-color: #e6f1ff;
+      transition: background 0.3s;
+      user-select: none;
+      cursor: pointer;
+    }
+    #ecology-impact .info-box h4:hover {
+      background-color: #d0e6ff;
+    }
+    #ecology-impact .info-box p {
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.4;
+      padding: 0 12px 10px;
+      display: none;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+    #ecology-impact .info-box.active p {
+      display: block;
+    }
+    #ecology-impact blockquote {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #2c3e50;
+      background: #e3f1ff;
+      border-left: 5px solid #007acc;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    /* hover-box 위치 #ecology-impact 기준 절대 위치 */
     #hover-box {
-      position: fixed;
-      top: 50px;
-      right: 10px;
+      position: absolute;
+      top: 0;
+      left: 100%;
+      margin-left: 10px;
       width: 350px;
       background: rgba(255,255,255,0.95);
       border: 1px solid #aaa;
@@ -95,64 +158,6 @@
     #hover-box button:hover {
       background-color: #005a99;
     }
-    #ecology-impact {
-      margin-top: 20px;
-      background: #f2f8ff;
-      padding: 15px;
-      border-radius: 6px;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    #ecology-impact h3 {
-      color: #1a3c57;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    #ecology-impact .info-box {
-      background: #fff;
-      border-left: 5px solid #4a90e2;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-      cursor: pointer;
-    }
-    #ecology-impact .info-box h4 {
-      font-size: 1rem;
-      color: #114a77;
-      margin: 0;
-      padding: 10px 12px;
-      background-color: #e6f1ff;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    #ecology-impact .info-box h4:hover {
-      background-color: #d0e6ff;
-    }
-    #ecology-impact .info-box p {
-      font-size: 0.9rem;
-      color: #333;
-      line-height: 1.4;
-      padding: 0 12px 10px;
-      display: none;
-      margin: 0;
-      white-space: pre-wrap;
-    }
-    #ecology-impact .info-box.active p {
-      display: block;
-    }
-    #ecology-impact blockquote {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #2c3e50;
-      background: #e3f1ff;
-      border-left: 5px solid #007acc;
-      padding: 12px;
-      border-radius: 6px;
-      margin-top: 15px;
-      text-align: center;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
   </style>
 </head>
 <body>
@@ -166,12 +171,14 @@
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
-      <div id="hover-box" role="tooltip" aria-hidden="true"></div>
 
       <section id="ecology-impact">
         <h3 id="ecology-title">왜 생태 변화가 전염병과 관련이 있을까?</h3>
         <div id="ecology-content"></div>
         <blockquote id="ecology-quote"></blockquote>
+
+        <!-- hover-box를 ecology-impact 안에 위치시켜 위치 기준으로 만듦 -->
+        <div id="hover-box" role="tooltip" aria-hidden="true"></div>
       </section>
     </aside>
 
@@ -300,134 +307,123 @@
             },
             {
               heading: "4. Ecological changes weaken people",
-              text: "Famine, floods, and droughts contaminate water and cause hunger.\nWeakened immune systems make people more susceptible to infections."
+              text: "Famine, floods, and droughts contaminate water and cause hunger.\nWeakened immune systems make people more susceptible to diseases."
             }
           ],
           quote: "\"The health of ecosystems is directly linked to human health.\""
         }
       };
 
-      // 현재 선택된 언어
-      let currentLang = "ko";
+      let currentLang = 'ko';
 
-      // hoverBox 보이기 함수
-      function showHoverBox() {
-        hoverBox.style.display = "block";
-        hoverBox.setAttribute("aria-hidden", "false");
-      }
-      // hoverBox 숨기기 함수
-      function hideHoverBox() {
-        hoverBox.style.display = "none";
-        hoverBox.setAttribute("aria-hidden", "true");
-      }
-      // hoverBox 내용 설정 함수
-      function setHoverBoxContent(desc) {
-        hoverBox.innerHTML = `
-          <h3>${desc.title}</h3>
-          <p>${desc.preview}</p>
-          <button type="button" aria-label="${desc.title} 자세히 보기">자세히 보기</button>
-        `;
-      }
+      // 언어 바꾸기
+      function updateLang(lang) {
+        currentLang = lang;
 
-      // 리스트 렌더링
-      function renderList() {
-        bacteriaList.innerHTML = "";
-        items[currentLang].forEach((text, index) => {
-          const li = document.createElement("li");
-          li.textContent = text;
-          li.setAttribute("data-id", index + 1);
-          li.setAttribute("tabindex", "0");
-          li.setAttribute("role", "listitem");
-          // 마우스 / 키보드 접근 이벤트
-          li.addEventListener("mouseenter", () => {
-            const id = li.getAttribute("data-id");
-            setHoverBoxContent(descriptions[currentLang][id]);
-            showHoverBox();
-          });
-          li.addEventListener("focus", () => {
-            const id = li.getAttribute("data-id");
-            setHoverBoxContent(descriptions[currentLang][id]);
-            showHoverBox();
-          });
-          li.addEventListener("mouseleave", () => {
-            // 100ms 뒤 마우스가 hoverBox 위에 없으면 숨김
-            setTimeout(() => {
-              if (!hoverBox.matches(":hover")) {
-                hideHoverBox();
-              }
-            }, 100);
-          });
-          li.addEventListener("blur", () => {
-            setTimeout(() => {
-              if (!hoverBox.matches(":hover")) {
-                hideHoverBox();
-              }
-            }, 100);
-          });
+        // 헤더와 리스트 타이틀 변경
+        if(lang === 'ko') {
+          headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
+          listTitle.textContent = "오른쪽 영역 리스트";
+        } else {
+          headerTitle.textContent = "Why does ecological change relate to infectious diseases?";
+          listTitle.textContent = "List on Right Area";
+        }
 
+        // 리스트 새로 그리기
+        bacteriaList.innerHTML = '';
+        items[lang].forEach((name, index) => {
+          const li = document.createElement('li');
+          li.textContent = name;
+          li.dataset.id = (index + 1).toString();
+          li.tabIndex = 0;
           bacteriaList.appendChild(li);
         });
-      }
 
-      // Ecology section 렌더링
-      function renderEcology() {
-        ecologyTitle.textContent = ecologyData[currentLang].title;
-        ecologyContent.innerHTML = "";
-        ecologyData[currentLang].items.forEach((item, idx) => {
-          const div = document.createElement("div");
-          div.classList.add("info-box");
-          div.setAttribute("tabindex", "0");
-          div.setAttribute("role", "region");
-          div.setAttribute("aria-expanded", "false");
-
-          const heading = document.createElement("h4");
-          heading.textContent = item.heading;
-          div.appendChild(heading);
-
-          const paragraph = document.createElement("p");
-          paragraph.textContent = item.text;
-          div.appendChild(paragraph);
-
-          // 클릭 또는 키보드 접근으로 상세 토글
-          function toggleDetail() {
-            const isActive = div.classList.toggle("active");
-            div.setAttribute("aria-expanded", isActive);
-          }
-          heading.addEventListener("click", toggleDetail);
-          div.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              toggleDetail();
-            }
-          });
-
+        // ecology-impact 내용 변경
+        ecologyTitle.textContent = ecologyData[lang].title;
+        ecologyContent.innerHTML = '';
+        ecologyData[lang].items.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'info-box';
+          div.tabIndex = 0;
+          div.innerHTML = `<h4>${item.heading}</h4><p>${item.text}</p>`;
           ecologyContent.appendChild(div);
         });
-        ecologyQuote.textContent = ecologyData[currentLang].quote;
+        ecologyQuote.textContent = ecologyData[lang].quote;
+
+        hideHoverBox();
       }
 
-      // 언어 변경 처리
-      langSelect.addEventListener("change", () => {
-        currentLang = langSelect.value;
-        headerTitle.textContent = currentLang === "ko" ? "왜 생태 변화가 전염병과 관련이 있을까?" : "Why does ecological change relate to infectious diseases?";
-        listTitle.textContent = currentLang === "ko" ? "오른쪽 영역 리스트" : "Right side list";
-        renderList();
-        renderEcology();
-        hideHoverBox();
+      // hover-box 보이기
+      function showHoverBox(li) {
+        const id = li.dataset.id;
+        const data = descriptions[currentLang][id];
+        if(!data) return;
+
+        hoverBox.innerHTML = `
+          <h3>${data.title}</h3>
+          <p>${data.preview}</p>
+          <button aria-label="상세보기 열기">자세히 보기</button>
+        `;
+        hoverBox.style.display = 'block';
+        hoverBox.setAttribute('aria-hidden', 'false');
+      }
+
+      // hover-box 숨기기
+      function hideHoverBox() {
+        hoverBox.style.display = 'none';
+        hoverBox.setAttribute('aria-hidden', 'true');
+      }
+
+      // 이벤트 연결
+      bacteriaList.addEventListener('mouseover', e => {
+        if(e.target.tagName === 'LI') {
+          showHoverBox(e.target);
+        }
+      });
+      bacteriaList.addEventListener('mouseout', e => {
+        if(e.target.tagName === 'LI') {
+          hideHoverBox();
+        }
       });
 
-      // hoverBox 마우스 이벤트 (숨기기 방지)
-      hoverBox.addEventListener("mouseenter", () => {
-        showHoverBox();
+      // 키보드 접근성 (focus로도 hover-box 표시)
+      bacteriaList.addEventListener('focusin', e => {
+        if(e.target.tagName === 'LI') {
+          showHoverBox(e.target);
+        }
       });
-      hoverBox.addEventListener("mouseleave", () => {
-        hideHoverBox();
+      bacteriaList.addEventListener('focusout', e => {
+        if(e.target.tagName === 'LI') {
+          hideHoverBox();
+        }
       });
 
-      // 초기 렌더링
-      renderList();
-      renderEcology();
-      hideHoverBox();
+      // 언어 선택 이벤트
+      langSelect.addEventListener('change', e => {
+        updateLang(e.target.value);
+      });
+
+      // 초기화
+      updateLang(currentLang);
+
+      // ecology-impact 내부의 info-box 클릭시 펼침/접힘 토글
+      ecologyContent.addEventListener('click', e => {
+        const infoBox = e.target.closest('.info-box');
+        if(infoBox) {
+          infoBox.classList.toggle('active');
+        }
+      });
+      ecologyContent.addEventListener('keydown', e => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          const infoBox = e.target.closest('.info-box');
+          if(infoBox) {
+            e.preventDefault();
+            infoBox.classList.toggle('active');
+          }
+        }
+      });
+
     })();
   </script>
 </body>
