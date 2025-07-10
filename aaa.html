@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>아코디언 리스트</title>
+  <title>사이드바에 서브 리스트 표시</title>
   <style>
     body {
       margin: 0;
@@ -15,28 +15,39 @@
       padding: 1em 0;
     }
     .container {
-  display: flex;
-  min-height: 400px;
-}
-aside {
-  flex: 3; /* 왼쪽 영역 3 */
-  padding: 1em;
-  background: #ddd;
-  box-sizing: border-box;
-}
-main {
-  flex: 1; /* 오른쪽 영역 1 */
-  padding: 1em;
-  background: #eee;
-  box-sizing: border-box;
-}
+      display: flex;
+      min-height: 400px;
+    }
+    aside {
+      flex: 3;
+      padding: 1em;
+      background: #ddd;
+      box-sizing: border-box;
+    }
+    main {
+      flex: 1;
+      padding: 1em;
+      background: #eee;
+      box-sizing: border-box;
+    }
+    ol {
+      padding-left: 1em;
+    }
     ol ol {
       margin-left: 1.5em;
-      display: none; /* 기본 숨김 */
+      display: none; /* 원래는 숨김 */
     }
     li.expandable {
       cursor: pointer;
       user-select: none;
+    }
+    /* 사이드바 서브 리스트 스타일 */
+    #sidebarContent ol {
+      margin: 0;
+      padding-left: 1em;
+    }
+    #sidebarContent ol li {
+      margin: 0.3em 0;
     }
   </style>
 </head>
@@ -48,12 +59,16 @@ main {
   <div class="container">
     <aside>
       <h2>사이드바 영역</h2>
+      <div id="sidebarContent">
+        <!-- 클릭된 서브 리스트가 여기 표시됨 -->
+        <p>서브 리스트가 여기 표시됩니다.</p>
+      </div>
     </aside>
 
     <main>
       <h2>오른쪽 영역 리스트</h2>
       <ol>
-        <li class="expandable">병 이름 1
+        <li class="expandable" data-id="item1">병 이름 1
           <ol>
             <li>내용 1</li>
             <li>내용 2</li>
@@ -61,7 +76,7 @@ main {
             <li>내용 4</li>
           </ol>
         </li>
-        <li class="expandable">병 이름 2
+        <li class="expandable" data-id="item2">병 이름 2
           <ol>
             <li>내용 1</li>
             <li>내용 2</li>
@@ -69,7 +84,7 @@ main {
             <li>내용 4</li>
           </ol>
         </li>
-        <li class="expandable">병 이름 3
+        <li class="expandable" data-id="item3">병 이름 3
           <ol>
             <li>내용 1</li>
             <li>내용 2</li>
@@ -77,7 +92,7 @@ main {
             <li>내용 4</li>
           </ol>
         </li>
-        <li class="expandable">병 이름 4
+        <li class="expandable" data-id="item4">병 이름 4
           <ol>
             <li>내용 1</li>
             <li>내용 2</li>
@@ -94,19 +109,21 @@ main {
   </footer>
 
   <script>
-    // 모든 expandable 클래스 li 선택
     const expandableItems = document.querySelectorAll('li.expandable');
+    const sidebarContent = document.getElementById('sidebarContent');
 
     expandableItems.forEach(item => {
       item.addEventListener('click', () => {
+        // 클릭한 항목의 서브 리스트 ol 복사
         const sublist = item.querySelector('ol');
         if (sublist) {
-          // 토글 display
-          if (sublist.style.display === 'none' || sublist.style.display === '') {
-            sublist.style.display = 'block';
-          } else {
-            sublist.style.display = 'none';
-          }
+          // 사이드바 내용 교체 (cloneNode(true)로 깊은 복사)
+          sidebarContent.innerHTML = '';
+          const clone = sublist.cloneNode(true);
+          clone.style.display = 'block'; // 보이게
+          sidebarContent.appendChild(clone);
+        } else {
+          sidebarContent.innerHTML = '<p>서브 리스트가 없습니다.</p>';
         }
       });
     });
