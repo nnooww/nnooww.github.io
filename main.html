@@ -49,21 +49,15 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <div class="intro-container">
     <h1 id="main-title">🌍 융합수업 프로젝트</h1>
-    <p id="main-subtitle">환경과 전염병의 연결고리를 탐구하다</p>
+    <p id="subtitle">환경과 전염병의 연결고리를 탐구하다</p>
     <div class="creator-list" id="creator-list">
       <span>채우혁</span>
       <span>채인혁</span>
@@ -73,6 +67,8 @@
   </div>
 
   <script>
+    const lang = new URL(location.href).searchParams.get('lang') || 'ko';
+
     const textData = {
       ko: {
         title: "🌍 융합수업 프로젝트",
@@ -82,33 +78,19 @@
       en: {
         title: "🌍 Convergence Class Project",
         subtitle: "Exploring the Link Between Environment and Infectious Diseases",
-        creators: ["WooHyuk Chae", "InHyuk Chae", "JinSeo Choi", "HyungRok Song"]
+        creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
       }
     };
 
-    const url = new URL(location.href);
-    const lang = url.searchParams.get('lang') || 'ko';
+    const content = textData[lang];
+    document.getElementById('main-title').textContent = content.title;
+    document.getElementById('subtitle').textContent = content.subtitle;
+    document.getElementById('creator-list').innerHTML = content.creators.map(name => `<span>${name}</span>`).join('');
 
-    const data = textData[lang];
-
-    // 텍스트 바꾸기
-    document.getElementById('main-title').textContent = data.title;
-    document.getElementById('main-subtitle').textContent = data.subtitle;
-
-    // 이름도 다국어로 바꾸기
-    const creatorList = document.getElementById('creator-list');
-    creatorList.innerHTML = ''; // 기존 이름 지우고
-    data.creators.forEach(name => {
-      const span = document.createElement('span');
-      span.textContent = name;
-      creatorList.appendChild(span);
-    });
-
-    // 4초 후 aaa.html로 이동 (언어 유지)
     setTimeout(() => {
-      const next = new URL('aaa.html', location.origin);
-      next.searchParams.set('lang', lang);
-      window.location.href = next.toString();
+      const url = new URL('aaa.html', location.origin);
+      url.searchParams.set('lang', lang);
+      window.location.href = url.toString();
     }, 4000);
   </script>
 </body>
