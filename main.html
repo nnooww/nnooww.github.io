@@ -62,8 +62,8 @@
 </head>
 <body>
   <div class="intro-container">
-    <h1>🌍 융합수업 프로젝트</h1>
-    <p>환경과 전염병의 연결고리를 탐구하다</p>
+    <h1 id="main-title">🌍 융합수업 프로젝트</h1>
+    <p id="main-subtitle">환경과 전염병의 연결고리를 탐구하다</p>
     <div class="creator-list">
       <span>채우혁</span>
       <span>채인혁</span>
@@ -73,15 +73,29 @@
   </div>
 
   <script>
-    // 페이지 로드 후 1초 뒤 aaa.html로 이동
-    setTimeout(() => {
-      // 현재 주소에 lang 쿼리가 있다면 유지해서 넘겨주고 싶으면 아래처럼 수정 가능
-      // const url = new URL('aaa.html', location.origin);
-      // const lang = new URL(location.href).searchParams.get('lang');
-      // if(lang) url.searchParams.set('lang', lang);
-      // window.location.href = url.toString();
+    const textData = {
+      ko: {
+        title: "🌍 융합수업 프로젝트",
+        subtitle: "환경과 전염병의 연결고리를 탐구하다"
+      },
+      en: {
+        title: "🌍 Convergence Class Project",
+        subtitle: "Exploring the Link Between Environment and Infectious Diseases"
+      }
+    };
 
-      window.location.href = 'aaa.html';
+    const url = new URL(location.href);
+    const lang = url.searchParams.get('lang') || 'ko';
+
+    // 텍스트 바꾸기
+    document.getElementById('main-title').textContent = textData[lang].title;
+    document.getElementById('main-subtitle').textContent = textData[lang].subtitle;
+
+    // 3초 뒤 aaa.html로 이동 (lang 포함)
+    setTimeout(() => {
+      const next = new URL('aaa.html', location.origin);
+      next.searchParams.set('lang', lang);
+      window.location.href = next.toString();
     }, 3000);
   </script>
 </body>
