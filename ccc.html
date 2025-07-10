@@ -24,6 +24,7 @@
       text-align: center;
       background-color: rgba(0,0,0,0.5);
       background-blend-mode: darken;
+      position: relative;
     }
 
     .intro-section h1 {
@@ -35,6 +36,7 @@
       font-size: 1.3rem;
       margin-bottom: 40px;
       color: #e0e0e0;
+      max-width: 600px;
     }
 
     .intro-section a {
@@ -52,25 +54,6 @@
       background-color: #276fc2;
     }
 
-    /* 언어 선택 UI */
-    #lang-switcher {
-      margin-top: 15px;
-      font-size: 0.85rem;
-      color: #ddd;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    #lang-select-ccc {
-      padding: 4px 8px;
-      font-size: 0.85rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      cursor: pointer;
-      background: #333;
-      color: white;
-    }
-
     /* 로딩 스타일 (aaa.html과 동일하게 맞춤) */
     .loading {
       position: fixed;
@@ -86,7 +69,6 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.5s ease;
-      flex-direction: row;
     }
 
     .loading > div {
@@ -102,6 +84,32 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* 언어 선택 UI 스타일 - 오른쪽 하단 작게 */
+    #lang-switcher {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.3);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: white;
+      user-select: none;
+    }
+
+    #lang-switcher label {
+      margin-right: 6px;
+    }
+
+    #lang-select-ccc {
+      font-size: 0.9rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -113,8 +121,8 @@
   </div>
 
   <section class="intro-section">
-    <h1>자연이 바뀌면, 병도 바뀐다</h1>
-    <p>조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
+    <h1 id="main-title">자연이 바뀌면, 병도 바뀐다</h1>
+    <p id="subtitle">조선 시대 생태 변화와 전염병의 관계를 탐험해보세요</p>
     <a href="aaa.html" id="go-aaa">탐색 시작</a>
 
     <!-- 한영 언어 선택 UI -->
@@ -133,31 +141,44 @@
     const loadingText = document.querySelector('.loading-text');
     const langSelectCCC = document.getElementById('lang-select-ccc');
 
-    // URL에서 lang 파라미터 읽어서 초기 언어 설정
+    // 텍스트 데이터
+    const textData = {
+      ko: {
+        mainTitle: "자연이 바뀌면, 병도 바뀐다",
+        subtitle: "조선 시대 생태 변화와 전염병의 관계를 탐험해보세요",
+        btnText: "탐색 시작",
+        loadingText: "로딩중..."
+      },
+      en: {
+        mainTitle: "When Nature Changes, Diseases Change Too",
+        subtitle: "Explore the Relationship Between Ecological Changes and Infectious Diseases in the Joseon Era",
+        btnText: "Start Exploration",
+        loadingText: "Loading..."
+      }
+    };
+
+    // URL에서 lang 파라미터 읽기, 없으면 ko
     let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
     langSelectCCC.value = currentLang;
 
-    // 언어별 로딩 텍스트 설정 함수
-    function updateLoadingText(lang) {
-      if (lang === 'en') {
-        loadingText.textContent = 'Loading...';
-      } else {
-        loadingText.textContent = '로딩중...';
-      }
+    // 텍스트 업데이트 함수
+    function updateTexts(lang) {
+      document.getElementById('main-title').textContent = textData[lang].mainTitle;
+      document.getElementById('subtitle').textContent = textData[lang].subtitle;
+      btn.textContent = textData[lang].btnText;
+      loadingText.textContent = textData[lang].loadingText;
     }
 
-    // 초기 로딩 텍스트 설정
-    updateLoadingText(currentLang);
+    // 초기 텍스트 설정
+    updateTexts(currentLang);
 
-    // 탐색 시작 클릭 시
+    // 버튼 클릭 시 로딩 보여주고 이동 (lang 쿼리 포함)
     btn.addEventListener('click', (e) => {
-      e.preventDefault(); // 기본 이동 차단
+      e.preventDefault();
 
-      // 로딩 보이기
       loading.style.visibility = 'visible';
       loading.style.opacity = '1';
 
-      // 1초 후 페이지 이동 (언어 파라미터 포함)
       const url = new URL(btn.href, location.origin);
       url.searchParams.set('lang', currentLang);
       setTimeout(() => {
@@ -168,9 +189,9 @@
     // 언어 선택 변경 이벤트
     langSelectCCC.addEventListener('change', (e) => {
       currentLang = e.target.value;
-      updateLoadingText(currentLang);
+      updateTexts(currentLang);
 
-      // URL lang 파라미터 업데이트 (새로고침 없이)
+      // URL lang 파라미터 변경 (주소창만 바꿈)
       const url = new URL(location.href);
       url.searchParams.set('lang', currentLang);
       history.replaceState(null, '', url.toString());
