@@ -101,7 +101,7 @@
     let id = getParam('id') || '1';
 
     // 상세 내용 데이터
-    const data = {
+const data = {
   ko: {
     "1": {
       title: "왜 생태 변화가 전염병과 관련이 있을까?",
@@ -129,144 +129,164 @@
       ],
       source: ""
     },
-        "2": {
-  title: "조선 시대의 생태",
-  sections: [
-    {
-      heading: "기후: 소빙기",
-      text: "17~19세기에는 기온이 낮아 흉년과 기근이 잦았습니다. 이로 인해 사람들의 면역력이 약해져 전염병이 자주 퍼졌습니다."
+    "2": {
+      title: "조선 시대의 생태",
+      sections: [
+        {
+          heading: "기후: 소빙기",
+          text: "17~19세기에는 기온이 낮아 흉년과 기근이 잦았습니다. 이로 인해 사람들의 면역력이 약해져 전염병이 자주 퍼졌습니다."
+        },
+        {
+          heading: "물과 위생",
+          text: "공동 우물과 강물을 사용했지만, 홍수나 가뭄이 오면 물이 오염되어 설사병, 이질 같은 수인성 전염병이 확산됐습니다."
+        },
+        {
+          heading: "농업과 산림",
+          text: "벼농사 중심의 농경 사회였고, 산림을 많이 베어내어 산사태나 생태계 파괴가 일어났습니다."
+        },
+        {
+          heading: "가축과 생활",
+          text: "가축과 사람이 가까이 살며 동물 전염병이 인간에게 퍼질 위험이 컸습니다."
+        },
+        {
+          heading: "유랑민과 전염",
+          text: "기근과 재해로 떠도는 유랑민이 많아지면서 전염병이 지역을 넘어 빠르게 확산되었습니다."
+        }
+      ],
+      source: ""
     },
-    {
-      heading: "물과 위생",
-      text: "공동 우물과 강물을 사용했지만, 홍수나 가뭄이 오면 물이 오염되어 설사병, 이질 같은 수인성 전염병이 확산됐습니다."
+    "3": {
+      title: "홍역(마마)",
+      sections: [
+        {
+          heading: "조선시대",
+          text: "자연 면역 의존, 민간요법 활용, 사망률 높았음."
+        },
+        {
+          heading: "현대",
+          text: "MMR 백신 보급으로 예방, 집단 면역 중요."
+        }
+      ],
+      source: "출처: 조선시대 질병사 연구"
     },
-    {
-      heading: "농업과 산림",
-      text: "벼농사 중심의 농경 사회였고, 산림을 많이 베어내어 산사태나 생태계 파괴가 일어났습니다."
+    "4": {
+      title: "장티푸스 및 이질",
+      sections: [
+        {
+          heading: "조선시대",
+          text: "오염된 물·음식 전파, 환자 격리, 민간 치료."
+        },
+        {
+          heading: "현대",
+          text: "항생제, 예방접종, 상하수도 개선으로 예방."
+        }
+      ],
+      source: "출처: 한국 전염병사"
     },
-    {
-      heading: "가축과 생활",
-      text: "가축과 사람이 가까이 살며 동물 전염병이 인간에게 퍼질 위험이 컸습니다."
-    },
-    {
-      heading: "유랑민과 전염",
-      text: "기근과 재해로 떠도는 유랑민이 많아지면서 전염병이 지역을 넘어 빠르게 확산되었습니다."
+    "5": {
+      title: "인플루엔자",
+      sections: [
+        {
+          heading: "현대",
+          text: "계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨."
+        }
+      ],
+      source: "출처: 질병관리청, WHO"
     }
-  ],
-  source: ""
-}
-        "3": {
-          title: "홍역(마마)",
-          sections: [
-            {
-              heading: "조선시대",
-              text: "자연 면역 의존, 민간요법 활용, 사망률 높았음."
-            },
-            {
-              heading: "현대",
-              text: "MMR 백신 보급으로 예방, 집단 면역 중요."
-            }
-          ],
-          source: "출처: 조선시대 질병사 연구"
+  },
+  en: {
+    "1": {
+      title: "Why Is Ecological Change Related to Infectious Diseases?",
+      sections: [
+        {
+          heading: "1. Ecosystems Are Homes to Viruses",
+          text: "Viruses and bacteria live in nature, such as animals, water, and plants. When nature changes, the habitats of pathogens also change."
         },
-        "4": {
-          title: "장티푸스 및 이질",
-          sections: [
-            {
-              heading: "조선시대",
-              text: "오염된 물·음식 전파, 환자 격리, 민간 치료."
-            },
-            {
-              heading: "현대",
-              text: "항생제, 예방접종, 상하수도 개선으로 예방."
-            }
-          ],
-          source: "출처: 한국 전염병사"
+        {
+          heading: "2. Viruses Follow Humans When Boundaries Are Crossed",
+          text: "When humans clear forests and build cities, they come closer to wildlife. Viruses in animals can jump to humans during this process."
         },
-        "5": {
-          title: "인플루엔자",
-          sections: [
-            {
-              heading: "현대",
-              text: "계절성 독감 및 팬데믹, 백신·항바이러스제 개발됨."
-            }
-          ],
-          source: "출처: 질병관리청, WHO"
+        {
+          heading: "3. Climate Change Expands Disease Range",
+          text: "As temperatures rise, disease carriers like mosquitoes and ticks spread to wider areas. Tropical diseases sometimes spread to other countries as a result."
+        },
+        {
+          heading: "4. Ecological Changes Weaken Humans",
+          text: "Famine, floods, and droughts pollute water and cause hunger. People with weakened immune systems become more vulnerable to infectious diseases."
+        },
+        {
+          heading: "Summary",
+          text: "Scientific research is increasingly clarifying how ecological changes impact human health."
         }
-      },
-      const details_en = {
-  "1": `
-    <h3>Why Is Ecological Change Related to Infectious Diseases?</h3>
-    <div class="section-title">English</div>
-    <p>Viruses and bacteria live in nature, such as animals, water, and plants.  
-    When nature changes, the habitats of pathogens also change.</p>
-
-    <p>When humans clear forests and build cities, they come closer to wildlife.  
-    In this process, viruses that were in animals can jump to humans.</p>
-
-    <p>As temperatures rise, disease carriers like mosquitoes and ticks spread to wider areas.  
-    As a result, tropical diseases sometimes spread to other countries.</p>
-
-    <p>Famine, floods, and droughts pollute water and cause hunger.  
-    People with weakened immune systems become more vulnerable to infectious diseases.</p>
-
-    <p>Scientific research is increasingly clarifying how ecological changes impact human health.</p>
-  `,
-
-  "2": `
-          title: "Cholera",
-          sections: [
-            {
-              heading: "Joseon Dynasty",
-              text: "Entered after the 19th century. Early burial and quarantine. Poor hygiene."
-            },
-            {
-              heading: "Modern",
-              text: "Rehydration, antibiotics, isolation, global surveillance."
-            }
-          ],
-          source: "Source: Korean History Journal"
+      ],
+      source: ""
+    },
+    "2": {
+      title: "Ecology in the Joseon Dynasty",
+      sections: [
+        {
+          heading: "Climate: Little Ice Age",
+          text: "Between the 17th and 19th centuries, temperatures were low, causing frequent famines and poor harvests. This weakened people's immune systems, allowing infectious diseases to spread."
         },
-        "3": {
-          title: "Measles",
-          sections: [
-            {
-              heading: "Joseon Dynasty",
-              text: "Natural immunity. High mortality. Folk remedies."
-            },
-            {
-              heading: "Modern",
-              text: "Prevention via MMR vaccine, herd immunity important."
-            }
-          ],
-          source: "Source: Study on Disease in Joseon"
+        {
+          heading: "Water and Hygiene",
+          text: "People used shared wells and river water, but floods and droughts contaminated water, spreading waterborne diseases like diarrhea and dysentery."
         },
-        "4": {
-          title: "Typhoid & Dysentery",
-          sections: [
-            {
-              heading: "Joseon Dynasty",
-              text: "Spread via contaminated food and water. Patient isolation and folk cures."
-            },
-            {
-              heading: "Modern",
-              text: "Antibiotics, vaccination, water sanitation improvements."
-            }
-          ],
-          source: "Source: Korean Epidemic History"
+        {
+          heading: "Agriculture and Forests",
+          text: "The society was rice-farming centered and deforested heavily, leading to landslides and ecological damage."
         },
-        "5": {
-          title: "Influenza",
-          sections: [
-            {
-              heading: "Modern",
-              text: "Seasonal flu and pandemics. Vaccines and antivirals developed."
-            }
-          ],
-          source: "Source: CDC, WHO"
+        {
+          heading: "Livestock and Living",
+          text: "People lived close to livestock, increasing the risk of animal-borne diseases spreading to humans."
+        },
+        {
+          heading: "Migrants and Epidemics",
+          text: "Due to famine and disasters, many migrants wandered, causing diseases to spread rapidly beyond regions."
         }
-      }
-    };
+      ],
+      source: ""
+    },
+    "3": {
+      title: "Measles",
+      sections: [
+        {
+          heading: "Joseon Dynasty",
+          text: "Relied on natural immunity; folk remedies were used; mortality rates were high."
+        },
+        {
+          heading: "Modern",
+          text: "Prevented by MMR vaccine; herd immunity is important."
+        }
+      ],
+      source: "Source: Study on Disease in Joseon"
+    },
+    "4": {
+      title: "Typhoid & Dysentery",
+      sections: [
+        {
+          heading: "Joseon Dynasty",
+          text: "Spread through contaminated food and water; patient isolation and folk treatments."
+        },
+        {
+          heading: "Modern",
+          text: "Prevention via antibiotics, vaccination, and sanitation improvements."
+        }
+      ],
+      source: "Source: Korean Epidemic History"
+    },
+    "5": {
+      title: "Influenza",
+      sections: [
+        {
+          heading: "Modern",
+          text: "Seasonal flu and pandemics; vaccines and antivirals developed."
+        }
+      ],
+      source: "Source: CDC, WHO"
+    }
+  }
+};
 
     function renderContent(lang, id) {
       const entry = data[lang][id];
