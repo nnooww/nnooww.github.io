@@ -196,9 +196,25 @@
     let currentLang = "ko";
 
     const items = {
-      ko: ["왜 생태 변화가 전염병과 관련이 있을까?", "조선 시대의 생태", "조선 시대의 전염병 소개", "현대 시대의 생태 소개", "현대 시대 생태에 따른 전염병들"],
-      en: ["Why Is Ecological Change Related to Infectious Diseases?", "Ecology in the Joseon Dynasty", "Introduction to Infectious Diseases in the Joseon Era", "Introduction to Modern Ecology", "Infectious Diseases Related to Modern Ecological Changes"]
-    };
+  ko: [
+    "왜 생태 변화가 전염병과 관련이 있을까?",
+    "조선 시대의 생태",
+    "조선 시대의 전염병 소개",
+    "현대 시대의 생태 소개",
+    "현대 시대 생태에 따른 전염병들",
+    "생태 변화와 바이러스의 진화",   // 6번
+    "전염병과 생태 변화 퀴즈"        // 7번
+  ],
+  en: [
+    "Why Is Ecological Change Related to Infectious Diseases?",
+    "Ecology in the Joseon Dynasty",
+    "Introduction to Infectious Diseases in the Joseon Era",
+    "Introduction to Modern Ecology",
+    "Infectious Diseases Related to Modern Ecological Changes",
+    "Ecological Change and Virus Evolution",  // 6
+    "Quiz: Epidemics and Ecological Change"   // 7
+  ]
+};
 
     const descriptions_ko = {
   "1": { 
@@ -220,7 +236,14 @@
   "5": { 
     title: "현대 시대 생태에 따른 전염병들", 
     preview: "계절성 독감과 팬데믹 사례, 그리고 백신과 항바이러스제 개발 현황을 소개합니다." 
-  }
+  },
+  "6":{
+    title: "생태 변화와 바이러스의 진화",
+    preview: "기후 변화와 서식지 파괴가 바이러스 진화에 미치는 영향에 대해 알아봅니다."
+  },
+  "7": {
+    title: "전염병과 생태 변화 퀴즈",
+    preview: "생태 변화와 전염병에 관한 간단한 퀴즈를 풀어봅니다."
 };
 
 const descriptions_en = {
@@ -243,7 +266,14 @@ const descriptions_en = {
   "5": { 
     title: "Infectious Diseases Related to Modern Ecological Changes", 
     preview: "Introduction to seasonal flu, pandemics, and the development of vaccines and antiviral drugs." 
-  }
+  },
+  "6": {
+  title: "Ecological Change and Virus Evolution",
+  preview: "Learn about how climate change and habitat destruction affect virus evolution."
+  },
+  "7": {
+  title: "Quiz: Epidemics and Ecological Change",
+  preview: "Try a simple quiz on ecological changes and infectious diseases."
 };
 
     const ecologyData = {
