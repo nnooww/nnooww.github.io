@@ -2,48 +2,83 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>레이아웃 예시</title>
+  <title>영역 구분 + 레이아웃</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header, footer {
+      background: #444;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+    }
+    /* 사이드바 + 메인 컨테이너 */
+    .container {
+      display: flex; /* 좌우 배치 */
+      min-height: 400px; /* 임의 높이 */
+    }
+    aside {
+      background: #ddd;
+      width: 200px;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+    main {
+      background: #eee;
+      flex-grow: 1; /* 남은 공간 모두 차지 */
+      padding: 1em;
+      box-sizing: border-box;
+    }
+    /* 리스트 하위 계층 들여쓰기 */
+    ol ol {
+      margin-left: 1.5em;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>헤더 영역</h1>
   </header>
 
-  <aside>
-    <h2>사이드바 영역</h2>
-  </aside>
+  <div class="container">
+    <aside>
+      <h2>사이드바 영역</h2>
+    </aside>
 
-  <main>
-    <h2>오른쪽 영역 리스트</h2>
-    <ol>
-      <li>1
-        <ol>
-          <li>1.1</li>
-          <li>1.2</li>
-          <li>1.3</li>
-          <li>1.4</li>
-        </ol>
-      </li>
-      <li>2
-        <ol>
-          <li>2.1</li>
-          <li>2.2</li>
-        </ol>
-      </li>
-      <li>3
-        <ol>
-          <li>3.1</li>
-          <li>3.2</li>
-        </ol>
-      </li>
-      <li>4
-        <ol>
-          <li>4.1</li>
-          <li>4.2</li>
-        </ol>
-      </li>
-    </ol>
-  </main>
+    <main>
+      <h2>오른쪽 영역 리스트</h2>
+      <ol>
+        <li>1
+          <ol>
+            <li>1.1</li>
+            <li>1.2</li>
+            <li>1.3</li>
+            <li>1.4</li>
+          </ol>
+        </li>
+        <li>2
+          <ol>
+            <li>2.1</li>
+            <li>2.2</li>
+          </ol>
+        </li>
+        <li>3
+          <ol>
+            <li>3.1</li>
+            <li>3.2</li>
+          </ol>
+        </li>
+        <li>4
+          <ol>
+            <li>4.1</li>
+            <li>4.2</li>
+          </ol>
+        </li>
+      </ol>
+    </main>
+  </div>
 
   <footer>
     <p>푸터 영역</p>
