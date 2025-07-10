@@ -4,25 +4,36 @@
 <meta charset="UTF-8" />
 <title>병 이름 상세 설명 (bbb.html)</title>
 <style>
-  body {
+  /* 화면 꽉 채우기 */
+  html, body {
     margin: 0;
+    padding: 0;
+    height: 100%;
     font-family: Arial, sans-serif;
-    padding: 1em;
     background: #f9f9f9;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   header, footer {
     background: #444;
     color: white;
     text-align: center;
     padding: 1em 0;
+    flex-shrink: 0;
   }
   main {
-    max-width: 800px;
-    margin: 20px auto;
+    flex-grow: 1;
+    padding: 1.5em 2em;
     background: white;
-    padding: 2em;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-radius: 0; /* 여백 없애기 */
+    box-shadow: none; /* 그림자 없애서 꽉찬 느낌 */
   }
   h1, h3 {
     margin-top: 0;
