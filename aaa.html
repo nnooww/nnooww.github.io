@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>왜 생태 변화가 전염병과 관련이 있을까? (aaa.html)</title>
+  <title>질병 리스트 (aaa.html)</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,77 +18,31 @@
       color: white;
       text-align: center;
       padding: 1em 0;
-      flex-shrink: 0;
       position: relative;
-      padding-top: 20px;
-      padding-bottom: 20px;
     }
+
     .container {
       display: flex;
-      min-height: calc(100vh - 160px);
+      min-height: calc(100vh - 160px); /* 헤더+푸터 제외 */
     }
     aside {
       flex: 3;
       padding: 1em;
       background: #ddd;
-      position: relative; /* hover-box 위치 기준 */
-      overflow: visible; /* hover-box가 밖으로 나와도 보이도록 */
+      position: relative;
     }
-    /* 언어 선택 박스 원래 위치 그대로 (오른쪽 위 고정) */
+
+    /* aside 안에서 오른쪽 위에 언어 선택 위치 */
     #lang-select {
       position: absolute;
       top: 10px;
-      right: 10px; /* 오른쪽 위 고정 - 이게 원래 위치 유지 */
+      right: 10px;
       padding: 4px 8px;
       font-size: 0.9em;
       cursor: pointer;
       z-index: 20;
-      user-select: none;
     }
-    /* 자세히보기 버튼, lang-select 바로 위, 겹치도록 위치 */
-    #detail-btn {
-      position: absolute;
-      top: 0px; /* lang-select top 10px 보다 위에 */
-      right: 10px; /* lang-select과 같은 right 값 */
-      padding: 4px 10px;
-      font-size: 0.9em;
-      cursor: pointer;
-      background: #007acc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      z-index: 25;
-      user-select: none;
-      line-height: 1.5;
-    }
-    #detail-btn:hover {
-      background: #005a99;
-    }
-    /* hover-box 위치는 detail-btn과 거의 겹치게 */
-    #hover-box {
-      position: absolute;
-      top: 0px;      /* detail-btn top과 동일 */
-      right: 10px;   /* detail-btn right과 동일 */
-      width: 320px;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #aaa;
-      padding: 1em;
-      display: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      z-index: 30;
-      border-radius: 6px;
-      user-select: none;
-      /* 언어선택 박스를 덮어서 가림 */
-    }
-    #hover-box h3 {
-      margin-top: 0;
-      font-size: 1.1em;
-    }
-    #hover-box p {
-      margin: 0.5em 0;
-      font-size: 0.9em;
-      white-space: pre-wrap;
-    }
+
     main {
       flex: 1;
       padding: 1em;
@@ -99,379 +53,200 @@
       font-weight: bold;
       margin-bottom: 1em;
       cursor: pointer;
-      user-select: none;
-      transition: color 0.3s;
     }
-    .bacteria-list > li:hover {
-      color: #007acc;
-    }
-    #ecology-impact {
-      margin-top: 20px;
-      background: #f2f8ff;
-      padding: 15px;
-      border-radius: 6px;
-      font-family: 'Noto Sans KR', sans-serif;
-    }
-    #ecology-impact h3 {
-      color: #1a3c57;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    #ecology-impact .info-box {
-      background: #fff;
-      border-left: 5px solid #4a90e2;
-      margin-bottom: 12px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-      cursor: pointer;
-    }
-    #ecology-impact .info-box h4 {
-      font-size: 1rem;
-      color: #114a77;
-      margin: 0;
-      padding: 10px 12px;
-      background-color: #e6f1ff;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    #ecology-impact .info-box:hover h4 {
-      background-color: #d0e6ff;
-    }
-    #ecology-impact .info-box p {
-      font-size: 0.9rem;
-      color: #333;
-      line-height: 1.4;
-      padding: 0 12px 10px;
+
+    /* 설명 박스 */
+    #hover-box {
+      position: absolute;
+      top: 50px;  /* 선택박스 아래쪽에 위치하도록 */
+      right: 10px;
+      width: 350px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #aaa;
+      padding: 1em;
       display: none;
-      margin: 0;
-      white-space: pre-wrap;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 10;
     }
-    #ecology-impact .info-box.active p {
-      display: block;
+
+    #hover-box h3 {
+      margin-top: 0;
+      font-size: 1.1em;
     }
-    #ecology-impact blockquote {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #2c3e50;
-      background: #e3f1ff;
-      border-left: 5px solid #007acc;
-      padding: 12px;
-      border-radius: 6px;
-      margin-top: 15px;
-      text-align: center;
-      line-height: 1.5;
-      white-space: pre-wrap;
+
+    #hover-box p {
+      margin: 0.5em 0;
+      font-size: 0.9em;
+    }
+
+    #hover-box button {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      font-size: 0.9em;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1 id="header-title">왜 생태 변화가 전염병과 관련이 있을까?</h1>
+    <h1 id="header-title">질병 리스트</h1>
   </header>
 
   <div class="container">
     <aside>
-      <!-- 언어선택 박스 원래 위치 -->
+      <h2 id="sidebar-title">사이드바 영역</h2>
       <select id="lang-select" aria-label="언어 선택">
         <option value="ko">한국어</option>
         <option value="en">English</option>
       </select>
-
-      <!-- 자세히보기 버튼 (hover-box 토글용) -->
-      <button id="detail-btn" aria-haspopup="true" aria-expanded="false" aria-controls="hover-box">자세히보기</button>
-
-      <!-- hover-box -->
-      <div id="hover-box" role="tooltip" aria-hidden="true"></div>
-
-      <section id="ecology-impact">
-        <h3 id="ecology-title">왜 생태 변화가 전염병과 관련이 있을까?</h3>
-        <div id="ecology-content"></div>
-        <blockquote id="ecology-quote"></blockquote>
-      </section>
+      <div id="hover-box"></div>
     </aside>
 
     <main>
       <h2 id="list-title">오른쪽 영역 리스트</h2>
-      <ol class="bacteria-list" role="list"></ol>
+      <ol class="bacteria-list"></ol>
     </main>
   </div>
 
-  <footer></footer>
+  <footer>
+    <p id="footer-text">푸터 영역</p>
+  </footer>
 
   <script>
-    (() => {
-      const bacteriaList = document.querySelector(".bacteria-list");
-      const hoverBox = document.getElementById("hover-box");
-      const langSelect = document.getElementById("lang-select");
-      const detailBtn = document.getElementById("detail-btn");
+    const bacteriaList = document.querySelector(".bacteria-list");
+    const hoverBox = document.getElementById("hover-box");
+    const langSelect = document.getElementById("lang-select");
 
-      const headerTitle = document.getElementById("header-title");
-      const listTitle = document.getElementById("list-title");
+    const headerTitle = document.getElementById("header-title");
+    const footerText = document.getElementById("footer-text");
+    const sidebarTitle = document.getElementById("sidebar-title");
+    const listTitle = document.getElementById("list-title");
 
-      const ecologyTitle = document.getElementById("ecology-title");
-      const ecologyContent = document.getElementById("ecology-content");
-      const ecologyQuote = document.getElementById("ecology-quote");
+    const items = {
+      ko: [
+        "두창(천연두)",
+        "콜레라(호열자)",
+        "홍역(마마)",
+        "장티푸스 및 이질",
+        "인플루엔자"
+      ],
+      en: [
+        "Smallpox",
+        "Cholera",
+        "Measles",
+        "Typhoid & Dysentery",
+        "Influenza"
+      ]
+    };
 
-      const items = {
-        ko: [
-          "두창(천연두)",
-          "콜레라(호열자)",
-          "홍역(마마)",
-          "장티푸스 및 이질",
-          "인플루엔자"
-        ],
-        en: [
-          "Smallpox",
-          "Cholera",
-          "Measles",
-          "Typhoid & Dysentery",
-          "Influenza"
-        ]
-      };
+    const descriptions_ko = {
+      "1": {
+        title: "두창(천연두)",
+        preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
+      },
+      "2": {
+        title: "콜레라(호열자)",
+        preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
+      },
+      "3": {
+        title: "홍역(마마)",
+        preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
+      },
+      "4": {
+        title: "장티푸스 및 이질",
+        preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
+      },
+      "5": {
+        title: "인플루엔자",
+        preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
+      }
+    };
 
-      const descriptions = {
-        ko: {
-          "1": {
-            title: "두창(천연두)",
-            preview: "조선시대 대표 전염병. 종두법이 시도되었고 WHO 백신 접종으로 박멸됨."
-          },
-          "2": {
-            title: "콜레라(호열자)",
-            preview: "19세기 이후 유입. 수분 보충과 항생제로 치료, 국제 감시체계 운영."
-          },
-          "3": {
-            title: "홍역(마마)",
-            preview: "자연 면역 의존, 백신 보급으로 예방 가능해짐."
-          },
-          "4": {
-            title: "장티푸스 및 이질",
-            preview: "오염된 물/음식으로 전파. 항생제와 위생개선으로 예방 가능."
-          },
-          "5": {
-            title: "인플루엔자",
-            preview: "계절성 독감 및 팬데믹. 백신·항바이러스제 개발."
+    const descriptions_en = {
+      "1": {
+        title: "Smallpox",
+        preview: "A representative infectious disease in the Joseon Dynasty. Eradicated by WHO vaccination."
+      },
+      "2": {
+        title: "Cholera",
+        preview: "Introduced after 19th century. Treated with hydration and antibiotics; international surveillance."
+      },
+      "3": {
+        title: "Measles",
+        preview: "Relies on natural immunity. Preventable with vaccine distribution."
+      },
+      "4": {
+        title: "Typhoid & Dysentery",
+        preview: "Spread via contaminated food and water. Preventable by antibiotics and improved sanitation."
+      },
+      "5": {
+        title: "Influenza",
+        preview: "Seasonal flu and pandemics. Development of vaccines and antivirals."
+      }
+    };
+
+    let currentLang = "ko";
+
+    function attachHoverListeners() {
+      let hoverTimeout;
+
+      document.querySelectorAll(".bacteria-list > li").forEach(item => {
+        const id = item.getAttribute("data-id");
+
+        item.addEventListener("mouseenter", () => {
+          clearTimeout(hoverTimeout);
+          const data = currentLang === "ko" ? descriptions_ko[id] : descriptions_en[id];
+          if (data) {
+            hoverBox.innerHTML = `
+              <h3>${data.title}</h3>
+              <p>${data.preview}</p>
+              <button onclick="location.href='bbb.html?id=${id}&lang=${currentLang}'">${currentLang === "ko" ? "자세히 보기" : "Details"}</button>
+            `;
+            hoverBox.style.display = "block";
           }
-        },
-        en: {
-          "1": {
-            title: "Smallpox",
-            preview: "A representative infectious disease in the Joseon Dynasty. Eradicated by WHO vaccination."
-          },
-          "2": {
-            title: "Cholera",
-            preview: "Introduced after 19th century. Treated with hydration and antibiotics; international surveillance."
-          },
-          "3": {
-            title: "Measles",
-            preview: "Relies on natural immunity. Preventable with vaccine distribution."
-          },
-          "4": {
-            title: "Typhoid & Dysentery",
-            preview: "Spread via contaminated food and water. Preventable by antibiotics and improved sanitation."
-          },
-          "5": {
-            title: "Influenza",
-            preview: "Seasonal flu and pandemics. Development of vaccines and antivirals."
-          }
-        }
-      };
-
-      const ecologyData = {
-        ko: {
-          title: "왜 생태 변화가 전염병과 관련이 있을까?",
-          items: [
-            {
-              heading: "1. 생태계는 바이러스의 집이다",
-              text: "바이러스와 세균은 동물, 물, 식물 같은 자연 안에 살고 있습니다.\n자연이 변하면 병원체의 서식지도 바뀌게 됩니다."
-            },
-            {
-              heading: "2. 인간이 경계를 넘으면 바이러스도 따라온다",
-              text: "산을 밀고 도시를 만들면 야생동물과 더 가까워집니다.\n이 과정에서 동물에게 있던 바이러스가 사람에게 옮겨올 수 있습니다."
-            },
-            {
-              heading: "3. 기후 변화는 병의 활동 범위를 넓힌다",
-              text: "기온이 오르면 모기, 진드기 같은 전염병 매개체가 더 넓은 지역으로 퍼집니다.\n그 결과 열대병이 다른 나라로 확산되기도 합니다."
-            },
-            {
-              heading: "4. 생태 변화는 사람을 더 약하게 만든다",
-              text: "기근, 홍수, 가뭄은 물을 오염시키고 사람을 굶주리게 만듭니다.\n이로 인해 면역력이 약해져 전염병에 더 취약해집니다."
-            }
-          ],
-          quote: "“생태계의 건강은 인간의 건강과 직결됩니다.”"
-        },
-        en: {
-          title: "Why is ecological change related to infectious diseases?",
-          items: [
-            {
-              heading: "1. Ecosystems are home to viruses",
-              text: "Viruses and bacteria live in nature — animals, water, plants.\nWhen nature changes, habitats of pathogens change too."
-            },
-            {
-              heading: "2. When humans cross boundaries, viruses follow",
-              text: "Clearing forests and building cities brings us closer to wildlife.\nViruses from animals can jump to humans in this process."
-            },
-            {
-              heading: "3. Climate change expands disease range",
-              text: "Rising temperatures allow vectors like mosquitoes and ticks to spread wider.\nThis leads to tropical diseases spreading to new regions."
-            },
-            {
-              heading: "4. Ecological changes weaken people",
-              text: "Famine, floods, and droughts contaminate water and cause hunger.\nThis weakens immunity making people more vulnerable."
-            }
-          ],
-          quote: "“The health of ecosystems is directly linked to human health.”"
-        }
-      };
-
-      function createList(lang) {
-        bacteriaList.innerHTML = "";
-        items[lang].forEach((item, i) => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          li.setAttribute("data-id", i + 1);
-          li.setAttribute("tabindex", "0");
-          li.setAttribute("role", "button");
-          li.setAttribute("aria-pressed", "false");
-          bacteriaList.appendChild(li);
         });
-      }
 
-      function showHoverBox(id, lang) {
-        if (!descriptions[lang][id]) {
-          hoverBox.style.display = "none";
-          hoverBox.setAttribute("aria-hidden", "true");
-          return;
-        }
-        const { title, preview } = descriptions[lang][id];
-        hoverBox.innerHTML = `<h3>${title}</h3><p>${preview}</p>`;
-        hoverBox.style.display = "block";
-        hoverBox.setAttribute("aria-hidden", "false");
-      }
-      function hideHoverBox() {
-        hoverBox.style.display = "none";
-        hoverBox.setAttribute("aria-hidden", "true");
-      }
-
-      // Ecology info 세팅
-      function updateEcology(lang) {
-        ecologyTitle.textContent = ecologyData[lang].title;
-        ecologyContent.innerHTML = "";
-        ecologyData[lang].items.forEach(item => {
-          const div = document.createElement("div");
-          div.classList.add("info-box");
-          const h4 = document.createElement("h4");
-          h4.textContent = item.heading;
-          const p = document.createElement("p");
-          p.textContent = item.text;
-          div.appendChild(h4);
-          div.appendChild(p);
-          ecologyContent.appendChild(div);
-
-          // 클릭시 펼침/접힘
-          h4.addEventListener("click", () => {
-            div.classList.toggle("active");
-          });
-          h4.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              div.classList.toggle("active");
-            }
-          });
+        item.addEventListener("mouseleave", () => {
+          hoverTimeout = setTimeout(() => {
+            hoverBox.style.display = "none";
+          }, 200);
         });
-        ecologyQuote.textContent = ecologyData[lang].quote;
-      }
-
-      // 초기 언어 셋팅
-      let currentLang = langSelect.value || "ko";
-      createList(currentLang);
-      updateEcology(currentLang);
-
-      // 리스트 아이템 hover 시 hover-box 보이도록 이벤트
-      bacteriaList.addEventListener("mouseover", (e) => {
-        if (e.target.tagName === "LI") {
-          const id = e.target.getAttribute("data-id");
-          showHoverBox(id, currentLang);
-        }
-      });
-      bacteriaList.addEventListener("mouseout", (e) => {
-        if (e.target.tagName === "LI") {
-          hideHoverBox();
-        }
-      });
-      bacteriaList.addEventListener("focusin", (e) => {
-        if (e.target.tagName === "LI") {
-          const id = e.target.getAttribute("data-id");
-          showHoverBox(id, currentLang);
-        }
-      });
-      bacteriaList.addEventListener("focusout", (e) => {
-        if (e.target.tagName === "LI") {
-          hideHoverBox();
-        }
       });
 
-      // 언어 변경시 리스트, ecology, 제목 변경
-      langSelect.addEventListener("change", () => {
-        currentLang = langSelect.value;
-        createList(currentLang);
-        updateEcology(currentLang);
-
-        // 제목 바꾸기
-        if (currentLang === "ko") {
-          headerTitle.textContent = "왜 생태 변화가 전염병과 관련이 있을까?";
-          listTitle.textContent = "오른쪽 영역 리스트";
-        } else {
-          headerTitle.textContent = "Why is ecological change related to infectious diseases?";
-          listTitle.textContent = "Right Area List";
-        }
-      });
-
-      // --- 자세히보기 hover-box 보이기/숨기기 로직 ---
-      // 버튼과 박스 위 마우스 상태 추적용 변수
-      let isOverDetailBtn = false;
-      let isOverHoverBox = false;
-
-      function updateHoverBoxVisibility() {
-        if (isOverDetailBtn || isOverHoverBox) {
-          hoverBox.style.display = "block";
-          hoverBox.setAttribute("aria-hidden", "false");
-          detailBtn.setAttribute("aria-expanded", "true");
-        } else {
-          hoverBox.style.display = "none";
-          hoverBox.setAttribute("aria-hidden", "true");
-          detailBtn.setAttribute("aria-expanded", "false");
-        }
-      }
-
-      // '자세히보기' 버튼에 마우스 올림
-      detailBtn.addEventListener("mouseenter", () => {
-        isOverDetailBtn = true;
-        updateHoverBoxVisibility();
-      });
-      detailBtn.addEventListener("mouseleave", () => {
-        isOverDetailBtn = false;
-        // 딜레이를 조금 줘서 박스로 바로 넘어갈 때 깜빡임 방지
-        setTimeout(updateHoverBoxVisibility, 100);
-      });
-
-      // hover-box에 마우스 올림
       hoverBox.addEventListener("mouseenter", () => {
-        isOverHoverBox = true;
-        updateHoverBoxVisibility();
-      });
-      hoverBox.addEventListener("mouseleave", () => {
-        isOverHoverBox = false;
-        // 딜레이로 깜빡임 방지
-        setTimeout(updateHoverBoxVisibility, 100);
+        clearTimeout(hoverTimeout);
+        hoverBox.style.display = "block";
       });
 
-      // hover-box 내용 세팅 (예시 텍스트)
-      hoverBox.innerHTML = `
-        <h3>자세히보기 내용</h3>
-        <p>여기에 자세한 설명이 들어갑니다.<br>마우스를 '자세히보기' 버튼이나 이 박스 위에 올려두면 이 박스가 유지됩니다.</p>
-      `;
-    })();
+      hoverBox.addEventListener("mouseleave", () => {
+        hoverBox.style.display = "none";
+      });
+    }
+
+    function renderList(lang) {
+      bacteriaList.innerHTML = items[lang].map((text, i) => `<li data-id="${i+1}">${text}</li>`).join("");
+      attachHoverListeners();
+
+      if (lang === "ko") {
+        headerTitle.textContent = "질병 리스트";
+        sidebarTitle.textContent = "사이드바 영역";
+        listTitle.textContent = "오른쪽 영역 리스트";
+        footerText.textContent = "푸터 영역";
+      } else {
+        headerTitle.textContent = "Disease List";
+        sidebarTitle.textContent = "Sidebar Area";
+        listTitle.textContent = "Right Area List";
+        footerText.textContent = "Footer Area";
+      }
+    }
+
+    renderList(currentLang);
+
+    langSelect.addEventListener("change", e => {
+      currentLang = e.target.value;
+      renderList(currentLang);
+      hoverBox.style.display = "none";
+    });
   </script>
 </body>
 </html>
