@@ -64,7 +64,7 @@
   <div class="intro-container">
     <h1 id="main-title">🌍 융합수업 프로젝트</h1>
     <p id="main-subtitle">환경과 전염병의 연결고리를 탐구하다</p>
-    <div class="creator-list">
+    <div class="creator-list" id="creator-list">
       <span>채우혁</span>
       <span>채인혁</span>
       <span>최진서</span>
@@ -76,27 +76,40 @@
     const textData = {
       ko: {
         title: "🌍 융합수업 프로젝트",
-        subtitle: "환경과 전염병의 연결고리를 탐구하다"
+        subtitle: "환경과 전염병의 연결고리를 탐구하다",
+        creators: ["채우혁", "채인혁", "최진서", "송형록"]
       },
       en: {
         title: "🌍 Convergence Class Project",
-        subtitle: "Exploring the Link Between Environment and Infectious Diseases"
+        subtitle: "Exploring the Link Between Environment and Infectious Diseases",
+        creators: ["WooHyuk Chae", "InHyuk Chae", "JinSeo Choi", "HyungRok Song"]
       }
     };
 
     const url = new URL(location.href);
     const lang = url.searchParams.get('lang') || 'ko';
 
-    // 텍스트 바꾸기
-    document.getElementById('main-title').textContent = textData[lang].title;
-    document.getElementById('main-subtitle').textContent = textData[lang].subtitle;
+    const data = textData[lang];
 
-    // 3초 뒤 aaa.html로 이동 (lang 포함)
+    // 텍스트 바꾸기
+    document.getElementById('main-title').textContent = data.title;
+    document.getElementById('main-subtitle').textContent = data.subtitle;
+
+    // 이름도 다국어로 바꾸기
+    const creatorList = document.getElementById('creator-list');
+    creatorList.innerHTML = ''; // 기존 이름 지우고
+    data.creators.forEach(name => {
+      const span = document.createElement('span');
+      span.textContent = name;
+      creatorList.appendChild(span);
+    });
+
+    // 4초 후 aaa.html로 이동 (언어 유지)
     setTimeout(() => {
       const next = new URL('aaa.html', location.origin);
       next.searchParams.set('lang', lang);
       window.location.href = next.toString();
-    }, 3000);
+    }, 4000);
   </script>
 </body>
 </html>
