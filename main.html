@@ -87,11 +87,11 @@
     document.getElementById('desc').textContent = text[lang].desc;
 
     const creators = document.getElementById('creators');
-    creators.innerHTML = text[lang].names.map(name => <span>${name}</span>).join('');
+    creators.innerHTML = text[lang].names.map(name => `<span>${name}</span>`).join('');
 
     // 4초 후 aaa.html 이동
     setTimeout(() => {
-      window.location.href = aaa.html?lang=${lang};
+      window.location.href = `aaa.html?lang=${lang}`;
     }, 4000);
   </script>
 </body>
