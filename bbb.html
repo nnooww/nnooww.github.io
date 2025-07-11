@@ -2,214 +2,258 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>융합수업 프로젝트 상세 페이지</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>융합수업 프로젝트</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-
     body {
-      margin: 0; padding: 0;
+      margin: 0;
       font-family: 'Noto Sans KR', sans-serif;
       background: linear-gradient(135deg, #e0f7fa, #ffffff);
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 20px;
-      color: #222;
+      overflow: hidden;
     }
-
-    header {
-      width: 100%;
-      max-width: 700px;
-      margin-bottom: 25px;
+    .loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(225,225,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #333;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+    }
+    .loading > div {
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid #333;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .left-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    .intro-container {
       text-align: center;
     }
-
-    header h1 {
-      font-size: 2.8rem;
+    .intro-container h1 {
+      font-size: 3rem;
       color: #007acc;
-      margin: 0;
-      font-weight: 900;
-      text-shadow: 1px 1px 4px rgba(0, 122, 204, 0.3);
+      margin-bottom: 20px;
     }
-
-    main {
-      background: #fff;
-      max-width: 700px;
-      width: 100%;
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,122,204,0.15);
-      line-height: 1.6;
-      font-size: 1.1rem;
-      color: #444;
-      animation: fadeInUp 0.8s ease forwards;
+    .intro-container p {
+      font-size: 1.5rem;
+      color: #333;
+      margin-top: 10px;
     }
-
-    main p {
-      margin: 0 0 1.1em;
+    .creator-list {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #555;
     }
-
-    nav {
-      margin-top: 30px;
-      width: 100%;
-      max-width: 700px;
+    .creator-list span {
+      display: inline-block;
+      margin: 5px 10px;
+      padding: 8px 14px;
+      background: #e3f2fd;
+      border-radius: 20px;
+    }
+    .right-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 20px;
+      background: #ffffff;
+      border-left: 3px solid #cce5f6;
+    }
+    .header {
       display: flex;
       justify-content: space-between;
-      gap: 15px;
+      align-items: center;
+      margin-bottom: 20px;
     }
-
-    nav a {
-      flex: 1;
-      padding: 14px 25px;
-      text-align: center;
-      background: #007acc;
-      color: white;
+    .header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #114a77;
+    }
+    select {
+      font-size: 1rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .card {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-left: 6px solid #4a90e2;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transition: background 0.2s;
+    }
+    .card:hover {
+      background: #e9f5ff;
+    }
+    .card a {
       text-decoration: none;
-      font-weight: 700;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-      user-select: none;
-      box-shadow: 0 4px 10px rgba(0,122,204,0.3);
+      color: #333;
+      font-size: 1.1rem;
     }
-
-    nav a:hover, nav a:focus {
-      background-color: #005f99;
-      outline: none;
-      box-shadow: 0 6px 16px rgba(0,95,153,0.6);
-    }
-
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    /* 반응형 */
-    @media (max-width: 720px) {
-      main {
-        padding: 25px 15px;
-        font-size: 1rem;
-      }
-      nav {
-        flex-direction: column;
-      }
-      nav a {
-        margin-bottom: 12px;
-      }
-      nav a:last-child {
-        margin-bottom: 0;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1 id="page-title">로딩중...</h1>
-  </header>
+  <div class="left-panel">
+    <div class="intro-container">
+      <!-- 제목, 부제, 팀원 표시 -->
+    </div>
+  </div>
 
-  <main id="content" tabindex="0" aria-live="polite" aria-atomic="true">
-    <p>내용을 불러오는 중입니다...</p>
-  </main>
+  <div class="right-panel">
+    <div class="header">
+      <h2 id="list-title">콘텐츠 목록</h2>
+      <select id="lang-select">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <div id="list-area"></div>
+  </div>
 
-  <nav aria-label="페이지 이동">
-    <a href="#" id="prev-btn" aria-disabled="true">이전</a>
-    <a href="#" id="list-btn">목록으로</a>
-    <a href="#" id="next-btn" aria-disabled="false">다음</a>
-  </nav>
+  <div class="loading">
+    로딩중...
+    <div></div>
+  </div>
 
   <script>
     const data = {
       ko: {
         titles: {
-          "1": "왜 생태 변화가 전염병과 관련이 있을까?",
-          "2": "조선 시대의 생태",
-          "3": "조선 시대의 전염병",
-          "4": "현대 시대의 생태",
-          "5": "현대 생태 변화가 만든 전염병",
-          "6": "생태 변화와 바이러스의 진화",
-          "7": "전염병과 생태 변화 퀴즈"
+          mainTitle: "🌍 융합수업 프로젝트",
+          subtitle: "환경과 전염병의 연결고리를 탐구하다",
+          creators: ["채우혁", "채인혁", "최진서", "송형록"]
         },
         contents: {
-          "1": "<p>생태계 변화는 바이러스와 같은 전염병의 출현에 큰 영향을 미칩니다...</p>",
-          "2": "<p>조선 시대의 생태계는 자연과 인간이 밀접하게 상호작용했습니다...</p>",
-          "3": "<p>조선 시대에는 여러 전염병이 유행했으며...</p>",
-          "4": "<p>현대의 생태 변화는 급속한 산업화와 도시화로 인해...</p>",
-          "5": "<p>현대 생태계 변화는 신종 전염병의 출현과 밀접한 관련이 있습니다...</p>",
-          "6": "<p>바이러스는 생태 변화에 따라 빠르게 진화하며...</p>",
-          "7": "<p>퀴즈: 전염병과 생태 변화에 대해 배운 내용을 확인해 보세요!</p>"
+          "1": { title: "왜 생태 변화가 전염병과 관련이 있을까?" },
+          "2": { title: "조선 시대의 생태" },
+          "3": { title: "조선 시대의 전염병" },
+          "4": { title: "현대 시대의 생태" },
+          "5": { title: "현대 생태 변화가 만든 전염병" },
+          "6": { title: "생태 변화와 바이러스의 진화" },
+          "7": { title: "전염병과 생태 변화 퀴즈" }
         }
       },
       en: {
         titles: {
-          "1": "Why Is Ecological Change Related to Infectious Diseases?",
-          "2": "Ecology of the Joseon Dynasty",
-          "3": "Infectious Diseases in Joseon Era",
-          "4": "Modern Ecology",
-          "5": "Infectious Diseases Created by Modern Ecological Changes",
-          "6": "Virus Evolution and Ecological Changes",
-          "7": "Epidemics and Ecological Change Quiz"
+          mainTitle: "🌍 Convergence Class Project",
+          subtitle: "Exploring the Link Between Environment and Infectious Diseases",
+          creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
         },
         contents: {
-          "1": "<p>Ecological changes significantly impact the emergence of viruses and infectious diseases...</p>",
-          "2": "<p>The ecology of the Joseon Dynasty involved close interaction between nature and humans...</p>",
-          "3": "<p>Several infectious diseases were prevalent during the Joseon era...</p>",
-          "4": "<p>Modern ecological changes are driven by rapid industrialization and urbanization...</p>",
-          "5": "<p>Modern ecological changes are closely related to the emergence of new infectious diseases...</p>",
-          "6": "<p>Viruses rapidly evolve in response to ecological changes...</p>",
-          "7": "<p>Quiz: Test your knowledge about epidemics and ecological changes!</p>"
+          "1": { title: "Why Is Ecological Change Related to Infectious Diseases?" },
+          "2": { title: "Ecology of the Joseon Dynasty" },
+          "3": { title: "Infectious Diseases in Joseon Era" },
+          "4": { title: "Modern Ecology" },
+          "5": { title: "Infectious Diseases Created by Modern Ecological Changes" },
+          "6": { title: "Virus Evolution and Ecological Changes" },
+          "7": { title: "Epidemics and Ecological Change Quiz" }
         }
       }
     };
 
-    const urlParams = new URL(location.href).searchParams;
-    let lang = urlParams.get('lang') || 'ko';
-    let page = urlParams.get('page') || '1';
+    const langSelect = document.getElementById('lang-select');
+    const listArea = document.getElementById('list-area');
+    const listTitle = document.getElementById('list-title');
+    const introContainer = document.querySelector('.intro-container');
+    const loading = document.querySelector('.loading');
 
-    const pageTitle = document.getElementById('page-title');
-    const contentArea = document.getElementById('content');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const listBtn = document.getElementById('list-btn');
+    // URL lang 파라미터 읽기, 없으면 'ko' 기본
+    let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
+    langSelect.value = currentLang;
 
-    const maxPage = 7;
-
-    function updateContent() {
-      if (!data[lang] || !data[lang].titles[page]) {
-        pageTitle.textContent = lang === 'ko' ? "페이지를 찾을 수 없습니다." : "Page not found.";
-        contentArea.innerHTML = "<p>" + (lang === 'ko' ? "유효하지 않은 페이지입니다." : "Invalid page.") + "</p>";
-        prevBtn.setAttribute('aria-disabled', 'true');
-        nextBtn.setAttribute('aria-disabled', 'true');
-        return;
+    function updateLoadingText(lang) {
+      if (lang === 'ko') {
+        loading.firstChild.textContent = '로딩중...';
+      } else if (lang === 'en') {
+        loading.firstChild.textContent = 'Loading...';
       }
-
-      pageTitle.textContent = data[lang].titles[page];
-      contentArea.innerHTML = data[lang].contents[page];
-      contentArea.focus();
-
-      // 이전 버튼
-      if (parseInt(page) <= 1) {
-        prevBtn.setAttribute('aria-disabled', 'true');
-        prevBtn.href = "#";
-      } else {
-        prevBtn.removeAttribute('aria-disabled');
-        prevBtn.href = `bbb.html?lang=${lang}&page=${parseInt(page)-1}`;
-      }
-
-      // 다음 버튼
-      if (parseInt(page) >= maxPage) {
-        nextBtn.setAttribute('aria-disabled', 'true');
-        nextBtn.href = "#";
-      } else {
-        nextBtn.removeAttribute('aria-disabled');
-        nextBtn.href = `bbb.html?lang=${lang}&page=${parseInt(page)+1}`;
-      }
-
-      // 목록 버튼
-      listBtn.href = `aaa.html?lang=${lang}`;
     }
 
-    updateContent();
+    function renderTitles(lang) {
+      const titles = data[lang].titles;
+      introContainer.innerHTML = 
+        <h1>${titles.mainTitle}</h1>
+        <p>${titles.subtitle}</p>
+        <div class="creator-list">
+          ${titles.creators.map(name => <span>${name}</span>).join('')}
+        </div>
+      ;
+    }
+
+    function renderList(lang) {
+      const langData = data[lang].contents;
+      listArea.innerHTML = "";
+      for (const id in langData) {
+        if (langData.hasOwnProperty(id)) {
+          const item = langData[id];
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = <a href="bbb.html?id=${id}&lang=${lang}">${item.title}</a>;
+          listArea.appendChild(card);
+        }
+      }
+      listTitle.textContent = lang === 'ko' ? '콘텐츠 목록' : 'Contents List';
+    }
+
+    function addLinkListeners() {
+      listArea.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          loading.style.visibility = 'visible';
+          loading.style.opacity = '1';
+
+          setTimeout(() => {
+            window.location.href = a.href;
+          }, 1000);
+        });
+      });
+    }
+
+    langSelect.addEventListener('change', e => {
+      currentLang = e.target.value;
+      const url = new URL(location.href);
+      url.searchParams.set('lang', currentLang);
+      history.replaceState(null, '', url.toString());
+
+      renderTitles(currentLang);
+      renderList(currentLang);
+      updateLoadingText(currentLang);
+      addLinkListeners();
+    });
+
+    // 초기 렌더링
+    renderTitles(currentLang);
+    renderList(currentLang);
+    updateLoadingText(currentLang);
+    addLinkListeners();
+
   </script>
 </body>
 </html>
