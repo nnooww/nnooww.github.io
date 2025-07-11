@@ -13,6 +13,7 @@
       display: flex;
       overflow: hidden;
     }
+
     .loading {
       position: fixed;
       top: 0; left: 0;
@@ -28,6 +29,7 @@
       visibility: hidden;
       transition: opacity 0.5s ease;
     }
+
     .loading > div {
       width: 50px; height: 50px;
       border: 6px solid #ccc;
@@ -36,10 +38,12 @@
       animation: spin 1s linear infinite;
       margin-left: 20px;
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
     .left-panel {
       flex: 1;
       display: flex;
@@ -47,24 +51,29 @@
       justify-content: center;
       animation: fadeIn 1.5s ease-in-out;
     }
+
     .intro-container {
       text-align: center;
     }
+
     .intro-container h1 {
       font-size: 3rem;
       color: #007acc;
       margin-bottom: 20px;
     }
+
     .intro-container p {
       font-size: 1.5rem;
       color: #333;
       margin-top: 10px;
     }
+
     .creator-list {
       margin-top: 20px;
       font-size: 1.2rem;
       color: #555;
     }
+
     .creator-list span {
       display: inline-block;
       margin: 5px 10px;
@@ -72,6 +81,7 @@
       background: #e3f2fd;
       border-radius: 20px;
     }
+
     .right-panel {
       flex: 1;
       overflow-y: auto;
@@ -79,23 +89,27 @@
       background: #ffffff;
       border-left: 3px solid #cce5f6;
     }
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
+
     .header h2 {
       margin: 0;
       font-size: 1.8rem;
       color: #114a77;
     }
+
     select {
       font-size: 1rem;
       padding: 5px 10px;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
+
     .card {
       background: #f8f9fa;
       padding: 15px 20px;
@@ -105,14 +119,17 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
       transition: background 0.2s;
     }
+
     .card:hover {
       background: #e9f5ff;
     }
+
     .card a {
       text-decoration: none;
       color: #333;
       font-size: 1.1rem;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -121,8 +138,8 @@
 </head>
 <body>
   <div class="left-panel">
-    <div class="intro-container">
-      <!-- 제목, 부제, 팀원 표시 -->
+    <div class="intro-container" id="intro">
+      <!-- 타이틀/설명/이름 목록 들어감 -->
     </div>
   </div>
 
@@ -138,92 +155,81 @@
   </div>
 
   <div class="loading">
-    로딩중...
+    <span class="loading-text">로딩중...</span>
     <div></div>
   </div>
 
   <script>
     const data = {
       ko: {
-        titles: {
-          mainTitle: "🌍 융합수업 프로젝트",
-          subtitle: "환경과 전염병의 연결고리를 탐구하다",
-          creators: ["채우혁", "채인혁", "최진서", "송형록"]
-        },
+        title: "🌍 융합수업 프로젝트",
+        subtitle: "환경과 전염병의 연결고리를 탐구하다",
+        creators: ["채우혁", "채인혁", "최진서", "송형록"],
+        listTitle: "콘텐츠 목록",
+        loadingText: "로딩중...",
         contents: {
-          "1": { title: "왜 생태 변화가 전염병과 관련이 있을까?" },
-          "2": { title: "조선 시대의 생태" },
-          "3": { title: "조선 시대의 전염병" },
-          "4": { title: "현대 시대의 생태" },
-          "5": { title: "현대 생태 변화가 만든 전염병" },
-          "6": { title: "생태 변화와 바이러스의 진화" },
-          "7": { title: "전염병과 생태 변화 퀴즈" }
+          "1": "왜 생태 변화가 전염병과 관련이 있을까?",
+          "2": "조선 시대의 생태",
+          "3": "조선 시대의 전염병",
+          "4": "현대 시대의 생태",
+          "5": "현대 생태 변화가 만든 전염병",
+          "6": "생태 변화와 바이러스의 진화",
+          "7": "전염병과 생태 변화 퀴즈"
         }
       },
       en: {
-        titles: {
-          mainTitle: "🌍 Convergence Class Project",
-          subtitle: "Exploring the Link Between Environment and Infectious Diseases",
-          creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"]
-        },
+        title: "🌍 Convergence Class Project",
+        subtitle: "Exploring the Link Between Environment and Infectious Diseases",
+        creators: ["Chae Woo-Hyuk", "Chae In-Hyuk", "Choi Jin-Seo", "Song Hyung-Rok"],
+        listTitle: "Contents List",
+        loadingText: "Loading...",
         contents: {
-          "1": { title: "Why Is Ecological Change Related to Infectious Diseases?" },
-          "2": { title: "Ecology of the Joseon Dynasty" },
-          "3": { title: "Infectious Diseases in Joseon Era" },
-          "4": { title: "Modern Ecology" },
-          "5": { title: "Infectious Diseases Created by Modern Ecological Changes" },
-          "6": { title: "Virus Evolution and Ecological Changes" },
-          "7": { title: "Epidemics and Ecological Change Quiz" }
+          "1": "Why Is Ecological Change Related to Infectious Diseases?",
+          "2": "Ecology of the Joseon Dynasty",
+          "3": "Infectious Diseases in Joseon Era",
+          "4": "Modern Ecology",
+          "5": "Infectious Diseases Created by Modern Ecological Changes",
+          "6": "Virus Evolution and Ecological Changes",
+          "7": "Epidemics and Ecological Change Quiz"
         }
       }
     };
 
     const langSelect = document.getElementById('lang-select');
+    const intro = document.getElementById('intro');
     const listArea = document.getElementById('list-area');
     const listTitle = document.getElementById('list-title');
-    const introContainer = document.querySelector('.intro-container');
     const loading = document.querySelector('.loading');
+    const loadingText = document.querySelector('.loading-text');
 
-    // URL lang 파라미터 읽기, 없으면 'ko' 기본
     let currentLang = new URL(location.href).searchParams.get('lang') || 'ko';
     langSelect.value = currentLang;
 
-    function updateLoadingText(lang) {
-      if (lang === 'ko') {
-        loading.firstChild.textContent = '로딩중...';
-      } else if (lang === 'en') {
-        loading.firstChild.textContent = 'Loading...';
-      }
-    }
+    function renderPage(lang) {
+      const d = data[lang];
 
-    function renderTitles(lang) {
-      const titles = data[lang].titles;
-      introContainer.innerHTML = 
-        <h1>${titles.mainTitle}</h1>
-        <p>${titles.subtitle}</p>
+      intro.innerHTML = `
+        <h1>${d.title}</h1>
+        <p>${d.subtitle}</p>
         <div class="creator-list">
-          ${titles.creators.map(name => <span>${name}</span>).join('')}
+          ${d.creators.map(name => `<span>${name}</span>`).join('')}
         </div>
-      ;
-    }
+      `;
 
-    function renderList(lang) {
-      const langData = data[lang].contents;
-      listArea.innerHTML = "";
-      for (const id in langData) {
-        if (langData.hasOwnProperty(id)) {
-          const item = langData[id];
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = <a href="bbb.html?id=${id}&lang=${lang}">${item.title}</a>;
-          listArea.appendChild(card);
-        }
+      listTitle.textContent = d.listTitle;
+      loadingText.textContent = d.loadingText;
+
+      listArea.innerHTML = '';
+      for (const id in d.contents) {
+        const title = d.contents[id];
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<a href="bbb.html?id=${id}&lang=${lang}">${title}</a>`;
+        listArea.appendChild(card);
       }
-      listTitle.textContent = lang === 'ko' ? '콘텐츠 목록' : 'Contents List';
-    }
 
-    function addLinkListeners() {
-      listArea.querySelectorAll('a').forEach(a => {
+      // 링크 클릭 시 로딩 후 이동
+      document.querySelectorAll('.card a').forEach(a => {
         a.addEventListener('click', e => {
           e.preventDefault();
           loading.style.visibility = 'visible';
@@ -241,19 +247,10 @@
       const url = new URL(location.href);
       url.searchParams.set('lang', currentLang);
       history.replaceState(null, '', url.toString());
-
-      renderTitles(currentLang);
-      renderList(currentLang);
-      updateLoadingText(currentLang);
-      addLinkListeners();
+      renderPage(currentLang);
     });
 
-    // 초기 렌더링
-    renderTitles(currentLang);
-    renderList(currentLang);
-    updateLoadingText(currentLang);
-    addLinkListeners();
-
+    renderPage(currentLang);
   </script>
 </body>
 </html>
