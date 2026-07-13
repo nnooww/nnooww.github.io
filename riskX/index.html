@@ -1,885 +1,200 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ELS 분석 과제</title>
-  <link rel="stylesheet" href="./style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수학던전 RPG</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- 네비게이션 -->
-  <nav class="site-nav" role="navigation" aria-label="섹션 이동">
-    <div class="nav-inner">
-      <span class="nav-brand">📊 ELS 리스크 체크랩</span>
-      <ul class="nav-links">
-        <li><a href="#section-intro">기본 개념</a></li>
-        <li><a href="#section-onepage">한 장 이해</a></li>
-        <li><a href="#section-compare">예금 비교</a></li>
-        <li><a href="#section-cards">수익/손실</a></li>
-        <li><a href="#section-risk">리스크 분석</a></li>
-        <li><a href="#section-case">실제 사례</a></li>
-        <li><a href="#section-simulator">시뮬레이터</a></li>
-        <li><a href="#section-mission">AI 검증 미션</a></li>
-        <li><a href="#section-quiz">이해도 퀴즈</a></li>
-        <li><a href="#section-sources">출처</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ===== 1. 메인 화면 ===== -->
-  <header class="hero" id="hero">
-    <div class="hero-inner">
-      <div class="hero-icon" aria-hidden="true">📊</div>
-      <p class="hero-lab-label">금융상품 이해 · 위험성 설명 · 전달력</p>
-      <h1 class="hero-title">ELS 리스크 체크랩</h1>
-      <p class="hero-subtitle">높은 수익률은 정말 안전할까?</p>
-      <p class="hero-desc">
-        ELS에 대해 알아보자
-      </p>
-      <a class="btn btn-start" href="#section-intro">지금 시작하기 →</a>
-    </div>
-  </header>
-
-  <main>
-
-    <!-- ===== 2. 기본 개념 ===== -->
-    <section class="section" id="section-intro">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">기본 개념</span>
-          <h2>ELS란 무엇인가요?</h2>
-        </div>
-        <div class="concept-card">
-          <div class="concept-label">📋 ELS 설명</div>
-          <p class="concept-main">
-            ELS는 영어로 <strong>Equity Linked Securities</strong>의 약자로, 우리말로는 <strong>주가연계증권</strong>이라고 합니다.
-            특정 주식의 가격이나 주가지수 같은 기초자산에 연동되는 금융상품으로, 만기까지 미리 정해진 조건을 충족하면 약속된 수익을 받을 수 있는 상품으로,
-            2019년에는 ELS 발행액이 약 100조 원에 이를 만큼 시장에서 많이 활용된 상품이기도 합니다.
-            하지만 ELS는 <strong>예금처럼 원금과 이자가 보장되는 상품이 아니기 때문에</strong>, 수익률만 보기보다 <strong>기초자산, 조기상환 조건, 낙인 조건, 만기 손실 조건</strong>을 함께 확인해야 합니다.
-          </p>
-        </div>
-
-        <div class="glossary-box">
-          <div class="glossary-label">📖 ELS를 이해하기 위한 기본 용어</div>
-          <div class="glossary-grid">
-            <div class="glossary-item">
-              <span class="glossary-term">기초자산</span>
-              <span class="glossary-def">기초자산은 내가 넣은 돈이 아니라, ELS가 수익이나 손실을 정할 때 기준으로 보는 대상입니다. 예를 들어 코스피200과 연결된 ELS라면, 코스피200이 기초자산이 됩니다. 그래서 내가 2000만 원을 넣었다면, 그 돈 자체가 기초자산이 되는 것이 아니라 코스피200이 정해진 기준보다 떨어졌는지에 따라 수익이나 손실이 달라집니다.</span>
-            </div>
-            <div class="glossary-item">
-              <span class="glossary-term">조기상환</span>
-              <span class="glossary-def">조기상환은 원래 대출이나 채권에서 만기 전에 돈을 미리 갚는다는 뜻으로 쓰입니다. 하지만 ELS에서는 투자자가 직접 갚는다는 의미가 아니라, 정해진 평가일에 조건을 만족하면 만기 전에 자동으로 계약이 끝나고 원금과 수익을 돌려받는 것을 말합니다.</span>
-            </div>
-            <div class="glossary-item">
-              <span class="glossary-term">낙인(Knock-In)</span>
-              <span class="glossary-def">낙인은 기초자산 가격이 정해진 손실 기준선 아래로 내려갔는지를 보는 조건입니다. 말 그대로 원금 손실 구간에 들어갔는지 확인하는 기준이라고 보면 됩니다. 다만 낙인이 발생했다고 해서 바로 손실이 확정되는 것은 아니고, 만기 때 가격이 어느 정도 회복했는지에 따라 최종 결과가 달라집니다.</span>
-            </div>
-            <div class="glossary-item">
-              <span class="glossary-term">만기</span>
-              <span class="glossary-def">만기는 ELS 계약이 끝나는 시점입니다. 중간에 조기상환이 되지 않았다면, 만기 평가일에 기초자산 가격을 확인해서 최종적으로 수익을 받을지, 손실이 날지가 결정됩니다.</span>
-            </div>
-            <div class="glossary-item">
-              <span class="glossary-term">배리어(Barrier)</span>
-              <span class="glossary-def">배리어는 ELS에서 기준선 역할을 하는 가격입니다. 예를 들어 조기상환 배리어가 95%라면, 평가일에 기초자산 가격이 처음 가격의 95% 이상인지 확인하는 식입니다. 배리어는 조기상환을 판단할 때도 쓰이고, 낙인이나 만기 손실을 판단할 때도 쓰입니다.</span>
-            </div>
-            <div class="glossary-item">
-              <span class="glossary-term">쿠폰(수익률)</span>
-              <span class="glossary-def">쿠폰은 조건을 만족했을 때 받을 수 있는 약속된 수익률입니다. ELS 설명에서 연 몇 % 수익률이라고 나오는 부분이 보통 쿠폰에 해당합니다. 하지만 예금 이자처럼 무조건 받는 돈은 아니고, 기초자산이 정해진 조건을 만족해야 받을 수 있습니다.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="analogy-box">
-          <div class="analogy-label">🎓 쉽게 비유하자면</div>
-          <p>
-            ELS는 게임에서 진행되는 <strong>조건부 보상 이벤트</strong>와 비슷하게 생각할 수 있습니다.
-          </p>
-          <p>
-            예를 들어 참가비로 2000만 코인을 내고,
-            3년짜리 게임 이벤트에 참여했다고 가정해 봅시다.
-            처음 점수는 10000점이고, 게임에서는 6개월마다 점수가
-            9000점 이상으로 유지되고 있는지 확인합니다.
-          </p>
-          <p>
-            확인하는 날에 점수가 9000점 이상이면,
-            3년을 끝까지 기다리지 않아도 이벤트가 바로 종료되고
-            2000만 코인과 약속된 보상 80만 코인을 함께 돌려받습니다.
-          </p>
-          <p>
-            하지만 6개월마다 확인했을 때 점수가 9000점보다 낮으면
-            바로 보상을 받지 못하고 다음 확인일까지 기다려야 합니다.
-            그리고 마지막까지도 조건을 만족하지 못하면,
-            기대했던 보상을 받지 못하거나 상황에 따라 참가비 일부를 잃을 수도 있습니다.
-          </p>
-          <p>
-            여기서 2000만 코인은 내가 넣은 원금이고,
-            게임 점수는 ELS가 기준으로 보는 기초자산과 비슷합니다.
-            중요한 점은 ELS가 예금처럼 돈을 넣어두면 무조건 이자가 붙는 상품이 아니라,
-            정해진 조건을 만족해야 수익을 받을 수 있는 상품이라는 것입니다.
-          </p>
-          <p class="analogy-caution">
-            ※ 이 비유는 이해를 돕기 위한 단순화된 예시이며, 실제 ELS 조건은 상품마다 다를 수 있습니다.
-          </p>
-        </div>
+  <div id="dungeonTransition" class="dungeon-transition hidden"></div>
+  <main id="app">
+    <section id="homeScreen" class="screen home-screen">
+      <div class="home-content">
+        <p class="eyebrow">Math Dungeon RPG</p>
+        <h1>수학던전 RPG</h1>
+        <p class="home-text">수학 문제를 풀어 던전 몬스터를 쓰러뜨리세요.</p>
+        <button id="startButton" class="primary-button" type="button">시작하기</button>
       </div>
     </section>
 
+    <section id="mainScreen" class="screen main-screen hidden">
+      <div class="main-panel">
+        <header class="main-header">
+          <div>
+            <p class="eyebrow">Dungeon Camp</p>
+            <h2 id="mainTitle">던전 입구</h2>
+            <p id="mainDescription">상점, 도감, 장비를 확인하고 전투에 입장하세요.</p>
+          </div>
+          <div class="main-resource-bar">
+            <span>♥ <b id="mainHpText">100</b></span>
+            <span>⚔ <b id="mainAtkText">10</b></span>
+            <span>🪙 <b id="mainCoinText">0</b></span>
+          </div>
+          <button id="mainHomeButton" type="button">처음 화면</button>
+        </header>
 
-    <!-- ===== 3. ELS를 한 장으로 이해하기 ===== -->
-    <section class="section section-alt" id="section-onepage">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">한 장 이해</span>
-          <h2>ELS를 한 장으로 이해하기</h2>
-          <p class="section-desc">
-            ELS는 수익률만 보고 고르는 상품이 아니라, 어떤 조건에서 수익이 나고 어떤 조건에서 손실이 나는지 먼저 봐야 하는 상품입니다.
-          </p>
+        <div id="mainHubView" class="main-view">
+          <section class="camp-layout">
+            <aside class="hero-card">
+              <img src="assets/sprites/player-idle-transparent.png" alt="플레이어">
+              <strong>플레이어</strong>
+              <p>기사</p>
+            </aside>
+
+            <section class="stage-card">
+              <p class="stage-label">스테이지 선택</p>
+              <strong id="stageActionTitle">챕터 선택</strong>
+              <p id="stageActionText">클리어한 스테이지는 다시 입장할 수 있고, 다음 스테이지만 해금됩니다.</p>
+              <button id="nextStageButton" class="primary-button" type="button">다음 스테이지 입장</button>
+              <div id="chapterMap" class="chapter-map"></div>
+              <button id="returnHubButton" type="button">메인화면으로 가기</button>
+            </section>
+
+            <nav class="main-menu">
+              <button id="shopButton" type="button" class="menu-tile shop-tile">
+                <span class="menu-icon">🛒</span>
+                <span>상점</span>
+                <small>준비중</small>
+              </button>
+              <button id="codexButton" type="button" class="menu-tile codex-tile">
+                <span class="menu-icon">📖</span>
+                <span>도감</span>
+                <small>수집 정보</small>
+              </button>
+              <button id="equipmentButton" type="button" class="menu-tile equipment-tile">
+                <span class="menu-icon">🛡</span>
+                <span>장비</span>
+                <small>장착 관리</small>
+              </button>
+            </nav>
+          </section>
         </div>
 
-        <div class="onepage-summary-card">
-          <div class="onepage-flow" aria-label="ELS 이해 흐름">
-            <div class="onepage-step">
-              <span class="flow-num">01</span>
-              <h3><strong>먼저 기준이 되는 대상을 정한다.</strong></h3>
-              <p>ELS는 내가 넣은 돈만 보고 결과가 정해지는 상품이 아닙니다. 예를 들어 게임 이벤트에 참가비로 2000만 코인을 넣었다고 해서, 그 2000만 코인 자체가 기준이 되는 것은 아닙니다.</p>
+        <div id="shopView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <h3>상점</h3>
+          <p>상점은 아직 열리지 않았습니다.</p>
+          <button type="button" class="locked-button">구매 기능 준비중</button>
+        </div>
+
+        <div id="codexView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <h3>도감</h3>
+          <div class="codex-window">
+            <div id="codexGrid" class="codex-grid"></div>
+            <aside id="codexDetail" class="codex-detail">몬스터를 클릭하면 상세 정보가 표시됩니다.</aside>
+          </div>
+        </div>
+
+        <div id="equipmentView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <div class="equipment-window">
+            <div class="equipment-title">장비</div>
+            <div class="equipment-left">
+              <div id="hpSlotA" class="slot head-slot"><span>머리</span><small>HP</small></div>
+              <div id="atkSlotA" class="slot left-slot"><span>왼팔</span><small>AT</small></div>
+              <img src="assets/sprites/player-idle-transparent.png" alt="플레이어" class="equipment-character">
+              <div id="atkSlotB" class="slot right-slot"><span>오른팔</span><small>AT</small></div>
+              <div id="hpSlotB" class="slot body-slot"><span>몸</span><small>HP</small></div>
             </div>
-            <div class="onepage-step">
-              <span class="flow-num">02</span>
-              <h3><strong>그럼 기준이 되는 대상은 무엇일까?</strong></h3>
-              <p>게임 이벤트로 보면 처음 시작 점수인 10000점이 기준이 됩니다. ELS에서는 이렇게 수익이나 손실을 판단할 때 기준이 되는 대상을 기초자산이라고 합니다.</p>
-            </div>
-            <div class="onepage-step">
-              <span class="flow-num">03</span>
-              <h3><strong>평가일마다 조건을 확인한다.</strong></h3>
-              <p>이벤트가 매일 끝나는 것이 아니라, 6개월마다 점수가 기준인 10000점의 90%인 9000점 이상으로 유지되고 있는지 확인한다고 생각하면 됩니다. ELS도 정해진 평가일마다 기초자산 가격이 조기상환 기준을 충족하는지 확인합니다.</p>
-            </div>
-            <div class="onepage-step">
-              <span class="flow-num">04</span>
-              <h3><strong>조건을 만족하면 조기상환된다.</strong></h3>
-              <p>원래 이벤트가 3년짜리라고 해서 무조건 3년 동안 기다려야 하는 것은 아닙니다. 6개월 뒤 확인했을 때 점수가 9000점 이상이면, 3년을 끝까지 기다리지 않아도 2000만 코인과 약속된 보상 80만 코인을 함께 돌려받을 수 있습니다. ELS에서 이렇게 만기 전에 조건을 만족해 원금과 수익을 돌려받는 것을 조기상환이라고 합니다.</p>
-            </div>
-            <div class="onepage-step">
-              <span class="flow-num">05</span>
-              <h3><strong>조건을 만족하지 못하면 다음 평가일로 넘어간다.</strong></h3>
-              <p>확인했을 때 점수가 9000점보다 낮으면 바로 원금과 보상을 돌려받을 수 없습니다. 이 경우 다음 6개월 뒤 평가일까지 기다려야 합니다.</p>
-            </div>
-            <div class="onepage-step warning-step">
-              <span class="flow-num">06</span>
-              <h3><strong>조건을 못 맞췄다고 바로 손실이 나는 것은 아니다.</strong></h3>
-              <p>만약 6개월 뒤에 9000점 이상을 유지하지 못했다고 해서 바로 참가비를 잃는 것은 아닙니다. 다음 평가일에 다시 조건을 확인할 수 있고, 이후에 점수가 올라가면 조기상환될 수도 있습니다. 다만 조심해야 할 점은, 마지막까지 기준을 회복하지 못하면 원금 손실이 발생할 수 있기 때문에 ELS는 수익 조건뿐만 아니라 손실 조건도 함께 봐야 합니다.</p>
+            <div class="equipment-right">
+              <h3>장비</h3>
+              <div id="inventoryGrid" class="inventory-grid">
+                <div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div>
+              </div>
+              <p id="equipmentHint">아직 장착한 장비가 없습니다.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== 4. 예금 비교 ===== -->
-    <section class="section section-alt" id="section-compare">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">예금 비교</span>
-          <h2>예금과 ELS, 무엇이 다른가요?</h2>
-        </div>
-        <div class="table-wrapper">
-          <table class="compare-table" role="table" aria-label="예금과 ELS 비교표">
-            <thead>
-              <tr>
-                <th scope="col">비교 항목</th>
-                <th scope="col">예금 / 적금</th>
-                <th scope="col">ELS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>상품 성격</td>
-                <td>은행에 돈을 맡기고 정해진 이자를 받는 저축상품입니다. 보호 한도 내에서는 원금 손실의 위험은 없지만, 연 2%처럼 금리가 낮으면 시간 대비 수익은 크지 않을 수 있습니다.</td>
-                <td>기초자산의 움직임에 따라 수익이나 손실이 달라지는 금융투자상품입니다. 예금보다 높은 수익을 기대할 수 있지만, 원금 손실의 위험도 있습니다.</td>
-              </tr>
-              <tr>
-                <td>원금 보장 여부</td>
-                <td>보호 대상 상품이면 원금과 이자가 일정 한도 안에서 보호됩니다. 그래서 큰 수익을 기대하기는 어렵지만, 원금 안정성은 높은 편입니다.</td>
-                <td>원금이 보장되지 않습니다. 기초자산 가격이 크게 떨어지거나 만기 조건을 만족하지 못하면 투자한 돈의 일부를 잃을 수 있습니다.</td>
-              </tr>
-              <tr>
-                <td>수익이 정해지는 방식</td>
-                <td>가입할 때 금리가 정해지기 때문에 정해진 날짜까지 유지하면 받을 약속된 이자를 받을 수 있습니다.</td>
-                <td>처음에 제시된 수익률이 있어도, 조기상환 조건이나 만기 조건을 만족해야 수익을 받을 수 있습니다.</td>
-              </tr>
-              <tr>
-                <td>예금자보호 여부</td>
-                <td>보호 대상 금융상품이면 금융회사별 1인당 원금과 이자를 합쳐 1억 원까지 보호됩니다.</td>
-                <td>예금자보호 대상 예금이 아닙니다. 손실이 나거나 발행사에 문제가 생겨도 보호받는 구조가 아닙니다.</td>
-              </tr>
-              <tr>
-                <td>위험도</td>
-                <td>매우 낮은 편입니다. 일부러 이자를 포기하는 상황이 아니라면 원금 손실의 위험이 없습니다.</td>
-                <td>예금에 비해 비교적 위험도가 높습니다. 기초자산, 낙인 조건, 만기 조건에 따라 위험도가 달라집니다.</td>
-              </tr>
-              <tr>
-                <td>돈이 묶이는 정도</td>
-                <td>원할 때 해지할 수 있지만, 중도해지 시 이자가 줄어들 수 있습니다.</td>
-                <td>조기상환 조건을 만족하지 못하면 다음 평가일이나 만기까지 돈이 묶일 수 있습니다. 중도상환을 신청해도 이자도 못받고 가격에 따라 수수료가 발생할 수 있습니다.</td>
-              </tr>
-              <tr>
-                <td>확인해야 할 조건</td>
-                <td>돈을 많이 벌고 싶다면 이자율과 만기일을 확인해야 합니다.</td>
-                <td>기초자산, 조기상환 기준, 만기상환 기준 등 많은 조건을 확인해야 합니다.</td>
-              </tr>
-              <tr>
-                <td>적합한 사람</td>
-                <td>큰 수익보다 원금 안정성과 이자를 중요하게 생각하는 사람에게 적합합니다.</td>
-                <td>원금 손실 가능성을 감수하고, 조건을 직접 확인한 뒤 투자할 수 있는 사람에게 적합합니다.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">※ 예금/적금의 예금자보호 여부는 금융회사 및 상품에 따라 다를 수 있으므로, 가입 전 확인이 필요합니다.</p>
-      </div>
-    </section>
-
-    <!-- ===== 5. 수익/손실 시나리오 ===== -->
-    <section class="section" id="section-cards">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">수익 / 손실</span>
-          <h2>ELS, 가장 좋은 경우와 가장 나쁜 경우</h2>
-          <p class="section-desc">
-            아래 예시는 ELS가 어떻게 수익이 나거나 손실이 날 수 있는지 쉽게 보기 위한 가정입니다.<br>
-            실제 상품은 기초자산, 수익률, 조기상환 기준, 낙인 기준에 따라 결과가 달라질 수 있습니다.
-          </p>
-        </div>
-        <div class="cards-grid">
-          <div class="scenario-card scenario-card--good">
-            <div class="card-tag">최선의 경우 - 조기상환 성공</div>
-            <h3>2000만 원을 투자한 뒤 첫 평가일에 조건을 만족한 경우</h3>
-            <p>
-              예를 들어 2000만 원을 ELS에 투자했고, 6개월 뒤 첫 평가일에 기초자산 가격이 조기상환 기준을 넘었다고 가정해 봅시다.<br>
-              이 상품의 약속 수익률이 연 8%라면, 6개월 투자 기간에 해당하는 수익은 약 4%입니다.
-            </p>
-            <p>
-              이 경우에는 만기인 3년까지 기다리지 않고, 6개월 만에 원금 2000만 원과 수익 약 80만 원을 함께 돌려받을 수 있습니다.
-            </p>
-            <div class="card-check">
-              <strong>이 결과를 위해 확인할 조건</strong>
-              <ul>
-                <li>첫 조기상환 평가일은 언제인가요?</li>
-                <li>조기상환 기준 가격은 몇 %인가요?</li>
-                <li>약속된 수익률은 연 몇 %인가요?</li>
-                <li>조기상환되면 실제로 얼마를 받을 수 있나요?</li>
-              </ul>
-            </div>
-          </div>
-          <div class="scenario-card scenario-card--bad">
-            <div class="card-tag">최악의 경우 - 원금 손실 발생</div>
-            <h3>기초자산 가격이 크게 하락하고 만기까지 회복하지 못한 경우</h3>
-            <p>
-              반대로 2000만 원을 투자했는데, 기초자산 가격이 크게 하락해 낙인 기준 아래로 떨어졌다고 가정해 봅시다.<br>
-              이후 만기까지도 기초자산 가격이 회복하지 못하고, 최종적으로 처음 가격의 60% 수준으로 끝났다면 원금 손실이 발생할 수 있습니다.
-            </p>
-            <p>
-              예를 들어 손실률이 기초자산 하락률과 비슷하게 적용되는 구조라면, 투자자는 원금 2000만 원 중 약 40%인 800만 원을 잃을 수 있습니다. 이 경우 돌려받는 금액은 약 1200만 원이 됩니다.
-            </p>
-            <p>
-              처음에는 높은 수익률만 보고 가입했더라도, 기초자산이 크게 떨어지고 만기까지 회복하지 못하면 예상보다 큰 손실이 날 수 있습니다.<br>
-              또한 ELS는 예금처럼 원금이 보장되는 상품이 아니기 때문에, 손실이 발생해도 예금보험으로 보전되지 않습니다.
-            </p>
-            <div class="card-check">
-              <strong>이 위험을 이해하려면 확인할 조건</strong>
-              <ul>
-                <li>낙인 기준은 초기 가격의 몇 %인가요?</li>
-                <li>만기 때 기초자산 가격이 얼마 이하이면 손실이 나나요?</li>
-                <li>손실이 날 경우 원금에서 얼마나 빠질 수 있나요?</li>
-                <li>최악의 경우 돌려받는 금액은 얼마까지 줄어들 수 있나요?</li>
-              </ul>
-            </div>
-          </div>
+    <section id="victoryScreen" class="screen victory-screen hidden">
+      <div class="victory-card">
+        <p class="eyebrow">Victory</p>
+        <h2>승리!</h2>
+        <img src="assets/sprites/player-idle-transparent.png" alt="플레이어" class="victory-player">
+        <p id="victoryText">테마 1-1 클리어</p>
+        <div class="victory-actions">
+          <button id="victoryMainButton" type="button">메인가기</button>
+          <button id="victoryNextButton" class="primary-button" type="button">다음 스테이지 가기</button>
         </div>
       </div>
     </section>
 
-    <!-- ===== 6. 리스크 분석 ===== -->
-    <section class="section section-alt" id="section-risk">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">리스크 분석</span>
-          <h2>높은 수익률만 보면 왜 위험한가요?</h2>
-        </div>
-        <div class="highlight-box">
-          <p class="highlight-sentence">
-            ELS의 높은 수익률은 공짜 보상이 아니라,<br>
-            투자자가 <strong>원금 손실 가능성을 감수하는 대가</strong>입니다.
-          </p>
-        </div>
-        <div class="risk-points risk-points-expanded">
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❶</span>
-            <p>ELS는 예금처럼 원금이 안전하게 보장되는 상품이 아닙니다. 만기 때 손실 조건에 걸리면 투자한 돈의 일부를 잃을 수 있기 때문에, 수익률만 보고 들어가면 위험합니다.</p>
+    <section id="battleScreen" class="screen battle-screen hidden">
+      <div id="battleBackground" class="battle-background">
+        <header class="hud top-hud">
+          <div>
+            <strong id="stageTitle">테마 1-1</strong>
+            <span id="turnText">플레이어 턴</span>
           </div>
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❷</span>
-            <p>예금은 보호 대상 상품이면 금융회사에 문제가 생겨도 일정 한도 안에서 보호받을 수 있지만, ELS는 예금자보호 대상이 아닙니다. 손실이 나도 예금처럼 보전받는 구조가 아니기 때문에 더욱 조심해야 합니다.</p>
+          <button id="restartButton" type="button">홈으로</button>
+        </header>
+
+        <div class="battlefield">
+          <div class="player-zone">
+            <div id="playerUnit" class="unit player-unit">
+              <div class="unit-body">
+                <img id="playerSprite" src="assets/sprites/player-idle-transparent.png" alt="플레이어 캐릭터">
+              </div>
+              <strong class="unit-name">플레이어</strong>
+              <div class="stat-line">
+                <span>♥ <b id="playerHpText">100 / 100</b></span>
+                <span>⚔ <b id="playerAtkText">10</b></span>
+              </div>
+              <div class="hp-bar">
+                <div id="playerHpBar" class="hp-fill player-fill"></div>
+              </div>
+            </div>
           </div>
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❸</span>
-            <p>겉으로는 연 8%, 연 10% 같은 수익률이 먼저 보이지만, 실제로는 조기상환 조건, 낙인 조건, 만기 조건을 만족해야 수익을 받을 수 있습니다. 이 조건을 제대로 보지 않으면 수익만 기대하고 손실 가능성은 놓칠 수 있습니다.</p>
-          </div>
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❹</span>
-            <p>조건을 만족하면 빨리 돌려받을 수 있지만, 조건을 만족하지 못하면 다음 평가일이나 만기까지 기다려야 합니다. 이러한 상황을 돈이 묶였다고 할 수 있고, 필요한 시점에 돈을 바로 쓰기 어렵습니다.</p>
-          </div>
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❺</span>
-            <p>조건을 만족하지 못했다고 해서 바로 손실이 나는 것은 아니지만, 기초자산 가격이 크게 떨어지고 만기까지 회복하지 못하면 손실이 발생할 수 있습니다. 손실 규모는 기초자산이 얼마나 떨어졌는지와 상품 조건에 따라 달라집니다.</p>
-          </div>
-          <div class="risk-point">
-            <span class="risk-icon" aria-hidden="true">❻</span>
-            <p>최악의 경우에는 상품에 따라 원금 대부분 또는 전부까지 잃을 수 있습니다. 그래서 ELS를 볼 때는 예상 수익률보다 먼저 손실 조건과 최악의 경우 돌려받을 수 있는 금액을 확인해야 합니다.</p>
-          </div>
+
+          <div id="monsterList" class="monster-zone"></div>
         </div>
 
-        <!-- 리스크 유형 -->
-        <div class="subsection-header">
-          <h3>ELS에 내재된 주요 리스크 유형</h3>
-          <p class="section-desc">ELS는 한 가지가 아닌 여러 유형의 리스크를 동시에 포함하고 있습니다.</p>
-        </div>
-        <div class="risk-type-grid">
-          <div class="risk-type-card">
-            <div class="risk-type-icon" aria-hidden="true">📉</div>
-            <h4>시장 리스크</h4>
-            <p>기초자산 가격이 하락해 손실 조건에 도달할 수 있습니다. 시장 변동성이 클수록 낙인 발생 가능성이 높아질 수 있습니다.</p>
+        <section class="hud command-panel">
+          <div class="target-row">
+            <strong>타겟</strong>
+            <span id="selectedMonsterText">몬스터를 선택하세요.</span>
           </div>
-          <div class="risk-type-card">
-            <div class="risk-type-icon" aria-hidden="true">🏦</div>
-            <h4>신용 리스크</h4>
-            <p>발행사의 신용도가 낮아지거나 파산할 경우 원금 회수가 어려울 수 있습니다. 예금자보호 대상이 아니므로 발행사의 신용 상태를 확인해야 합니다.</p>
-          </div>
-          <div class="risk-type-card">
-            <div class="risk-type-icon" aria-hidden="true">🔒</div>
-            <h4>유동성 리스크</h4>
-            <p>만기 전 환매가 어렵거나 중도 환매 시 손실이 클 수 있습니다. 투자 기간 동안 자금이 묶이는 구조임을 이해해야 합니다.</p>
-          </div>
-          <div class="risk-type-card">
-            <div class="risk-type-icon" aria-hidden="true">📐</div>
-            <h4>구조적 리스크</h4>
-            <p>복잡한 조건 구조로 인해 일반 투자자가 손실 발생 시점이나 규모를 직관적으로 파악하기 어려울 수 있습니다. 조건을 충분히 이해한 후 가입 여부를 검토해야 합니다.</p>
-          </div>
-        </div>
+          <aside id="monsterTraitPanel" class="monster-trait-panel">몬스터에 마우스를 올리면 특성이 표시됩니다.</aside>
 
-        <!-- 리스크 확인 체크리스트 -->
-        <div class="risk-checklist-box">
-          <div class="risk-checklist-label">✅ 가입 전 확인해야 할 조건</div>
-          <div class="risk-checklist-grid">
-            <div class="risk-checklist-item">
-              <span class="checklist-num">01</span>
-              <div>
-                <strong>기초자산</strong>
-                <p>이 ELS가 어떤 지수나 주식을 기준으로 움직이는지 확인해야 합니다. 기초자산이 크게 흔들리면 수익과 손실 결과도 달라질 수 있습니다.</p>
-              </div>
-            </div>
-            <div class="risk-checklist-item">
-              <span class="checklist-num">02</span>
-              <div>
-                <strong>조기상환 기준</strong>
-                <p>몇 개월마다 평가하는지, 그때 기초자산이 몇 % 이상이어야 조기상환되는지 확인해야 합니다.</p>
-              </div>
-            </div>
-            <div class="risk-checklist-item">
-              <span class="checklist-num">03</span>
-              <div>
-                <strong>낙인 조건</strong>
-                <p>기초자산이 어느 수준 아래로 떨어지면 손실 위험 구간에 들어가는지 확인해야 합니다.</p>
-              </div>
-            </div>
-            <div class="risk-checklist-item">
-              <span class="checklist-num">04</span>
-              <div>
-                <strong>만기 손실 조건</strong>
-                <p>만기 때 어떤 조건이면 원금 손실이 나는지, 최악의 경우 얼마까지 잃을 수 있는지 확인해야 합니다.</p>
-              </div>
-            </div>
-            <div class="risk-checklist-item">
-              <span class="checklist-num">05</span>
-              <div>
-                <strong>발행사 신용도</strong>
-                <p>ELS는 예금자보호 대상이 아니므로, 상품을 발행한 증권사가 안정적인지도 확인해야 합니다.</p>
-              </div>
-            </div>
-            <div class="risk-checklist-item">
-              <span class="checklist-num">06</span>
-              <div>
-                <strong>중도상환 조건</strong>
-                <p>급하게 돈이 필요할 때 중도상환이 가능한지, 그때 원금보다 적게 받는지도 확인해야 합니다.</p>
-              </div>
+          <div class="difficulty-row">
+            <button type="button" data-difficulty="easy">쉬움</button>
+            <button type="button" data-difficulty="normal">보통</button>
+            <button type="button" data-difficulty="hard">어려움</button>
+          </div>
+
+          <div id="potionRow" class="potion-row"></div>
+
+          <form id="answerForm" class="answer-row">
+            <strong id="questionText">문제: -</strong>
+            <span id="timerText">제한시간: -</span>
+            <input id="answerInput" type="number" placeholder="답 입력" autocomplete="off" disabled>
+            <button id="attackButton" type="submit" disabled>공격</button>
+          </form>
+
+          <p id="message" class="message">몬스터를 클릭하고 난이도를 선택하세요.</p>
+        </section>
+
+        <section id="gameOverOverlay" class="game-over-overlay hidden">
+          <div class="game-over-box">
+            <p class="eyebrow">Game Over</p>
+            <h2>플레이어가 쓰러졌습니다</h2>
+            <div class="game-over-actions">
+              <button id="retryButton" type="button">다시 시도하기</button>
+              <button id="mainButton" type="button">메인화면으로 가기</button>
             </div>
           </div>
-        </div>
-
+        </section>
       </div>
     </section>
-
-    <!-- ===== 7. 실제 사례: 홍콩 H지수 ELS ===== -->
-    <section class="section" id="section-case">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">실제 사례</span>
-          <h2>홍콩 H지수 사례</h2>
-          <p class="section-desc">
-            실제 발생한 홍콩 H지수 연계 ELS 손실 사례를 통해, ELS가 어떤 흐름으로 손실 위험에 가까워지는지 단계별로 정리했습니다.
-          </p>
-        </div>
-
-        <article class="case-page case-page-primary">
-          <div class="case-page-label">CASE 01</div>
-          <h3>홍콩 H지수 ELS 손실 사례</h3>
-          <p class="case-page-lead">
-            이 사례는 단순히 홍콩 H지수가 떨어져서 손실이 났다는 사실로 끝나는 문제가 아닙니다. ELS는 일정 조건을 만족하면 조기상환되고 쿠폰 수익을 받을 수 있지만, 조건을 충족하지 못하면 상환이 미뤄집니다. 여기에 기초자산이 낙인 기준 아래로 내려가면, 만기 평가가격에 따라 원금 손실로 이어질 수 있습니다. 홍콩 H지수 ELS 손실은 이 구조가 실제로 어떻게 작동했는지를 보여주는 대표적인 사례입니다.
-          </p>
-          <div class="case-timeline">
-            <div class="case-step">
-              <div class="case-step-num" aria-hidden="true">1</div>
-              <div class="case-step-body">
-                <h4>가입 시점</h4>
-                <p>2020년 말부터 2021년 상반기 사이 홍콩 H지수 연계 ELS에 가입한 투자자가 많았습니다. 당시 홍콩 H지수는 비교적 높은 수준이었고, 2021년 상반기 평균은 약 11,104 수준이었습니다. 투자자 입장에서는 예금보다 높은 쿠폰 수익률이 먼저 눈에 들어왔지만, 더 중요하게 봤어야 할 부분은 기초자산이 홍콩 H지수라는 점이었습니다.</p>
-                <p>ELS는 겉으로는 정해진 조건만 맞으면 수익을 주는 상품처럼 보이지만, 실제로는 기초자산 가격이 기준가보다 얼마나 하락했는지를 확인했어야 했습니다. 가입 당시 기준가가 높게 잡히면, 이후 지수가 크게 떨어졌을 때 조기상환 조건을 충족하기 어려워지고 만기 손실 가능성도 커집니다.</p>
-              </div>
-            </div>
-            <div class="case-step">
-              <div class="case-step-num" aria-hidden="true">2</div>
-              <div class="case-step-body">
-                <h4>H지수 하락</h4>
-                <p>가입 이후 홍콩 H지수는 큰 폭으로 하락했습니다. 2021년 초 1만 선을 넘었던 지수는 중국 경기 둔화, 부동산 시장 불안, 미중 갈등 등 여러 요인이 겹치면서 2024년 초에는 5,000선 안팎까지 밀렸습니다. 가입 당시와 비교하면 거의 반토막 수준이었습니다.</p>
-                <p>이 단계에서 중요한 것은 단순한 지수 하락률이 아니라, ELS의 최초 기준가와 현재 지수의 차이입니다. 예를 들어 최초 기준가가 11,000 수준인데 만기 평가 시점 지수가 5,500 수준이라면, 지수는 기준가의 절반 정도밖에 되지 않습니다. 이렇게 되면 조기상환은 어렵고, 낙인이나 만기 손실 조건에 걸릴 수밖에 없습니다.</p>
-              </div>
-            </div>
-            <div class="case-step">
-              <div class="case-step-num" aria-hidden="true">3</div>
-              <div class="case-step-body">
-                <h4>조기상환 평가일 반복 미충족</h4>
-                <p>많은 ELS는 6개월마다 조기상환 평가일이 있습니다. 이때 기초자산 가격이 정해진 기준, 예를 들어 최초 기준가의 90%, 85%, 80% 이상이면 원금과 쿠폰을 받고 상환됩니다. 문제는 홍콩 H지수가 계속 낮은 수준에 머물면서 이 기준을 넘지 못한 상품이 많았다는 점입니다.</p>
-                <p>조기상환이 되지 않으면 투자자는 약속된 수익을 바로 받지 못하고 다음 평가일이나 만기까지 기다려야 합니다. 이때 자금도 묶입니다. 그래서 ELS를 볼 때는 쿠폰 수익률만 볼 것이 아니라 조기상환 평가일, 상환 배리어, 상환 실패 시 다음 평가로 넘어가는 구조를 같이 확인해야 합니다.</p>
-              </div>
-            </div>
-            <div class="case-step">
-              <div class="case-step-num" aria-hidden="true">4</div>
-              <div class="case-step-body">
-                <h4>낙인 발생</h4>
-                <p>일부 상품은 홍콩 H지수가 낙인 기준 아래로 내려가면서 낙인이 발생했습니다. 낙인은 보통 기초자산이 최초 기준가의 일정 수준, 예를 들어 50% 안팎 아래로 떨어질 때 발생합니다. 2021년 상반기처럼 기준가가 높게 형성된 상품은 낙인 기준도 5,000대에 많이 몰려 있었습니다.</p>
-                <p>낙인이 발생했다고 해서 바로 손실이 확정되는 것은 아닙니다. 하지만 낙인 이후에는 만기 평가가격이 훨씬 중요해집니다. 만기 때 기초자산이 손실 회피 기준을 회복하지 못하면, 지수 하락률에 따라 원금 손실이 발생합니다. 최종 손실 여부는 만기 평가가격이 결정합니다.</p>
-              </div>
-            </div>
-            <div class="case-step">
-              <div class="case-step-num" aria-hidden="true">5</div>
-              <div class="case-step-body">
-                <h4>만기 손실 확정</h4>
-                <p>2024년 들어 2021년에 판매된 홍콩 H지수 ELS의 만기가 본격적으로 돌아오면서 손실이 현실화됐습니다. 당시 지수가 가입 시점보다 크게 낮았기 때문에, 조기상환에 실패하고 낙인까지 발생한 상품들은 만기 때 원금 손실이 확정됐습니다. 자본시장연구원 자료에 따르면 2024년 1~2월 만기상환된 일부 홍콩 H지수 연계 ELS의 손실률은 대략 50% 안팎까지 나타났습니다.</p>
-                <p>이 사례에서 배울 수 있는 점은 높은 쿠폰 수익률만 볼 것이 아니라, 기초자산이 기준가 대비 얼마나 하락하면 원금 손실로 이어지는지, 그리고 어떤 조건을 충족해야 수익을 받을 수 있는지를 먼저 확인해야 한다는 점입니다. 홍콩 H지수 ELS는 조기상환 조건을 넘지 못하고, 낙인 기준까지 도달한 뒤, 만기에도 지수가 회복되지 못하면서 손실이 확정된 대표적 사례라고 볼 수 있습니다.</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="case-page case-page-check">
-          <div class="case-page-label">CASE 02</div>
-          <h3>이 사례에서 사전에 검증했어야 할 항목</h3>
-          <p class="case-page-lead">
-            홍콩 H지수 ELS 손실 사례에서 중요한 점은 손실이 갑자기 발생한 것이 아니라, 가입 전 확인해야 할 조건들이 상품 구조 안에 이미 들어 있었다는 점입니다. 따라서 ELS에 가입하기 전에는 쿠폰 수익률만 볼 것이 아니라, 기초자산, 기준가 수준, 조기상환 조건, 낙인 기준, 만기 손실 계산 방식까지 함께 검토했어야 합니다.
-          </p>
-          <div class="precheck-grid">
-            <div class="precheck-item">
-              <span>01</span>
-              <strong>기초자산 확인</strong>
-              <p>가장 먼저 확인했어야 할 것은 이 상품의 수익과 손실을 결정하는 기초자산이 무엇인지입니다. 홍콩 H지수는 홍콩 증시에 상장된 중국 관련 주요 기업들의 주가 흐름을 반영하는 지수입니다. 따라서 중국 경기, 부동산 시장, 미중 갈등, 중국 정부의 규제 정책 같은 요인에 영향을 크게 받을 수 있습니다.</p>
-              <p>단순히 지수형 상품이라 개별 주식보다 안전하다고 볼 것이 아니라, 해당 지수가 어떤 국가와 산업에 노출되어 있는지 확인했어야 합니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>02</span>
-              <strong>기준가 수준 확인</strong>
-              <p>ELS는 가입 시점의 기초자산 가격을 기준가로 잡고, 이후 지수가 그 기준가 대비 얼마나 움직였는지를 따집니다. 2021년 상반기처럼 홍콩 H지수가 높은 수준일 때 가입하면 기준가도 높게 설정됩니다.</p>
-              <p>기준가가 높으면 이후 지수가 조금만 하락해도 조기상환 조건을 넘기 어려워지고, 큰 폭으로 하락하면 낙인이나 만기 손실 가능성도 커집니다. 그래서 가입 전에는 현재 지수가 과거 평균과 비교해 높은 구간인지, 단기적으로 과열된 상태는 아닌지 확인했어야 합니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>03</span>
-              <strong>조기상환 조건 확인</strong>
-              <p>많은 ELS는 보통 6개월마다 조기상환 평가일이 있고, 이때 기초자산이 최초 기준가의 90%, 85%, 80% 이상 같은 조건을 충족하면 원금과 쿠폰을 받고 상환됩니다. 반대로 조건을 충족하지 못하면 상환이 다음 평가일로 미뤄집니다.</p>
-              <p>따라서 가입 전에는 평가일마다 필요한 지수 수준이 얼마인지, 기준을 넘지 못할 경우 자금이 얼마나 오래 묶일 수 있는지 확인했어야 합니다. 특히 조기상환 가능성을 막연히 기대하는 것이 아니라, 실제 지수가 어느 수준까지 회복되어야 상환되는지 숫자로 봤어야 합니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>04</span>
-              <strong>낙인 기준 확인</strong>
-              <p>낙인 기준은 원금 손실 위험이 커지는 중요한 기준입니다. 보통 기초자산이 최초 기준가의 50% 안팎 아래로 내려가면 낙인이 발생하는 구조가 많습니다. 낙인이 발생하면 그 이후에는 만기 평가가격이 손실 여부를 결정하는 핵심 조건이 됩니다.</p>
-              <p>가입 전에는 낙인 기준이 몇 %인지, 실제 지수로 환산하면 얼마인지 계산했어야 합니다. 예를 들어 기준가가 11,000이고 낙인 기준이 50%라면, 지수가 5,500 아래로 내려갈 때 낙인이 발생할 수 있습니다. 이렇게 숫자로 바꿔 봐야 위험 구간이 현실적으로 보입니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>05</span>
-              <strong>만기 손실 계산 확인</strong>
-              <p>ELS에서 가장 중요한 부분은 만기 때 손실이 어떻게 계산되는지입니다. 낙인이 발생했거나 만기 조건을 충족하지 못하면, 기초자산 하락률이 원금 손실률로 이어질 수 있습니다.</p>
-              <p>예를 들어 기준가가 11,000이고 만기 평가가격이 5,500이라면, 기초자산은 기준가 대비 약 50% 하락한 것입니다. 이 경우 상품 구조에 따라 투자 원금도 비슷한 수준으로 손실이 날 수 있습니다. 다만 실제 손실률은 상품의 세부 조건에 따라 달라질 수 있습니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>06</span>
-              <strong>예금자보호 여부 확인</strong>
-              <p>ELS는 예금처럼 보일 수 있지만 예금자보호 대상이 아닙니다. 은행 창구에서 가입했더라도 예금이 아니라 투자상품이기 때문에, 손실이 발생하면 예금자보호제도로 원금을 보장받을 수 없습니다.</p>
-              <p>따라서 가입 전에는 이 상품이 원금보장형인지, 원금비보장형인지, 예금자보호 대상인지 반드시 확인했어야 합니다. 특히 은행에서 판매했다는 사실만으로 안전하다고 판단해서는 안 됩니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>07</span>
-              <strong>중도 환매 조건 확인</strong>
-              <p>조기상환이 되지 않으면 투자금은 다음 평가일이나 만기까지 묶입니다. 이때 급하게 돈이 필요하면 중도 환매를 해야 할 수 있는데, 중도 환매 가격은 원금보다 낮을 수 있고 평가금액에 따라 손실이 발생할 수도 있습니다.</p>
-              <p>따라서 가입 전에는 중도 환매가 가능한지, 환매 시 평가금액이 어떻게 계산되는지, 시장 상황이 나쁠 때 어느 정도 손실이 날 수 있는지 확인했어야 합니다. ELS는 만기까지 들고 갈 수 있는 돈으로만 투자하는 것이 적절합니다.</p>
-            </div>
-            <div class="precheck-item">
-              <span>08</span>
-              <strong>발행사 신용도 확인</strong>
-              <p>ELS는 기초자산 가격 조건만 중요한 것이 아니라, 상품을 발행한 증권사의 상환 능력도 중요합니다. 투자자는 조건이 충족되면 발행사로부터 원금과 쿠폰을 받는 구조이기 때문입니다.</p>
-              <p>따라서 발행사의 신용등급, 재무 건전성, 상환 능력도 확인했어야 합니다. 지수가 조건을 충족하더라도 발행사에 문제가 생기면 투자자는 또 다른 위험에 노출될 수 있습니다.</p>
-            </div>
-          </div>
-          <p class="case-page-lead case-page-summary">
-            결국 ELS는 수익률이 높은 상품인지보다, 내가 감당할 수 있는 손실 구조인지 먼저 따져봐야 하는 상품입니다. 가입 전에는 각 조건을 실제 지수와 투자 금액으로 바꿔 계산해 봐야 위험이 현실적으로 보입니다.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ===== 8. 체험형 시뮬레이터 ===== -->
-    <section class="section section-alt" id="section-simulator">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">체험 시뮬레이터</span>
-          <h2>ELS 투자 체험 시뮬레이터</h2>
-          <p class="section-desc">
-            초기 자산 <strong>1억 원</strong>으로 ELS에 투자해 보세요.<br>
-            매 라운드마다 투자 금액을 정하면 가상의 시장 결과가 무작위로 반영됩니다.<br>
-            <span class="sim-disclaimer">※ 최소 투자 1,000만 원 | 2,000만 원 미만이 되면 체험 종료 | 3억 원 달성 시 성공</span>
-          </p>
-        </div>
-
-        <div class="sim-game" id="simGame">
-          <div class="sim-status-bar">
-            <div class="sim-status-item">
-              <span class="sim-status-label">현재 자산</span>
-              <span class="sim-status-value" id="simAsset">1억 원</span>
-            </div>
-            <div class="sim-status-item">
-              <span class="sim-status-label">라운드</span>
-              <span class="sim-status-value" id="simRound">1</span>
-            </div>
-            <div class="sim-status-item">
-              <span class="sim-status-label">목표</span>
-              <span class="sim-status-value sim-goal">3억 원</span>
-            </div>
-          </div>
-
-          <div class="sim-bet-area" id="simBetArea">
-            <p class="sim-bet-label">이번 라운드 투자 금액을 선택하세요</p>
-            <div class="sim-bet-btns" id="simBetBtns" role="group" aria-label="투자 금액 선택">
-              <button class="btn-sim-bet" data-bet="1000">1,000만 원</button>
-              <button class="btn-sim-bet" data-bet="3000">3,000만 원</button>
-              <button class="btn-sim-bet" data-bet="5000">5,000만 원</button>
-              <button class="btn-sim-bet" data-bet="all">전액</button>
-            </div>
-          </div>
-
-          <div class="sim-market-area" id="simMarketArea" hidden>
-            <p class="sim-bet-label">시장은 예측할 수 없습니다. 투자를 진행하시겠습니까?</p>
-            <div class="sim-odds-info">
-              <span>📈 조기상환 성공 <strong>40%</strong></span>
-              <span>📊 조기상환 이월 <strong>35%</strong></span>
-              <span>📉 큰 하락·손실 상황 <strong>25%</strong></span>
-            </div>
-            <button class="btn-sim-go" id="simGoBtn">투자 진행하기 →</button>
-          </div>
-
-          <div class="sim-result-box" id="simResultBox" hidden aria-live="polite">
-            <div class="sim-result-header">
-              <span class="sim-result-icon" id="simIcon" aria-hidden="true"></span>
-              <h3 id="simTitle"></h3>
-            </div>
-            <div class="sim-result-body">
-              <div class="sim-row">
-                <span class="sim-label">결과</span>
-                <span class="sim-value" id="simOutcome"></span>
-              </div>
-              <div class="sim-row">
-                <span class="sim-label">자산 변화</span>
-                <span class="sim-value" id="simChange"></span>
-              </div>
-              <div class="sim-summary" id="simSummary"></div>
-            </div>
-            <div class="sim-next-area">
-              <button class="btn btn-confirm" id="simNextBtn">다음 라운드 →</button>
-            </div>
-          </div>
-
-          <div class="sim-end-box" id="simEndBox" hidden aria-live="polite">
-            <div class="sim-end-icon" id="simEndIcon" aria-hidden="true"></div>
-            <h3 id="simEndTitle"></h3>
-            <p id="simEndMsg"></p>
-            <button class="btn btn-retry" id="simRestartBtn">처음부터 다시 →</button>
-          </div>
-        </div>
-        <p class="sim-note">※ 이 시뮬레이터는 금융교육 목적의 가상 체험입니다. 실제 ELS 결과는 상품 조건에 따라 달라질 수 있습니다.</p>
-
-      </div>
-    </section>
-
-
-    <!-- ===== 9. AI 설명 검증 미션 ===== -->
-    <section class="section" id="section-mission">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">AI 설명 검증 미션</span>
-          <h2>AI가 만든 금융 설명, 그대로 믿어도 될까?</h2>
-          <p class="section-desc">
-            아래 문장은 AI가 생성한 금융상품 설명입니다. 문제가 있는지 없는지 판단해주세요.
-          </p>
-        </div>
-
-        <div class="mission-panel">
-          <div class="mission-status">
-            <span>검증 완료: <strong id="missionAnswered">0</strong> / 4</span>
-            <span>맞힌 개수: <strong id="missionCorrect">0</strong></span>
-          </div>
-
-          <div class="mission-list" id="missionList">
-            <div class="mission-card" data-answer="risk">
-              <p class="mission-text"><strong>이 ELS는 연 8% 수익률을 제공하므로 예금보다 안전한 고수익 상품입니다.</strong></p>
-              <div class="mission-choices">
-                <button class="btn-mission" data-choice="risk">문제 있음</button>
-                <button class="btn-mission" data-choice="safe">문제 없음</button>
-              </div>
-              <p class="mission-feedback" aria-live="polite"></p>
-            </div>
-            <div class="mission-card" data-answer="safe">
-              <p class="mission-text"><strong>ELS는 조건을 만족하면 수익을 받을 수 있지만, 조건을 벗어나면 원금 손실이 발생할 수 있습니다.</strong></p>
-              <div class="mission-choices">
-                <button class="btn-mission" data-choice="risk">문제 있음</button>
-                <button class="btn-mission" data-choice="safe">문제 없음</button>
-              </div>
-              <p class="mission-feedback" aria-live="polite"></p>
-            </div>
-            <div class="mission-card" data-answer="risk">
-              <p class="mission-text"><strong>낙인이 발생해도 만기에는 원금이 자동으로 회복됩니다.</strong></p>
-              <div class="mission-choices">
-                <button class="btn-mission" data-choice="risk">문제 있음</button>
-                <button class="btn-mission" data-choice="safe">문제 없음</button>
-              </div>
-              <p class="mission-feedback" aria-live="polite"></p>
-            </div>
-            <div class="mission-card" data-answer="risk">
-              <p class="mission-text"><strong>높은 수익률이 제시되면 손실 조건은 자세히 보지 않아도 됩니다.</strong></p>
-              <div class="mission-choices">
-                <button class="btn-mission" data-choice="risk">문제 있음</button>
-                <button class="btn-mission" data-choice="safe">문제 없음</button>
-              </div>
-              <p class="mission-feedback" aria-live="polite"></p>
-            </div>
-          </div>
-
-          <div class="mission-result" id="missionResult" hidden>
-            <strong>검증 미션 완료</strong>
-            <p id="missionResultText"></p>
-            <button class="btn btn-retry" id="missionRetryBtn">↺ 다시 검증하기</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 10. OX 퀴즈 ===== -->
-    <section class="section" id="section-quiz">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">이해도 퀴즈</span>
-          <h2>ELS 핵심 내용을 이해했는지 확인해보세요</h2>
-          <p class="section-desc">
-            지금까지 살펴본 내용을 바탕으로 아래 6개 문항에 O 또는 X로 답해 주세요.<br>
-            모두 답하시면 학습 결과가 나옵니다.
-          </p>
-        </div>
-
-        <div class="quiz-progress-wrap">
-          <span class="quiz-progress-label">진행: <strong id="quizAnswered">0</strong> / 6 문항 완료</span>
-          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6" aria-label="퀴즈 진행률" id="quizProgressBar">
-            <div class="progress-fill" id="quizProgressFill"></div>
-          </div>
-        </div>
-
-        <div class="quiz-list" id="quizList">
-
-          <div class="quiz-card" data-answer="X" data-index="0">
-            <p class="quiz-question"><span class="quiz-num">Q1.</span> ELS는 예금자보호 대상 예금이다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q1 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-          <div class="quiz-card" data-answer="O" data-index="1">
-            <p class="quiz-question"><span class="quiz-num">Q2.</span> ELS는 조건에 따라 원금 손실이 발생할 수 있다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q2 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-          <div class="quiz-card" data-answer="X" data-index="2">
-            <p class="quiz-question"><span class="quiz-num">Q3.</span> 높은 수익률만 보고 투자해도 괜찮다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q3 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-          <div class="quiz-card" data-answer="O" data-index="3">
-            <p class="quiz-question"><span class="quiz-num">Q4.</span> ELS는 기초자산 가격과 관련이 있다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q4 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-          <div class="quiz-card" data-answer="O" data-index="4">
-            <p class="quiz-question"><span class="quiz-num">Q5.</span> 상품 설명서의 손실 조건을 확인해야 한다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q5 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-          <div class="quiz-card" data-answer="X" data-index="5">
-            <p class="quiz-question"><span class="quiz-num">Q6.</span> 조기상환이 안 되어도 무조건 안전하다.</p>
-            <div class="quiz-btns" role="group" aria-label="Q6 답 선택">
-              <button class="btn-ox btn-o" aria-label="O 선택">O</button>
-              <button class="btn-ox btn-x" aria-label="X 선택">X</button>
-            </div>
-            <div class="quiz-result" aria-live="polite"></div>
-          </div>
-
-        </div>
-
-        <div class="result-btn-wrap">
-          <button class="btn btn-confirm" id="verdictBtn" disabled aria-disabled="true">
-            학습 결과 확인하기 (6문항 모두 답해야 가능)
-          </button>
-        </div>
-
-        <!-- 학습 결과 박스 -->
-        <div class="result-box" id="verdictBox" hidden aria-live="polite">
-          <div class="result-header">
-            <span class="result-icon" aria-hidden="true" id="verdictIcon">📊</span>
-            <h3 id="verdictGrade"></h3>
-          </div>
-          <p class="result-score-line" id="verdictScoreLine"></p>
-          <p class="result-body" id="verdictBody"></p>
-          <button class="btn btn-retry" id="retryBtn">↺ 다시 풀어보기</button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===== 12. 참고 출처 ===== -->
-    <section class="section section-alt" id="section-sources">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">참고 출처</span>
-          <h2>이 사이트에서 참고한 자료</h2>
-          <p class="section-desc">
-            이 웹사이트는 아래 공공기관·금융기관 자료를 참고하여 제작되었습니다.
-          </p>
-        </div>
-
-        <div class="sources-note">
-          <span class="sources-note-icon" aria-hidden="true">🔍</span>
-          <p>
-            <strong>금융 정보 확인의 기준</strong> - 이 사이트의 금융 설명은 아래 공식 기관 자료와 신뢰할 수 있는 보도를 바탕으로 작성되었습니다.<br>
-            직접 방문해 내용을 확인해 보세요.
-          </p>
-        </div>
-
-        <div class="sources-list">
-
-          <div class="source-card">
-            <div class="source-num">①</div>
-            <div class="source-body">
-              <div class="source-org">예금보험공사 - 보호한도</div>
-              <div class="source-title">예금자보호제도 - 보호한도 안내</div>
-              <div class="source-reason">예금/적금의 보호 한도(금융회사별 1인당 1억 원) 설명에 참고</div>
-              <div class="source-url">URL: <a href="https://www.kdic.or.kr/sp/dpstrprot/ProtSystProtLmts/selectScrn.do" target="_blank" rel="noopener">kdic.or.kr - 보호한도 안내</a></div>
-            </div>
-          </div>
-
-          <div class="source-card">
-            <div class="source-num">②</div>
-            <div class="source-body">
-              <div class="source-org">예금보험공사 - 보호대상 금융상품</div>
-              <div class="source-title">예금자보호제도 - 보호대상 금융상품 요약</div>
-              <div class="source-reason">예금·적금이 보호대상 금융상품임을 확인하는 데 참고</div>
-              <div class="source-url">URL: <a href="https://www.kdic.or.kr/sp/dpstrprot/selectProtSystProtTrgtPrdctSumr.do" target="_blank" rel="noopener">kdic.or.kr - 보호대상 금융상품</a></div>
-            </div>
-          </div>
-
-          <div class="source-card">
-            <div class="source-num">③</div>
-            <div class="source-body">
-              <div class="source-org">KB국민은행</div>
-              <div class="source-title">홍콩 H지수 ELS 손실고객 보상안 안내</div>
-              <div class="source-reason">홍콩 H지수 연계 ELS 판매 시기와 낙인 발생 상품 관련 실제 사례 설명에 참고</div>
-              <div class="source-url">URL: <a href="https://obank1.kbstar.com/quics?articleClass=1&amp;articleId=129951&amp;bbsMode=view&amp;boardId=669&amp;compId=b058334&amp;page=C020721&amp;searchCondition=title&amp;searchStr=&amp;viewPage=1" target="_blank" rel="noopener">kbstar.com - 홍콩 H지수 ELS 손실고객 보상안 안내</a></div>
-            </div>
-          </div>
-
-          <div class="source-card">
-            <div class="source-num">④</div>
-            <div class="source-body">
-              <div class="source-org">KDI 경제정보센터</div>
-              <div class="source-title">정책자료 - 홍콩 H지수 ELS 관련 자료</div>
-              <div class="source-reason">홍콩 H지수 ELS 손실 사례와 금융당국 대응 내용을 확인하는 데 참고</div>
-              <div class="source-url">URL: <a href="https://eiec.kdi.re.kr/policy/materialView.do?num=251462" target="_blank" rel="noopener">eiec.kdi.re.kr - 정책자료</a></div>
-            </div>
-          </div>
-
-          <div class="source-card">
-            <div class="source-num">⑤</div>
-            <div class="source-body">
-              <div class="source-org">자본시장연구원</div>
-              <div class="source-title">홍콩 H지수 연계 ELS 손실 현황</div>
-              <div class="source-reason">홍콩 H지수 하락, 조기상환 실패, 만기 손실률 등 실제 사례 수치 설명에 참고</div>
-              <div class="source-url">URL: <a href="https://www.kcmi.re.kr/publications/pub_detail_view?cno=6293&amp;syear=2024&amp;zcd=002001016&amp;zno=1772" target="_blank" rel="noopener">kcmi.re.kr - 홍콩 H지수 연계 ELS 손실 현황</a></div>
-            </div>
-          </div>
-
-          <div class="source-card">
-            <div class="source-num">⑥</div>
-            <div class="source-body">
-              <div class="source-org">Reuters</div>
-              <div class="source-title">South Korea to impose sanctions on banks over sales of Hong Kong equity-linked products</div>
-              <div class="source-reason">홍콩 H지수 연계 ELS 손실 사례의 국제적 보도 및 사회적 맥락 참고</div>
-              <div class="source-url">URL: <a href="https://www.reuters.com/sustainability/boards-policy-regulation/south-korea-impose-sanctions-banks-over-sales-hong-kong-equity-linked-2026-02-12/" target="_blank" rel="noopener">reuters.com - South Korea ELS sanctions</a></div>
-            </div>
-          </div>
-
-        </div>
-        <p class="sources-notice">
-          ※ 이 사이트에 포함된 금융 설명은 위 자료를 바탕으로 작성되었으나, 세부 수치나 최신 규정은 변경될 수 있습니다.
-        </p>
-      </div>
-    </section>
-
   </main>
 
-  <!-- 푸터 -->
-  <footer class="site-footer">
-    <div class="container">
-      <p class="footer-sub">ELS 리스크 체크랩 | RiskX 과제 | 2026</p>
-    </div>
-  </footer>
-
-  <script src="./script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
