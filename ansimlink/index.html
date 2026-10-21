@@ -30,11 +30,11 @@
         </p>
       </div>
 
-      <button type="button" onclick="allowPermission()">
+      <button type="button" id="allowPermissionButton">
         권한 허용하고 시작하기
       </button>
 
-      <button type="button" class="sub-button" onclick="denyPermission()">
+      <button type="button" id="denyPermissionButton" class="sub-button">
         취소
       </button>
     </section>
@@ -42,7 +42,7 @@
     <section id="mainScreen" class="screen">
       <header class="top-bar">
         <h1>안심링크</h1>
-        <button type="button" class="small-button" onclick="showHistory()">
+        <button type="button" id="showHistoryButton" class="small-button">
           기록
         </button>
       </header>
@@ -58,15 +58,15 @@
         placeholder="예: 보안 인증이 필요합니다. https://goudle.com/login 으로 접속하세요."
       ></textarea>
 
-      <button type="button" onclick="pasteFromClipboard()">
+      <button type="button" id="pasteFromClipboardButton">
         클립보드에서 붙여넣기
       </button>
 
-      <button type="button" onclick="insertSample()">
+      <button type="button" id="insertSampleButton">
         테스트 예시 넣기
       </button>
 
-      <button type="button" onclick="detectAndAnalyzeLinks()">
+      <button type="button" id="detectAndAnalyzeLinksButton">
         링크 탐지 및 분석하기
       </button>
 
@@ -76,7 +76,7 @@
 
       <section id="resultArea" class="result-area" aria-live="assertive"></section>
 
-      <button type="button" class="sub-button" onclick="speakLastMessage()">
+      <button type="button" id="speakLastMessageButton" class="sub-button">
         🔊 음성 안내 다시 듣기
       </button>
     </section>
@@ -86,11 +86,11 @@
 
       <div id="historyArea"></div>
 
-      <button type="button" onclick="clearHistory()">
+      <button type="button" id="clearHistoryButton">
         기록 삭제
       </button>
 
-      <button type="button" class="sub-button" onclick="goMain()">
+      <button type="button" id="goMainButton" class="sub-button">
         돌아가기
       </button>
     </section>

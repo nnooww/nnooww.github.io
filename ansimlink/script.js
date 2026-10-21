@@ -582,3 +582,23 @@ function escapeHtml(text) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
+
+if (location.protocol === "chrome-extension:") {
+    document.documentElement.classList.add("extension-popup");
+}
+
+const buttonActions = {
+    allowPermissionButton: allowPermission,
+    denyPermissionButton: denyPermission,
+    showHistoryButton: showHistory,
+    pasteFromClipboardButton: pasteFromClipboard,
+    insertSampleButton: insertSample,
+    detectAndAnalyzeLinksButton: detectAndAnalyzeLinks,
+    speakLastMessageButton: speakLastMessage,
+    clearHistoryButton: clearHistory,
+    goMainButton: goMain
+};
+
+Object.entries(buttonActions).forEach(function ([buttonId, action]) {
+    document.getElementById(buttonId).addEventListener("click", action);
+});

@@ -11,6 +11,17 @@ body {
     color: #111;
 }
 
+html.extension-popup {
+    width: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.extension-popup body {
+    width: 400px;
+    min-height: 0;
+}
+
 .app {
     width: 100%;
     max-width: 560px;
