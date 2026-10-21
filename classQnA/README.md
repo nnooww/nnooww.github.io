@@ -2,8 +2,6 @@
 
 실습 수업 중 학생이 질문을 신청하고 자신의 대기 순서를 확인하는 웹앱입니다. 첫 화면에서 회원가입 또는 로그인을 선택합니다. 학생과 선생님의 화면은 데이터베이스에 저장된 계정 권한에 따라 구분됩니다. 선생님 화면에서 대기 중인 질문을 열어 답변할 수 있습니다.
 
-프로젝트 기획과 기능 요구사항은 [PRD.md](PRD.md)에 정리했습니다. 이 코드는 `nnooww/nnooww.github.io` 합본 저장소의 `classQnA/` 폴더에 있습니다.
-
 ## 실행
 
 Windows에서 `start.cmd`를 실행하거나 터미널에서 `node server.js`를 실행합니다. Node.js 22 이상이 필요합니다. 브라우저에서 `http://localhost:3000`을 엽니다. 별도의 패키지 설치는 필요 없습니다.
@@ -34,7 +32,7 @@ Windows에서 `start.cmd`를 실행하거나 터미널에서 `node server.js`를
 
 GitHub는 코드를 보관하고, Railway의 웹 서비스가 Node 서버를 실행합니다. GitHub Pages만으로는 이 앱의 서버와 SQLite 데이터베이스를 실행할 수 없습니다.
 
-1. GitHub의 `nnooww/nnooww.github.io` 저장소를 Railway 웹 서비스에 연결하고 Root Directory를 `/classQnA`로 설정합니다.
+1. GitHub의 `classroom-question-queue` 저장소를 Railway의 새 웹 서비스에 연결합니다.
 2. 서비스에 영구 볼륨을 추가하고 마운트 경로를 `/data`로 설정합니다.
 3. 서비스 환경변수 `DB_FILE=/data/questions.sqlite`를 설정합니다. `TEACHER_PASSWORD`에는 공백만으로 구성되지 않은 8~128자 비밀번호를 설정합니다. 비밀번호를 GitHub 코드에 적지 않습니다.
 4. 시작 명령은 `npm start`입니다. Railway에서 공개 도메인을 생성한 뒤 `/api/health`가 `{"ok":true}`인지 확인합니다.
