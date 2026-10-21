@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>안심링크</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section id="permissionScreen" class="screen active">
+      <h1>🔒 안심링크</h1>
+
+      <p class="main-text">
+        시각장애인과 저시력 사용자가 링크를 누르기 전에
+        위험 여부를 확인할 수 있도록 돕는 안전 링크 확인 서비스입니다.
+      </p>
+
+      <div class="info-box">
+        <p><strong>사용 방식</strong><br>
+          문자, 게시글, 이메일, 링크를 붙여넣으면 URL을 자동으로 탐지합니다.
+        </p>
+
+        <p><strong>수집 내용</strong><br>
+          사용자가 입력한 텍스트 안의 URL 정보만 검사합니다.
+        </p>
+
+        <p><strong>저장 내용</strong><br>
+          검사한 URL, 안전/위험 결과, 판단 이유만 저장합니다.
+        </p>
+      </div>
+
+      <button type="button" onclick="allowPermission()">
+        권한 허용하고 시작하기
+      </button>
+
+      <button type="button" class="sub-button" onclick="denyPermission()">
+        취소
+      </button>
+    </section>
+
+    <section id="mainScreen" class="screen">
+      <header class="top-bar">
+        <h1>안심링크</h1>
+        <button type="button" class="small-button" onclick="showHistory()">
+          기록
+        </button>
+      </header>
+
+      <p class="main-text">
+        검사할 문자, 게시글, 이메일 내용 또는 URL을 아래에 붙여넣으세요.
+      </p>
+
+      <label for="inputText">검사할 내용</label>
+      <textarea
+        id="inputText"
+        rows="8"
+        placeholder="예: 보안 인증이 필요합니다. https://goudle.com/login 으로 접속하세요."
+      ></textarea>
+
+      <button type="button" onclick="pasteFromClipboard()">
+        클립보드에서 붙여넣기
+      </button>
+
+      <button type="button" onclick="insertSample()">
+        테스트 예시 넣기
+      </button>
+
+      <button type="button" onclick="detectAndAnalyzeLinks()">
+        링크 탐지 및 분석하기
+      </button>
+
+      <div id="statusBox" class="status-box" aria-live="polite">
+        발견된 링크 수: 0개
+      </div>
+
+      <section id="resultArea" class="result-area" aria-live="assertive"></section>
+
+      <button type="button" class="sub-button" onclick="speakLastMessage()">
+        🔊 음성 안내 다시 듣기
+      </button>
+    </section>
+
+    <section id="historyScreen" class="screen">
+      <h1>검사 기록</h1>
+
+      <div id="historyArea"></div>
+
+      <button type="button" onclick="clearHistory()">
+        기록 삭제
+      </button>
+
+      <button type="button" class="sub-button" onclick="goMain()">
+        돌아가기
+      </button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
