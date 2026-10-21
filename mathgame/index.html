@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mathgame</title>
+  <link rel="stylesheet" href="style.css?v=mathgame-20261021">
+</head>
+<body>
+  <div id="dungeonTransition" class="dungeon-transition hidden"></div>
+  <main id="app">
+    <section id="homeScreen" class="screen home-screen">
+      <div class="home-content">
+        <h1>mathgame</h1>
+        <p class="home-text">수학 문제를 풀어 던전 몬스터를 쓰러뜨리세요.</p>
+        <button id="startButton" class="primary-button" type="button">시작하기</button>
+      </div>
+    </section>
+
+    <section id="mainScreen" class="screen main-screen hidden">
+      <div class="main-panel">
+        <header class="main-header">
+          <div>
+            <p class="eyebrow">Dungeon Camp</p>
+            <h2 id="mainTitle">던전 입구</h2>
+            <p id="mainDescription">상점, 도감, 장비를 확인하고 전투에 입장하세요.</p>
+          </div>
+          <div class="main-resource-bar">
+            <span>♥ <b id="mainHpText">100</b></span>
+            <span>⚔ <b id="mainAtkText">10</b></span>
+            <span>🪙 <b id="mainCoinText">0</b></span>
+          </div>
+          <button id="mainHomeButton" type="button">처음 화면</button>
+        </header>
+
+        <div id="mainHubView" class="main-view">
+          <section class="camp-layout">
+            <aside class="hero-card">
+              <img src="assets/sprites/player-idle-transparent.png" alt="플레이어">
+              <strong>플레이어</strong>
+              <p>기사</p>
+            </aside>
+
+            <section class="stage-card">
+              <p class="stage-label">스테이지 선택</p>
+              <strong id="stageActionTitle">챕터 선택</strong>
+              <p id="stageActionText">클리어한 스테이지는 다시 입장할 수 있고, 다음 스테이지만 해금됩니다.</p>
+              <button id="nextStageButton" class="primary-button" type="button">다음 스테이지 입장</button>
+              <div id="chapterMap" class="chapter-map"></div>
+              <button id="returnHubButton" type="button">메인화면으로 가기</button>
+            </section>
+
+            <nav class="main-menu">
+              <button id="shopButton" type="button" class="menu-tile shop-tile">
+                <span class="menu-icon">🛒</span>
+                <span>상점</span>
+                <small>준비중</small>
+              </button>
+              <button id="codexButton" type="button" class="menu-tile codex-tile">
+                <span class="menu-icon">📖</span>
+                <span>도감</span>
+                <small>수집 정보</small>
+              </button>
+              <button id="equipmentButton" type="button" class="menu-tile equipment-tile">
+                <span class="menu-icon">🛡</span>
+                <span>장비</span>
+                <small>장착 관리</small>
+              </button>
+            </nav>
+          </section>
+        </div>
+
+        <div id="shopView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <h3>상점</h3>
+          <p>상점은 아직 열리지 않았습니다.</p>
+          <button type="button" class="locked-button">구매 기능 준비중</button>
+        </div>
+
+        <div id="codexView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <h3>도감</h3>
+          <div class="codex-window">
+            <div id="codexGrid" class="codex-grid"></div>
+            <aside id="codexDetail" class="codex-detail">몬스터를 클릭하면 상세 정보가 표시됩니다.</aside>
+          </div>
+        </div>
+
+        <div id="equipmentView" class="main-view hidden">
+          <button class="back-button" type="button" data-back-main>← 메인</button>
+          <div class="equipment-window">
+            <div class="equipment-title">장비</div>
+            <div class="equipment-left">
+              <div id="hpSlotA" class="slot head-slot"><span>머리</span><small>HP</small></div>
+              <div id="atkSlotA" class="slot left-slot"><span>왼팔</span><small>AT</small></div>
+              <img src="assets/sprites/player-idle-transparent.png" alt="플레이어" class="equipment-character">
+              <div id="atkSlotB" class="slot right-slot"><span>오른팔</span><small>AT</small></div>
+              <div id="hpSlotB" class="slot body-slot"><span>몸</span><small>HP</small></div>
+            </div>
+            <div class="equipment-right">
+              <h3>장비</h3>
+              <div id="inventoryGrid" class="inventory-grid">
+                <div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div>
+              </div>
+              <p id="equipmentHint">아직 장착한 장비가 없습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="victoryScreen" class="screen victory-screen hidden">
+      <div class="victory-card">
+        <p class="eyebrow">Victory</p>
+        <h2>승리!</h2>
+        <img src="assets/sprites/player-idle-transparent.png" alt="플레이어" class="victory-player">
+        <p id="victoryText">테마 1-1 클리어</p>
+        <div class="victory-actions">
+          <button id="victoryMainButton" type="button">메인가기</button>
+          <button id="victoryNextButton" class="primary-button" type="button">다음 스테이지 가기</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="battleScreen" class="screen battle-screen hidden">
+      <div id="battleBackground" class="battle-background">
+        <header class="hud top-hud">
+          <div>
+            <strong id="stageTitle">테마 1-1</strong>
+            <span id="turnText">플레이어 턴</span>
+          </div>
+          <button id="restartButton" type="button">홈으로</button>
+        </header>
+
+        <div class="battlefield">
+          <div class="player-zone">
+            <div id="playerUnit" class="unit player-unit">
+              <div class="unit-body">
+                <img id="playerSprite" src="assets/sprites/player-idle-transparent.png" alt="플레이어 캐릭터">
+              </div>
+              <strong class="unit-name">플레이어</strong>
+              <div class="stat-line">
+                <span>♥ <b id="playerHpText">100 / 100</b></span>
+                <span>⚔ <b id="playerAtkText">10</b></span>
+              </div>
+              <div class="hp-bar">
+                <div id="playerHpBar" class="hp-fill player-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="monsterList" class="monster-zone"></div>
+        </div>
+
+        <section class="hud command-panel">
+          <div class="target-row">
+            <strong>타겟</strong>
+            <span id="selectedMonsterText">몬스터를 선택하세요.</span>
+          </div>
+          <aside id="monsterTraitPanel" class="monster-trait-panel">몬스터에 마우스를 올리면 특성이 표시됩니다.</aside>
+
+          <div class="difficulty-row">
+            <button type="button" data-difficulty="easy">쉬움</button>
+            <button type="button" data-difficulty="normal">보통</button>
+            <button type="button" data-difficulty="hard">어려움</button>
+          </div>
+
+          <div id="potionRow" class="potion-row"></div>
+
+          <form id="answerForm" class="answer-row">
+            <strong id="questionText">문제: -</strong>
+            <span id="timerText">제한시간: -</span>
+            <input id="answerInput" type="number" placeholder="답 입력" autocomplete="off" disabled>
+            <button id="attackButton" type="submit" disabled>공격</button>
+          </form>
+
+          <p id="message" class="message">몬스터를 클릭하고 난이도를 선택하세요.</p>
+        </section>
+
+        <section id="gameOverOverlay" class="game-over-overlay hidden">
+          <div class="game-over-box">
+            <p class="eyebrow">Game Over</p>
+            <h2>플레이어가 쓰러졌습니다</h2>
+            <div class="game-over-actions">
+              <button id="retryButton" type="button">다시 시도하기</button>
+              <button id="mainButton" type="button">메인화면으로 가기</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
