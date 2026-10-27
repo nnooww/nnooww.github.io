@@ -1,0 +1,17 @@
+{
+  "name": "classqna-desktop",
+  "productName": "수업 질문 대기열",
+  "version": "0.1.0",
+  "private": true,
+  "description": "수업 질문 대기열의 Windows 데스크톱 클라이언트",
+  "main": "main.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "package:win": "electron-packager . ClassQnA --platform=win32 --arch=x64 --out=dist --overwrite --asar --icon=assets/icon.ico --ignore=^/dist$"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "@electron/packager": "20.3.0"
+  }
+}
