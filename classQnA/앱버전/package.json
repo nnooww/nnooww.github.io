@@ -1,7 +1,7 @@
 {
   "name": "classqna-desktop",
   "productName": "수업 질문 대기열",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "수업 질문 대기열의 Windows 데스크톱 클라이언트",
   "main": "main.js",

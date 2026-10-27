@@ -1,6 +1,7 @@
 'use strict';
 
 const { app, BrowserWindow, Menu, session } = require('electron');
+const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
@@ -9,6 +10,7 @@ const APP_ORIGIN = new URL(APP_URL).origin;
 const OFFLINE_PATH = path.join(__dirname, 'offline.html');
 const OFFLINE_URL = pathToFileURL(OFFLINE_PATH).href;
 const SESSION_PARTITION = 'classqna-temporary';
+const DESKTOP_CSS = fs.readFileSync(path.join(__dirname, 'desktop.css'), 'utf8');
 
 function isAllowedNavigation(target) {
   if (target === OFFLINE_URL) return true;
@@ -30,8 +32,8 @@ function createWindow() {
 
   const window = new BrowserWindow({
     title: '수업 질문 대기열',
-    width: 1040,
-    height: 760,
+    width: 800,
+    height: 620,
     minWidth: 680,
     minHeight: 520,
     autoHideMenuBar: true,
@@ -58,6 +60,16 @@ function createWindow() {
     if (!isAllowedNavigation(navigation.url)) navigation.preventDefault();
   });
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+
+  window.webContents.on('did-finish-load', () => {
+    try {
+      const url = new URL(window.webContents.getURL());
+      if (url.protocol === 'https:' && url.origin === APP_ORIGIN)
+        window.webContents.insertCSS(DESKTOP_CSS).catch(() => {});
+    } catch {
+      // 오프라인 안내 화면은 앱 전용 스타일을 사용한다.
+    }
+  });
 
   window.webContents.on('did-fail-load', (_event, errorCode, _description, target, isMainFrame) => {
     if (!isMainFrame || errorCode === -3) return; // -3: 정상적인 이동 중 이전 요청 취소

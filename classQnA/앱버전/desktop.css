@@ -1,0 +1,124 @@
+/* Windows 앱 창에만 적용하는 시각적 조정. 서버 화면과 기능은 그대로 사용한다. */
+html:root {
+  --accent: #3159c9;
+  --accent-dark: #2549ad;
+  --accent-soft: #eaf0ff;
+}
+
+body {
+  background: #eef2f8;
+}
+
+.site-header {
+  border-bottom-color: #dce3ef;
+  box-shadow: 0 1px 5px rgba(27, 42, 72, .04);
+}
+
+body .site-header .page-width {
+  min-height: 64px;
+}
+
+body .site-header h1 {
+  font-size: 20px;
+}
+
+main.page-width:has(#auth-view:not([hidden])) {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 65px);
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+main.page-width:has(#auth-view[data-mode="choice"]:not([hidden])) {
+  height: calc(100vh - 65px);
+  min-height: 0;
+}
+
+main.page-width:has(#auth-view[data-mode="signup"]:not([hidden])) {
+  place-items: start center;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+#auth-view.auth-panel {
+  margin: 0;
+  border-color: #d9e2ef;
+  border-top: 4px solid var(--accent);
+  border-radius: 16px;
+  box-shadow: 0 16px 42px rgba(28, 45, 78, .09);
+}
+
+.auth-panel[data-mode="choice"] {
+  width: min(100%, 440px);
+  padding: 32px;
+}
+
+.auth-panel[data-mode="choice"] .auth-tabs {
+  gap: 12px;
+}
+
+.auth-panel[data-mode="choice"] .tab-button {
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: background-color .15s, border-color .15s, box-shadow .15s;
+}
+
+.auth-panel[data-mode="choice"] #show-signup {
+  background: #f8faff;
+}
+
+.auth-panel[data-mode="choice"] #show-signup:hover {
+  border-color: #adc0ea;
+  background: #edf3ff;
+}
+
+.auth-panel[data-mode="choice"] #show-login {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(49, 89, 201, .18);
+}
+
+.auth-panel[data-mode="choice"] #show-login:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+.auth-panel:not([data-mode="choice"]) {
+  padding: 28px 30px;
+}
+
+.auth-panel[data-mode="signup"] {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.auth-panel[data-mode="signup"] .auth-tabs {
+  margin-bottom: 18px;
+}
+
+.auth-panel[data-mode="signup"] .role-options,
+.auth-panel[data-mode="signup"] .field {
+  margin-bottom: 14px;
+}
+
+.auth-panel input {
+  background: #fbfcff;
+}
+
+.auth-panel input:focus {
+  background: #fff;
+}
+
+@media (max-width: 600px) {
+  .auth-panel[data-mode="choice"] {
+    padding: 26px 22px;
+  }
+
+  .auth-panel:not([data-mode="choice"]) {
+    padding: 24px 22px;
+  }
+}
