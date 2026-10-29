@@ -4,6 +4,7 @@ const state = {
   joinedAt: null,
   view: 'public',
   selectedThreadId: null,
+  pendingThread: null,
   announcements: [],
   threads: [],
   detail: null,
@@ -54,9 +55,11 @@ function showAuth(mode = 'choice') {
   state.user = null;
   state.detail = null;
   state.selectedThreadId = null;
+  state.pendingThread = null;
   state.creating = false;
   state.listKey = '';
   state.messageKey = '';
+  $('message-input').value = '';
   $('auth-view').hidden = false;
   $('app-view').hidden = true;
   $('login-form').hidden = mode !== 'login';
@@ -87,11 +90,14 @@ function showApp(user) {
   state.user = user;
   state.view = user.role === 'teacher' ? 'private' : 'public';
   state.selectedThreadId = null;
+  state.pendingThread = null;
   state.detail = null;
+  state.creating = user.role === 'student';
   state.announcements = [];
   state.threads = [];
   state.listKey = '';
   state.messageKey = '';
+  $('message-input').value = '';
   $('auth-view').hidden = true;
   $('app-view').hidden = false;
   $('account-name').textContent = `${displayName(user)} · ${user.role === 'teacher' ? '선생님' : '학생'}`;
@@ -103,24 +109,33 @@ function showApp(user) {
 function setView(view) {
   state.view = view;
   state.selectedThreadId = null;
+  state.pendingThread = null;
   state.detail = null;
   state.listKey = '';
   state.messageKey = '';
-  state.creating = false;
+  state.creating = state.user.role === 'student' && view !== 'announcements';
+  $('message-input').value = '';
   $('app-error').textContent = '';
   render();
   refresh();
 }
 
 function threadsForView() {
-  return state.threads.filter(thread => thread.visibility === state.view);
+  const threads = state.threads.filter(thread => thread.visibility === state.view);
+  if (state.pendingThread?.visibility === state.view &&
+      !threads.some(thread => thread.id === state.pendingThread.id)) {
+    return [state.pendingThread, ...threads];
+  }
+  return threads;
 }
 
 function selectThread(id) {
   state.selectedThreadId = id;
+  if (state.pendingThread?.id !== id) state.pendingThread = null;
   state.detail = null;
   state.messageKey = '';
   state.creating = false;
+  $('message-input').value = '';
   $('app-error').textContent = '';
   render();
   refresh();
@@ -140,6 +155,7 @@ function renderSidebar() {
   if (section.hidden) return;
   $('list-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
   $('new-thread-button').hidden = state.user.role !== 'student';
+  $('new-thread-button').disabled = state.creating;
   const threads = threadsForView();
   const key = JSON.stringify([state.view, state.selectedThreadId, threads]);
   if (key === state.listKey) return;
@@ -189,7 +205,6 @@ function renderMessages(messages, announcementMode = false) {
 
 function renderContent() {
   const messageForm = $('message-form');
-  $('new-thread-form').hidden = !state.creating;
   if (state.view === 'announcements') {
     $('chat-title').textContent = '전체 공지';
     $('chat-subtitle').textContent = '선생님이 모든 학생에게 보낸 공지';
@@ -199,21 +214,36 @@ function renderContent() {
     renderMessages(state.announcements, true);
     return;
   }
-  const thread = state.threads.find(item => item.id === state.selectedThreadId);
+  if (state.user.role === 'student' && state.creating) {
+    $('chat-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
+    $('chat-subtitle').textContent = '';
+    messageForm.hidden = false;
+    messageForm.dataset.mode = 'new-thread';
+    $('message-input').placeholder = '질문을 입력하세요';
+    const key = `${state.view}-new-question`;
+    if (state.messageKey !== key) {
+      state.messageKey = key;
+      $('message-list').replaceChildren();
+    }
+    return;
+  }
+  const thread = threadsForView().find(item => item.id === state.selectedThreadId);
   if (!thread) {
     $('chat-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
     $('chat-subtitle').textContent = '';
-    messageForm.hidden = true;
+    messageForm.hidden = state.user.role !== 'student';
+    messageForm.dataset.mode = 'new-thread';
+    $('message-input').placeholder = '질문을 입력하세요';
     const key = `${state.view}-empty`;
     if (state.messageKey !== key) {
       state.messageKey = key;
-      $('message-list').replaceChildren(node('p', '질문을 선택하세요.', 'empty-state'));
+      $('message-list').replaceChildren();
     }
     return;
   }
   $('chat-title').textContent = thread.title || '질문';
   $('chat-subtitle').textContent = `${thread.visibility === 'public' ? '공개 질문' : '1:1 질문'} · ${thread.studentName || '학생'}`;
-  messageForm.hidden = state.creating;
+  messageForm.hidden = false;
   messageForm.dataset.mode = 'thread';
   $('message-input').placeholder = '메시지를 입력하세요';
   renderMessages(state.detail?.messages || []);
@@ -232,23 +262,29 @@ async function refresh() {
   state.refreshing = true;
   try {
     const [noticeResult, threadResult] = await Promise.all([
-      api(visibleSinceJoining('/api/announcements')),
+      api('/api/announcements'),
       api(visibleSinceJoining('/api/threads'))
     ]);
     if (!state.user) return;
     state.announcements = noticeResult.announcements || [];
     state.threads = threadResult.threads || [];
+    if (state.pendingThread && state.threads.some(thread => thread.id === state.pendingThread.id)) {
+      state.pendingThread = null;
+    }
     if (state.view !== 'announcements') {
       const matching = threadsForView();
-      if (!matching.some(item => item.id === state.selectedThreadId)) {
+      if (!state.creating && !matching.some(item => item.id === state.selectedThreadId)) {
         state.selectedThreadId = matching[0]?.id || null;
         state.detail = null;
         state.messageKey = '';
+        if (state.user.role === 'student' && !state.selectedThreadId) state.creating = true;
       }
-      const selectedId = state.selectedThreadId;
+      const selectedId = state.creating ? null : state.selectedThreadId;
       if (selectedId) {
         const detail = await api(visibleSinceJoining(`/api/threads/${encodeURIComponent(selectedId)}`));
         if (state.selectedThreadId === selectedId) state.detail = detail;
+      } else {
+        state.detail = null;
       }
     }
     $('app-error').textContent = '';
@@ -268,12 +304,15 @@ async function refresh() {
 function openNewThread() {
   if (state.user.role !== 'student') return;
   state.creating = true;
-  const visibility = document.querySelector(`input[name="visibility"][value="${state.view}"]`);
-  if (visibility) visibility.checked = true;
-  $('question-content').value = '';
+  state.selectedThreadId = null;
+  state.pendingThread = null;
+  state.detail = null;
+  state.listKey = '';
+  state.messageKey = '';
+  $('message-input').value = '';
   $('app-error').textContent = '';
   render();
-  $('question-content').focus();
+  $('message-input').focus();
 }
 
 $('show-login').addEventListener('click', () => showAuth('login'));
@@ -324,47 +363,46 @@ for (const button of document.querySelectorAll('.nav-button')) {
   button.addEventListener('click', () => setView(button.dataset.view));
 }
 $('new-thread-button').addEventListener('click', openNewThread);
-$('cancel-new-thread').addEventListener('click', () => { state.creating = false; render(); });
-
-$('new-thread-form').addEventListener('submit', async event => {
-  event.preventDefault();
-  const content = $('question-content').value.trim();
-  if (!content) return;
-  const visibility = document.querySelector('input[name="visibility"]:checked').value;
-  const button = event.currentTarget.querySelector('button[type="submit"]');
-  button.disabled = true;
-  $('app-error').textContent = '';
-  try {
-    const { thread } = await api('/api/threads', 'POST', { visibility, content });
-    state.view = visibility;
-    state.selectedThreadId = thread.id;
-    state.creating = false;
-    $('question-content').value = '';
-    state.listKey = '';
-    state.messageKey = '';
-    await refresh();
-  } catch (error) { $('app-error').textContent = error.message; }
-  finally { button.disabled = false; }
-});
 
 $('message-form').addEventListener('submit', async event => {
   event.preventDefault();
   const content = $('message-input').value.trim();
   if (!content) return;
   const button = event.currentTarget.querySelector('button[type="submit"]');
+  if (button.disabled) return;
+  const mode = event.currentTarget.dataset.mode;
+  const visibility = state.view;
+  const selectedThreadId = state.selectedThreadId;
   button.disabled = true;
   $('app-error').textContent = '';
   try {
-    if (event.currentTarget.dataset.mode === 'announcement') {
+    if (mode === 'announcement') {
       await api('/api/announcements', 'POST', { content });
+    } else if (mode === 'new-thread' && state.user.role === 'student') {
+      const { thread } = await api('/api/threads', 'POST', { visibility, content });
+      state.selectedThreadId = thread.id;
+      state.pendingThread = thread;
+      state.creating = false;
+      state.listKey = '';
+      state.messageKey = '';
+    } else if (mode === 'thread' && selectedThreadId) {
+      await api(`/api/threads/${encodeURIComponent(selectedThreadId)}/messages`, 'POST', { content });
     } else {
-      await api(`/api/threads/${encodeURIComponent(state.selectedThreadId)}/messages`, 'POST', { content });
+      throw new Error('질문을 선택하세요.');
     }
     $('message-input').value = '';
     await refresh();
     $('message-list').scrollTop = $('message-list').scrollHeight;
   } catch (error) { $('app-error').textContent = error.message; }
   finally { button.disabled = false; }
+});
+
+$('message-input').addEventListener('keydown', event => {
+  if (event.key !== 'Enter' || event.shiftKey || event.isComposing || event.keyCode === 229) return;
+  event.preventDefault();
+  if (!$('message-form').hidden && !$('message-form').querySelector('button[type="submit"]').disabled) {
+    $('message-form').requestSubmit();
+  }
 });
 
 const joinTimeReady = api('/api/join-time').then(({ joinedAt }) => {

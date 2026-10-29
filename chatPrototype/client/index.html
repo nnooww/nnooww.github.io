@@ -74,20 +74,6 @@
           <textarea id="message-input" maxlength="2000" rows="2" placeholder="메시지를 입력하세요" required></textarea>
           <button type="submit" class="primary-button">보내기</button>
         </form>
-        <form id="new-thread-form" class="new-thread-form" hidden>
-          <div class="form-heading">
-            <h3>새 질문</h3>
-            <button id="cancel-new-thread" type="button" class="text-button">취소</button>
-          </div>
-          <fieldset>
-            <legend>질문 범위</legend>
-            <label><input type="radio" name="visibility" value="public" checked> 공개 질문</label>
-            <label><input type="radio" name="visibility" value="private"> 1:1 질문</label>
-          </fieldset>
-          <label for="question-content" class="sr-only">질문 내용</label>
-          <textarea id="question-content" maxlength="2000" rows="4" placeholder="질문을 입력하세요" required></textarea>
-          <button type="submit" class="primary-button">질문 보내기</button>
-        </form>
         <p id="app-error" class="app-error" role="status"></p>
       </main>
     </div>
