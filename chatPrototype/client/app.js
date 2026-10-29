@@ -1,6 +1,7 @@
 const $ = id => document.getElementById(id);
 const state = {
   user: null,
+  joinedAt: null,
   view: 'public',
   selectedThreadId: null,
   announcements: [],
@@ -34,6 +35,10 @@ async function api(path, method = 'GET', data) {
     throw error;
   }
   return result;
+}
+
+function visibleSinceJoining(path) {
+  return `${path}?since=${state.joinedAt}`;
 }
 
 function displayName(account) {
@@ -222,13 +227,13 @@ function render() {
 }
 
 async function refresh() {
-  if (!state.user) return;
+  if (!state.user || state.joinedAt === null) return;
   if (state.refreshing) { state.refreshQueued = true; return; }
   state.refreshing = true;
   try {
     const [noticeResult, threadResult] = await Promise.all([
-      api('/api/announcements'),
-      api('/api/threads')
+      api(visibleSinceJoining('/api/announcements')),
+      api(visibleSinceJoining('/api/threads'))
     ]);
     if (!state.user) return;
     state.announcements = noticeResult.announcements || [];
@@ -242,7 +247,7 @@ async function refresh() {
       }
       const selectedId = state.selectedThreadId;
       if (selectedId) {
-        const detail = await api(`/api/threads/${encodeURIComponent(selectedId)}`);
+        const detail = await api(visibleSinceJoining(`/api/threads/${encodeURIComponent(selectedId)}`));
         if (state.selectedThreadId === selectedId) state.detail = detail;
       }
     }
@@ -280,6 +285,7 @@ $('login-form').addEventListener('submit', async event => {
   const button = event.currentTarget.querySelector('button[type="submit"]');
   button.disabled = true;
   try {
+    await joinTimeReady;
     const { user } = await api('/api/login', 'POST', { username: $('login-name').value.trim(), password: $('login-password').value });
     $('login-password').value = '';
     showApp(user);
@@ -294,6 +300,7 @@ $('signup-form').addEventListener('submit', async event => {
   const button = event.currentTarget.querySelector('button[type="submit"]');
   button.disabled = true;
   try {
+    await joinTimeReady;
     const { user } = await api('/api/signup', 'POST', {
       role: document.querySelector('input[name="signup-role"]:checked').value,
       displayName: $('signup-name').value.trim(),
@@ -360,5 +367,12 @@ $('message-form').addEventListener('submit', async event => {
   finally { button.disabled = false; }
 });
 
-api('/api/me').then(({ user }) => showApp(user)).catch(() => showAuth());
+const joinTimeReady = api('/api/join-time').then(({ joinedAt }) => {
+  if (!Number.isSafeInteger(joinedAt) || joinedAt < 0) throw new Error('서버 시각을 확인할 수 없습니다.');
+  state.joinedAt = joinedAt;
+});
+joinTimeReady.then(() => api('/api/me')).then(({ user }) => showApp(user)).catch(error => {
+  showAuth();
+  if (error.status !== 401) $('auth-error').textContent = error.message;
+});
 setInterval(refresh, 3000);
