@@ -8,11 +8,27 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "electron .",
-    "package:win": "electron-packager . ClassQnA --platform=win32 --arch=x64 --out=dist --overwrite --asar --icon=desktop/icon.ico --ignore=^/dist$ --ignore=^/server$ --ignore=^/client$",
+    "package:win": "electron-builder --win portable",
     "test": "node --test ../server/server.test.js ../server/demo.test.js"
+  },
+  "build": {
+    "asar": true,
+    "appId": "io.github.nnooww.classqna",
+    "win": {
+      "target": "portable",
+      "icon": "desktop/icon.ico"
+    },
+    "files": [
+      "desktop/**",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "afterPack": "./afterPack.js"
   },
   "devDependencies": {
     "electron": "45.0.0",
-    "@electron/packager": "20.3.0"
+    "electron-builder": "26.18.0"
   }
 }
