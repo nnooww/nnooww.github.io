@@ -6,6 +6,7 @@ const state = {
   selectedThreadId: null,
   pendingThread: null,
   announcements: [],
+  publicMessages: [],
   threads: [],
   detail: null,
   creating: false,
@@ -92,8 +93,9 @@ function showApp(user) {
   state.selectedThreadId = null;
   state.pendingThread = null;
   state.detail = null;
-  state.creating = user.role === 'student';
+  state.creating = user.role === 'student' && state.view === 'private';
   state.announcements = [];
+  state.publicMessages = [];
   state.threads = [];
   state.listKey = '';
   state.messageKey = '';
@@ -113,7 +115,7 @@ function setView(view) {
   state.detail = null;
   state.listKey = '';
   state.messageKey = '';
-  state.creating = state.user.role === 'student' && view !== 'announcements';
+  state.creating = state.user.role === 'student' && view === 'private';
   $('message-input').value = '';
   $('app-error').textContent = '';
   render();
@@ -151,9 +153,9 @@ function renderNav() {
 
 function renderSidebar() {
   const section = $('thread-list-section');
-  section.hidden = state.view === 'announcements';
+  section.hidden = state.view !== 'private';
   if (section.hidden) return;
-  $('list-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
+  $('list-title').textContent = '1:1 질문';
   $('new-thread-button').hidden = state.user.role !== 'student';
   $('new-thread-button').disabled = state.creating;
   const threads = threadsForView();
@@ -214,8 +216,17 @@ function renderContent() {
     renderMessages(state.announcements, true);
     return;
   }
+  if (state.view === 'public') {
+    $('chat-title').textContent = '공개 질문';
+    $('chat-subtitle').textContent = '';
+    messageForm.hidden = false;
+    messageForm.dataset.mode = 'public-room';
+    $('message-input').placeholder = '메시지를 입력하세요';
+    renderMessages(state.publicMessages);
+    return;
+  }
   if (state.user.role === 'student' && state.creating) {
-    $('chat-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
+    $('chat-title').textContent = '1:1 질문';
     $('chat-subtitle').textContent = '';
     messageForm.hidden = false;
     messageForm.dataset.mode = 'new-thread';
@@ -229,7 +240,7 @@ function renderContent() {
   }
   const thread = threadsForView().find(item => item.id === state.selectedThreadId);
   if (!thread) {
-    $('chat-title').textContent = state.view === 'public' ? '공개 질문' : '1:1 질문';
+    $('chat-title').textContent = '1:1 질문';
     $('chat-subtitle').textContent = '';
     messageForm.hidden = state.user.role !== 'student';
     messageForm.dataset.mode = 'new-thread';
@@ -242,7 +253,7 @@ function renderContent() {
     return;
   }
   $('chat-title').textContent = thread.title || '질문';
-  $('chat-subtitle').textContent = `${thread.visibility === 'public' ? '공개 질문' : '1:1 질문'} · ${thread.studentName || '학생'}`;
+  $('chat-subtitle').textContent = `1:1 질문 · ${thread.studentName || '학생'}`;
   messageForm.hidden = false;
   messageForm.dataset.mode = 'thread';
   $('message-input').placeholder = '메시지를 입력하세요';
@@ -261,17 +272,19 @@ async function refresh() {
   if (state.refreshing) { state.refreshQueued = true; return; }
   state.refreshing = true;
   try {
-    const [noticeResult, threadResult] = await Promise.all([
+    const [noticeResult, publicResult, threadResult] = await Promise.all([
       api('/api/announcements'),
+      api(visibleSinceJoining('/api/public-messages')),
       api(visibleSinceJoining('/api/threads'))
     ]);
     if (!state.user) return;
     state.announcements = noticeResult.announcements || [];
+    state.publicMessages = publicResult.messages || [];
     state.threads = threadResult.threads || [];
     if (state.pendingThread && state.threads.some(thread => thread.id === state.pendingThread.id)) {
       state.pendingThread = null;
     }
-    if (state.view !== 'announcements') {
+    if (state.view === 'private') {
       const matching = threadsForView();
       if (!state.creating && !matching.some(item => item.id === state.selectedThreadId)) {
         state.selectedThreadId = matching[0]?.id || null;
@@ -378,6 +391,12 @@ $('message-form').addEventListener('submit', async event => {
   try {
     if (mode === 'announcement') {
       await api('/api/announcements', 'POST', { content });
+    } else if (mode === 'public-room') {
+      const { message } = await api('/api/public-messages', 'POST', { content });
+      if (message && !state.publicMessages.some(item => item.id === message.id)) {
+        state.publicMessages = [...state.publicMessages, message];
+        if (state.view === 'public') render();
+      }
     } else if (mode === 'new-thread' && state.user.role === 'student') {
       const { thread } = await api('/api/threads', 'POST', { visibility, content });
       state.selectedThreadId = thread.id;
