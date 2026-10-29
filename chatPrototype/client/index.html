@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>수업 질문 대화</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <section id="auth-view" class="auth-view">
+    <div class="auth-card">
+      <h1>수업 질문 대화</h1>
+      <div class="auth-tabs" role="group" aria-label="시작 방법">
+        <button id="show-login" type="button" class="auth-tab">로그인</button>
+        <button id="show-signup" type="button" class="auth-tab">회원가입</button>
+      </div>
+      <form id="login-form" hidden>
+        <label for="login-name">이름 또는 아이디</label>
+        <input id="login-name" autocomplete="username" required>
+        <label for="login-password">비밀번호</label>
+        <input id="login-password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="primary-button full-width">로그인</button>
+      </form>
+      <form id="signup-form" hidden>
+        <fieldset>
+          <legend>가입 권한</legend>
+          <label class="role-option"><input type="radio" name="signup-role" value="student" checked> 학생</label>
+          <label class="role-option"><input id="signup-teacher" type="radio" name="signup-role" value="teacher" disabled> 선생님</label>
+        </fieldset>
+        <p id="teacher-availability" class="field-note"></p>
+        <label for="signup-name">이름</label>
+        <input id="signup-name" maxlength="24" autocomplete="username" required>
+        <label for="signup-password">비밀번호</label>
+        <input id="signup-password" type="password" minlength="8" autocomplete="new-password" required>
+        <button type="submit" class="primary-button full-width">가입하기</button>
+      </form>
+      <p id="auth-error" class="error-text" role="status"></p>
+    </div>
+  </section>
+
+  <section id="app-view" class="app-view" hidden>
+    <header class="app-header">
+      <h1>수업 질문 대화</h1>
+      <div class="account-area">
+        <span id="account-name"></span>
+        <button id="logout-button" type="button" class="light-button">로그아웃</button>
+      </div>
+    </header>
+    <div class="workspace">
+      <aside class="sidebar">
+        <nav class="section-nav" aria-label="대화 종류">
+          <button type="button" class="nav-button" data-view="announcements">전체 공지</button>
+          <button type="button" class="nav-button" data-view="public">공개 질문</button>
+          <button type="button" class="nav-button" data-view="private">1:1 질문</button>
+        </nav>
+        <div id="thread-list-section" class="thread-list-section" hidden>
+          <div class="list-heading">
+            <h2 id="list-title"></h2>
+            <button id="new-thread-button" type="button" class="small-primary-button" hidden>새 질문</button>
+          </div>
+          <div id="thread-list" class="thread-list"></div>
+        </div>
+      </aside>
+      <main class="chat-pane">
+        <div class="chat-heading">
+          <div>
+            <h2 id="chat-title"></h2>
+            <p id="chat-subtitle"></p>
+          </div>
+        </div>
+        <div id="message-list" class="message-list" aria-live="polite"></div>
+        <form id="message-form" class="composer" hidden>
+          <label for="message-input" class="sr-only">메시지</label>
+          <textarea id="message-input" maxlength="2000" rows="2" placeholder="메시지를 입력하세요" required></textarea>
+          <button type="submit" class="primary-button">보내기</button>
+        </form>
+        <form id="new-thread-form" class="new-thread-form" hidden>
+          <div class="form-heading">
+            <h3>새 질문</h3>
+            <button id="cancel-new-thread" type="button" class="text-button">취소</button>
+          </div>
+          <fieldset>
+            <legend>질문 범위</legend>
+            <label><input type="radio" name="visibility" value="public" checked> 공개 질문</label>
+            <label><input type="radio" name="visibility" value="private"> 1:1 질문</label>
+          </fieldset>
+          <label for="question-content" class="sr-only">질문 내용</label>
+          <textarea id="question-content" maxlength="2000" rows="4" placeholder="질문을 입력하세요" required></textarea>
+          <button type="submit" class="primary-button">질문 보내기</button>
+        </form>
+        <p id="app-error" class="app-error" role="status"></p>
+      </main>
+    </div>
+  </section>
+  <script src="/app.js"></script>
+</body>
+</html>
