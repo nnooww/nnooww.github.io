@@ -32,12 +32,23 @@ db.exec(`
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     expires_at INTEGER NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS app_meta (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );
   CREATE TABLE IF NOT EXISTS announcements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     teacher_id INTEGER NOT NULL REFERENCES users(id),
     content TEXT NOT NULL,
     created_at INTEGER NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS public_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id INTEGER NOT NULL REFERENCES users(id),
+    content TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS public_messages_order ON public_messages(created_at, id);
   CREATE TABLE IF NOT EXISTS threads (
     id TEXT PRIMARY KEY,
     visibility TEXT NOT NULL CHECK(visibility IN ('public', 'private')),
@@ -56,6 +67,30 @@ db.exec(`
   );
   CREATE INDEX IF NOT EXISTS messages_thread_order ON messages(thread_id, created_at, id);
 `);
+
+const contentResetKey = 'prototype_test_content_reset_2026_10_29';
+function clearPrototypeTestContentOnce() {
+  db.exec('BEGIN IMMEDIATE');
+  try {
+    if (db.prepare('SELECT 1 FROM app_meta WHERE key=?').get(contentResetKey)) {
+      db.exec('COMMIT');
+      return false;
+    }
+    db.exec(`
+      DELETE FROM messages;
+      DELETE FROM threads;
+      DELETE FROM public_messages;
+      DELETE FROM announcements;
+    `);
+    db.prepare('INSERT INTO app_meta(key,value) VALUES(?,?)').run(contentResetKey, 'done');
+    db.exec('COMMIT');
+    return true;
+  } catch (error) {
+    db.exec('ROLLBACK');
+    throw error;
+  }
+}
+clearPrototypeTestContentOnce();
 
 const host = process.env.HOST || '127.0.0.1';
 const port = Number(process.env.PORT || 3100);
@@ -187,7 +222,7 @@ const windowThreadSelect = `SELECT t.*, u.display_name AS student_name,
   FROM threads t JOIN users u ON u.id = t.student_id`;
 function visibleThread(id, user) {
   const row = db.prepare(`${threadSelect} WHERE t.id = ?`).get(id);
-  if (!row || (row.visibility === 'private' && user.role !== 'teacher' && row.student_id !== user.id)) return null;
+  if (!row || row.visibility !== 'private' || (user.role !== 'teacher' && row.student_id !== user.id)) return null;
   return row;
 }
 function messageView(row) {
@@ -205,6 +240,20 @@ function readMessage(id) {
   const row = db.prepare(`SELECT m.*, u.display_name AS author_name, u.role AS author_role
     FROM messages m JOIN users u ON u.id = m.author_id WHERE m.id = ?`).get(id);
   return messageView(row);
+}
+function publicMessageView(row) {
+  return {
+    id: row.id,
+    authorId: row.author_id,
+    authorName: row.author_name,
+    authorRole: row.author_role,
+    content: row.content,
+    createdAt: row.created_at
+  };
+}
+function readPublicMessage(id) {
+  return publicMessageView(db.prepare(`SELECT m.*, u.display_name AS author_name, u.role AS author_role
+    FROM public_messages m JOIN users u ON u.id = m.author_id WHERE m.id = ?`).get(id));
 }
 
 async function api(req, res, url) {
@@ -285,13 +334,30 @@ async function api(req, res, url) {
     });
   }
 
+  if (url.pathname === '/api/public-messages' && req.method === 'GET') {
+    const since = windowStart(url);
+    const messages = db.prepare(`SELECT m.*, u.display_name AS author_name, u.role AS author_role
+      FROM public_messages m JOIN users u ON u.id = m.author_id
+      WHERE m.created_at >= ? ORDER BY m.created_at, m.id`).all(since).map(publicMessageView);
+    return sendJson(res, 200, { messages });
+  }
+  if (url.pathname === '/api/public-messages' && req.method === 'POST') {
+    const input = await readJson(req);
+    const content = clean(input.content, 2000);
+    if (!content) return fail(res, 400, '메시지를 입력하세요.');
+    const createdAt = Date.now();
+    const inserted = db.prepare('INSERT INTO public_messages(author_id,content,created_at) VALUES(?,?,?)')
+      .run(user.id, content, createdAt);
+    return sendJson(res, 201, { message: readPublicMessage(Number(inserted.lastInsertRowid)) });
+  }
+
   if (url.pathname === '/api/threads' && req.method === 'GET') {
     const since = windowStart(url);
     const rows = user.role === 'teacher'
-      ? db.prepare(`${windowThreadSelect} WHERE EXISTS (
+      ? db.prepare(`${windowThreadSelect} WHERE t.visibility='private' AND EXISTS (
           SELECT 1 FROM messages m WHERE m.thread_id=t.id AND m.created_at >= ?
         ) ORDER BY t.updated_at DESC, t.id DESC`).all(since, since, since)
-      : db.prepare(`${windowThreadSelect} WHERE (t.visibility='public' OR t.student_id=?) AND EXISTS (
+      : db.prepare(`${windowThreadSelect} WHERE t.visibility='private' AND t.student_id=? AND EXISTS (
           SELECT 1 FROM messages m WHERE m.thread_id=t.id AND m.created_at >= ?
         ) ORDER BY t.updated_at DESC, t.id DESC`).all(since, since, user.id, since);
     return sendJson(res, 200, { threads: rows.map(threadView) });
@@ -301,7 +367,7 @@ async function api(req, res, url) {
     const input = await readJson(req);
     const visibility = input.visibility;
     const content = clean(input.content, 2000);
-    if (visibility !== 'public' && visibility !== 'private') return fail(res, 400, '공개 범위를 선택하세요.');
+    if (visibility !== 'private') return fail(res, 400, '1:1 질문만 이곳에서 시작할 수 있습니다.');
     if (!content) return fail(res, 400, '질문 내용을 입력하세요.');
     const id = crypto.randomUUID();
     const title = content.split(/\r?\n/)[0].slice(0, 60);
@@ -398,4 +464,4 @@ if (require.main === module) {
     console.log(`ClassQnA chat prototype: http://${host}:${address.port}`);
   });
 }
-module.exports = { server, db, isLoopbackAddress };
+module.exports = { server, db, isLoopbackAddress, clearPrototypeTestContentOnce, contentResetKey };
