@@ -267,10 +267,9 @@ async function api(req, res, url) {
   if (url.pathname === '/api/me' && req.method === 'GET') return sendJson(res, 200, { user: publicUser(user) });
 
   if (url.pathname === '/api/announcements' && req.method === 'GET') {
-    const since = windowStart(url);
     const rows = db.prepare(`SELECT a.id, a.content, a.created_at AS createdAt,
       u.display_name AS teacherName FROM announcements a JOIN users u ON u.id=a.teacher_id
-      WHERE a.created_at >= ? ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all(since);
+      ORDER BY a.created_at DESC, a.id DESC`).all();
     return sendJson(res, 200, { announcements: rows });
   }
   if (url.pathname === '/api/announcements' && req.method === 'POST') {
