@@ -74,6 +74,13 @@ function sendJson(res, status, data, headers = {}) {
 }
 function fail(res, status, error) { sendJson(res, status, { error }); }
 function clean(value, max) { return typeof value === 'string' ? value.trim().slice(0, max) : ''; }
+function windowStart(url) {
+  const raw = url.searchParams.get('since');
+  if (raw === null) return 0;
+  if (!/^(0|[1-9][0-9]*)$/.test(raw) || !Number.isSafeInteger(Number(raw)))
+    throw { status: 400, message: '대화 시작 시간이 올바르지 않습니다.' };
+  return Number(raw);
+}
 function tokenHash(token) { return crypto.createHash('sha256').update(token).digest('hex'); }
 function passwordHash(password, salt) { return crypto.scryptSync(password, salt, 64).toString('hex'); }
 function seedDemoAccounts() {
@@ -157,10 +164,11 @@ function readJson(req) {
   });
 }
 function threadView(row) {
+  const firstVisibleMessage = row.visible_first_message;
   return {
     id: row.id,
     visibility: row.visibility,
-    title: row.title,
+    title: firstVisibleMessage ? firstVisibleMessage.split(/\r?\n/)[0].slice(0, 60) : row.title,
     studentId: row.student_id,
     studentName: row.student_name,
     createdAt: row.created_at,
@@ -170,6 +178,12 @@ function threadView(row) {
 }
 const threadSelect = `SELECT t.*, u.display_name AS student_name,
   (SELECT m.content FROM messages m WHERE m.thread_id = t.id ORDER BY m.created_at DESC, m.id DESC LIMIT 1) AS last_message
+  FROM threads t JOIN users u ON u.id = t.student_id`;
+const windowThreadSelect = `SELECT t.*, u.display_name AS student_name,
+  (SELECT m.content FROM messages m WHERE m.thread_id = t.id AND m.created_at >= ?
+    ORDER BY m.created_at, m.id LIMIT 1) AS visible_first_message,
+  (SELECT m.content FROM messages m WHERE m.thread_id = t.id AND m.created_at >= ?
+    ORDER BY m.created_at DESC, m.id DESC LIMIT 1) AS last_message
   FROM threads t JOIN users u ON u.id = t.student_id`;
 function visibleThread(id, user) {
   const row = db.prepare(`${threadSelect} WHERE t.id = ?`).get(id);
@@ -197,6 +211,8 @@ async function api(req, res, url) {
   if (req.method !== 'GET' && !originAllowed(req)) return fail(res, 403, '다른 사이트에서 보낸 요청은 받지 않습니다.');
   if (url.pathname === '/api/health' && req.method === 'GET')
     return sendJson(res, 200, { ok: true, app: 'classqna-chat-prototype' });
+  if (url.pathname === '/api/join-time' && req.method === 'GET')
+    return sendJson(res, 200, { joinedAt: Date.now() });
   if (url.pathname === '/api/signup-options' && req.method === 'GET') {
     return sendJson(res, 200, {
       teacherAvailable: isLoopbackAddress(req.socket.remoteAddress) &&
@@ -251,9 +267,10 @@ async function api(req, res, url) {
   if (url.pathname === '/api/me' && req.method === 'GET') return sendJson(res, 200, { user: publicUser(user) });
 
   if (url.pathname === '/api/announcements' && req.method === 'GET') {
+    const since = windowStart(url);
     const rows = db.prepare(`SELECT a.id, a.content, a.created_at AS createdAt,
       u.display_name AS teacherName FROM announcements a JOIN users u ON u.id=a.teacher_id
-      ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all();
+      WHERE a.created_at >= ? ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all(since);
     return sendJson(res, 200, { announcements: rows });
   }
   if (url.pathname === '/api/announcements' && req.method === 'POST') {
@@ -270,9 +287,14 @@ async function api(req, res, url) {
   }
 
   if (url.pathname === '/api/threads' && req.method === 'GET') {
+    const since = windowStart(url);
     const rows = user.role === 'teacher'
-      ? db.prepare(`${threadSelect} ORDER BY t.updated_at DESC, t.id DESC`).all()
-      : db.prepare(`${threadSelect} WHERE t.visibility='public' OR t.student_id=? ORDER BY t.updated_at DESC, t.id DESC`).all(user.id);
+      ? db.prepare(`${windowThreadSelect} WHERE EXISTS (
+          SELECT 1 FROM messages m WHERE m.thread_id=t.id AND m.created_at >= ?
+        ) ORDER BY t.updated_at DESC, t.id DESC`).all(since, since, since)
+      : db.prepare(`${windowThreadSelect} WHERE (t.visibility='public' OR t.student_id=?) AND EXISTS (
+          SELECT 1 FROM messages m WHERE m.thread_id=t.id AND m.created_at >= ?
+        ) ORDER BY t.updated_at DESC, t.id DESC`).all(since, since, user.id, since);
     return sendJson(res, 200, { threads: rows.map(threadView) });
   }
   if (url.pathname === '/api/threads' && req.method === 'POST') {
@@ -304,12 +326,19 @@ async function api(req, res, url) {
 
   const threadMatch = url.pathname.match(/^\/api\/threads\/([0-9a-f-]{36})$/);
   if (threadMatch && req.method === 'GET') {
+    const since = windowStart(url);
     const row = visibleThread(threadMatch[1], user);
     if (!row) return fail(res, 404, '대화를 찾을 수 없습니다.');
     const messages = db.prepare(`SELECT m.*, u.display_name AS author_name, u.role AS author_role
-      FROM messages m JOIN users u ON u.id=m.author_id WHERE m.thread_id=?
-      ORDER BY m.created_at, m.id`).all(row.id).map(messageView);
-    return sendJson(res, 200, { thread: threadView(row), messages });
+      FROM messages m JOIN users u ON u.id=m.author_id WHERE m.thread_id=? AND m.created_at >= ?
+      ORDER BY m.created_at, m.id`).all(row.id, since).map(messageView);
+    if (!messages.length) return fail(res, 404, '대화를 찾을 수 없습니다.');
+    const visibleRow = {
+      ...row,
+      visible_first_message: messages[0].content,
+      last_message: messages[messages.length - 1].content
+    };
+    return sendJson(res, 200, { thread: threadView(visibleRow), messages });
   }
   const messageMatch = url.pathname.match(/^\/api\/threads\/([0-9a-f-]{36})\/messages$/);
   if (messageMatch && req.method === 'POST') {
